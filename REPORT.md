@@ -1,6 +1,6 @@
 # SLICKK engineering report
 
-Checkpoint: 22 October 2026, Asia/Dhaka. This is a working report; deployment is not complete.
+Checkpoint: 22 October 2026, Asia/Dhaka. This is a working report; deployment is in progress.
 
 ## Delivered locally
 
@@ -80,11 +80,11 @@ GitHub connector and CLI identify authenticated user `shiyamprimetrade-sketch`. 
 | Item | State |
 | --- | --- |
 | Local source and build | Complete, checks above verified |
-| Legal drafts | Written and clearly marked; owner review pending before publication |
+| Legal pages | Owner approved both for publication in this chat; draft notices removed |
 | Cloudflare MCP | Installed, configured, OAuth verified; tool loading requires restart |
-| Correct account / zone | Pending read-only account verification |
-| Existing Pages projects | Not listed successfully before Wrangler authentication |
-| Pages project / deployment ID / URL | Not created or verified |
+| Correct account / zone | Authenticated account verified by API to own active slickk.online |
+| Existing Pages projects | API inspection confirmed zero before project creation |
+| Pages project / deployment ID / URL | slickk created successfully; upload in progress |
 | Custom domain / production HTTPS | Not activated or verified |
 | Public email display | Verified in built output and browser checks |
 | Incoming email test | Not performed; prior working configuration left untouched |

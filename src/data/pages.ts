@@ -88,7 +88,7 @@ export const editorialPages: EditorialPage[] = [
       { title: 'Analytics, cookies and browser storage', text: 'The website code does not install analytics, advertising pixels or tracking cookies, and does not use local storage. Fonts, scripts and images are served with the site. Cloudflare may apply infrastructure security measures under its own policies; hosting-level settings should be reviewed by the owner.' },
       { title: 'Retention and sharing', text: 'Inquiry correspondence is retained for the period needed to respond and manage the related discussion, subject to applicable recordkeeping requirements. There is no fixed automated deletion period for email. Information needed for a proposed transaction may be shared with relevant service providers or counterparties when appropriate; agree confidentiality requirements before sending sensitive material.' },
       { title: 'Security and your requests', text: 'HTTPS helps protect website traffic in transit, but no website or email channel can promise absolute security. For questions about your information, or a request for access, correction or deletion, email contact@slickk.online. Requests will be considered in light of applicable obligations and legitimate recordkeeping needs.' },
-      { title: 'Changes to this notice', text: 'This notice should be reviewed when website features or data practices change. The current draft was prepared on 22 October 2026 and requires the owner’s review of actual business practices before publication.' },
+      { title: 'Changes to this notice', text: 'This notice should be reviewed when website features or data practices change. Last updated: 22 October 2026.' },
     ],
   },
   {
@@ -102,7 +102,7 @@ export const editorialPages: EditorialPage[] = [
       { title: 'Acceptable use', text: 'Use the website lawfully. Do not attempt unauthorized access, disrupt availability, introduce malicious code, impersonate another business or misuse contact details for unsolicited bulk messages.' },
       { title: 'Intellectual property', text: 'The website’s original branding, design and content are intended for SLICKK’s business use. Third-party material, if identified, remains subject to its respective rights and license. Do not imply endorsement or a commercial relationship without permission.' },
       { title: 'Availability and external links', text: 'Content and website availability may change. Information should be confirmed before commercial reliance. External websites, when linked, are controlled by their operators and have their own terms and privacy practices.' },
-      { title: 'Questions and updates', text: 'Contact contact@slickk.online with website or commercial questions. These terms are a draft prepared on 22 October 2026 for owner review before publication. They do not select a legal jurisdiction, assert a registered corporate status or replace a transaction-specific contract.' },
+      { title: 'Questions and updates', text: 'Contact contact@slickk.online with website or commercial questions. Last updated: 22 October 2026. These terms do not select a legal jurisdiction, assert a registered corporate status or replace a transaction-specific contract.' },
     ],
   },
 ];
