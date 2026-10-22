@@ -43,11 +43,11 @@ test('navigation, keyboard focus, mobile menu, product filtering, FAQ and inquir
   const missing = await page.goto('/a-route-that-does-not-exist/'); expect(missing.status()).toBe(404); await expect(page.locator('h1')).toContainText('out of season');
 });
 
-test('reduced motion and no-JavaScript fallback remain usable', async ({ browser }) => {
-  const context = await browser.newContext({ javaScriptEnabled: false, reducedMotion: 'reduce', viewport: { width: 390, height: 844 } });
-  const page = await context.newPage(); await page.goto('http://127.0.0.1:4321/products/');
+test('reduced motion and no-JavaScript fallback remain usable', async ({ browser, baseURL }) => {
+  const context = await browser.newContext({ baseURL, javaScriptEnabled: false, reducedMotion: 'reduce', viewport: { width: 390, height: 844 } });
+  const page = await context.newPage(); await page.goto('/products/');
   await expect(page.locator('[data-product]')).toHaveCount(3); await expect(page.locator('.product-filters')).toBeHidden();
-  await page.goto('http://127.0.0.1:4321/contact/'); await expect(page.locator('#inquiry-form')).toBeHidden();
+  await page.goto('/contact/'); await expect(page.locator('#inquiry-form')).toBeHidden();
   await expect(page.locator('.no-js-email')).toBeVisible();
   await expect(page.locator('main a[href="mailto:contact@slickk.online"]').first()).toBeVisible(); await context.close();
 });

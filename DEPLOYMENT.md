@@ -14,20 +14,22 @@ Run commands one at a time in PowerShell, from `Slickk-Website`.
 ```powershell
 npx wrangler --version
 npx wrangler whoami
-npx wrangler login --device --browser=false
+npx wrangler login --scopes account:read user:read zone:read pages:write --no-use-keyring
 npx wrangler whoami
 npx wrangler pages project list
 ```
 
-Only run login if authentication is missing or wrong. Device flow needs Wrangler 4.119.0+. Approve using the Cloudflare account that contains `slickk.online`. Never paste passwords or API tokens into chat. `whoami` alone does not establish zone ownership: check the dashboard or authorized API as well. If multiple accounts exist, select the confirmed account with `CLOUDFLARE_ACCOUNT_ID` in the local environment.
+Only run login if authentication is missing or wrong. The normal browser callback flow succeeded for this release. Wrangler stores its OAuth profile locally, outside project Git. If a callback cannot be reached, device flow is an alternative on Wrangler 4.119.0+: `npx wrangler login --device --browser=false`. Approve using the Cloudflare account that contains `slickk.online`. Never paste passwords or API tokens into chat. `whoami` alone does not establish zone ownership: check the dashboard or authorized API as well. If multiple accounts exist, select the confirmed account with `CLOUDFLARE_ACCOUNT_ID` in the local environment.
 
 ## Project and upload
 
 Reuse a suitable `slickk` project if present. Check its integration mode and production branch. If absent, creating this free Pages project changes the account and requires the owner’s authorization under workspace instructions:
 
 ```powershell
-npx wrangler pages project create slickk --production-branch=main
+npx wrangler pages project create slickk --production-branch=main --force
 ```
+
+Wrangler 4.151.3 delegates creation to Workers by default. For a new project, `--force` selects the requested Pages product. The actual `slickk` project already exists: do not create it again, and do not pass `--force` on subsequent uploads.
 
 After all checks and legal review:
 
@@ -43,7 +45,7 @@ In Cloudflare: Workers & Pages → confirmed Pages project → Custom domains �
 
 An authorized API client can use `POST /accounts/{actual_account_id}/pages/projects/{actual_project_name}/domains` with the discovered domain name. Do not invent IDs or print authentication material. Adding the domain through the API may still require DNS setup; check activation state and required web DNS records.
 
-`public/_redirects` redirects WWW to the canonical apex domain once WWW DNS and TLS are active. Do not attach a conflicting existing hostname without owner approval.
+The live domain-level redirect is the enabled Cloudflare Single Redirect **SLICKK WWW to apex**, under slickk.online → Rules → Redirect Rules. It matches `https://www.slickk.online/*`, targets `https://slickk.online/${1}`, returns HTTP 301, and preserves the query string. Both web CNAMEs target `slickk.pages.dev` and are proxied. Cloudflare Pages does not support domain-level sources in `_redirects`; that source file contains a pointer to this runbook. HTTP redirects to HTTPS before the canonical WWW redirect. Do not attach a conflicting existing hostname without owner approval.
 
 ## Verification and rollback
 
@@ -58,6 +60,8 @@ Use the Pages dashboard’s existing deployment history to roll back a release. 
 ## Source control
 
 Local Git is initialized on `main`; inspect `git status` before committing. Commit only reviewed project source and lockfile. No remote or GitHub URL should be reported until verified. Native Cloudflare Git integration and Direct Upload have different constraints; future CI can invoke Wrangler with a least-privilege secret held in the CI secret store.
+
+The approved private backup is https://github.com/shiyamprimetrade-sketch/slickk-website . Its `main` branch is backed up with Git push; automatic deployments are not configured.
 
 ## Search Console
 

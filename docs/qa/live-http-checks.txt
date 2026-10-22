@@ -1,0 +1,25 @@
+
+> slickk-website@1.0.0 verify:live
+> node scripts/verify-live.mjs
+
+PASS / HTTP 200, brand, contact, CSP; TLS validation enabled
+PASS /about/ HTTP 200, brand, contact, CSP; TLS validation enabled
+PASS /products/ HTTP 200, brand, contact, CSP; TLS validation enabled
+PASS /global-sourcing/ HTTP 200, brand, contact, CSP; TLS validation enabled
+PASS /quality-logistics/ HTTP 200, brand, contact, CSP; TLS validation enabled
+PASS /why-slickk/ HTTP 200, brand, contact, CSP; TLS validation enabled
+PASS /for-exporters/ HTTP 200, brand, contact, CSP; TLS validation enabled
+PASS /for-buyers/ HTTP 200, brand, contact, CSP; TLS validation enabled
+PASS /contact/ HTTP 200, brand, contact, CSP; TLS validation enabled
+PASS /faq/ HTTP 200, brand, contact, CSP; TLS validation enabled
+PASS /privacy/ HTTP 200, brand, contact, CSP; TLS validation enabled
+PASS /terms/ HTTP 200, brand, contact, CSP; TLS validation enabled
+PASS /responsible-sourcing/ HTTP 200, brand, contact, CSP; TLS validation enabled
+PASS /sitemap.xml
+PASS /robots.txt
+PASS /images/hero.webp
+PASS /images/social.jpg
+PASS /fonts/inter-latin.woff2
+PASS branded 404 and WWW canonical redirect. Mail delivery is a separate end-to-end check.
+PASS http://slickk.online/ redirects to HTTPS
+PASS http://www.slickk.online/ redirects to HTTPS

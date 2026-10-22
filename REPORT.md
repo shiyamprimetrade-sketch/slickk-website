@@ -1,102 +1,89 @@
-# SLICKK engineering report
+# SLICKK final engineering report
 
-Checkpoint: 22 October 2026, Asia/Dhaka. This is a working report; deployment is in progress.
+Verified 22 October 2026, Asia/Dhaka.
 
-## Delivered locally
+**Production: https://slickk.online**
 
-- Project: `C:\Users\mobta\CodexWorkspace\Slickk-Website`.
-- Framework: Astro 7.4.2, TypeScript 6, static HTML with minimal client JavaScript.
-- Fourteen HTML pages: home, about, products, global sourcing, quality/logistics, why SLICKK, exporters, buyers, contact, FAQs, privacy, terms, responsible sourcing and branded 404.
-- Original forest-green/citrus identity, generated fruit imagery, responsive local WebP assets, local Inter font and original SVG favicon/wordmark.
-- Accessible mobile navigation, product filters, FAQ disclosures and a validated mailto inquiry builder.
-- Unique metadata, canonical URLs on indexable pages, Organization JSON-LD, social preview, sitemap and robots.
-- Cloudflare security headers generated from actual script hashes; no unsafe-inline, backend, database, tracking or remote visitor assets.
-- README, asset provenance, deployment runbook, checkpoints and tests preserved. Local Git initialized on `main`; remote publication pending.
+## Delivery
 
-## Verified checks
-
-| Check | Executed command | Actual result |
-| --- | --- | --- |
-| Types / Astro diagnostics | `npm run check` with `ASTRO_TELEMETRY_DISABLED=1` | 0 errors, 0 warnings, 0 hints across 25 files |
-| Lint | `npm run lint` | No issues |
-| Production build | `npm run build` | 14 HTML pages plus sitemap; security headers generated |
-| Unit and static-output tests | `npm test` | 5 passed, 0 failed |
-| Desktop/mobile browser checks | `npm run test:browser` | 6 passed, 0 failed; Chrome desktop and iPhone 13 viewport emulation |
-| Automated accessibility | Axe WCAG 2 A/AA and WCAG 2.1 A/AA tags, inside browser suite | No violations detected across all 13 public pages at both viewport sizes |
-| Links / metadata / sitemap / images / CSP / secret patterns | Included in unit/output and browser suites | Passed |
-| Dependency audit | `npm audit --registry=https://registry.yarnpkg.com --fetch-retries=0` | 0 vulnerabilities across 481 audited packages at this checkpoint |
-| Lighthouse mobile | Local Chrome Lighthouse, mobile default throttling | Performance 96, accessibility 100, best practices 100, SEO 100 |
-| Lighthouse desktop | Local Chrome Lighthouse, desktop preset | Performance 100, accessibility 100, best practices 100, SEO 100 |
-
-Browser interaction checks exercise mobile-menu expansion/Escape, navigation, skip-link focus, category filtering, FAQ expansion, product-prefilled inquiry draft, real 404 response and browser-disabled JavaScript fallback. Draft handoff never sends a message automatically. Mobile tests are emulation, not a physical-device test. Manual screen-reader review is not performed.
-
-## Corrections during testing
-
-- Suppressed canonical tags on noindex 404 output to avoid a canonical pointing to an unserved `/404/` route.
-- Removed a redundant product-image ARIA label that conflicted with visible card numbering; decorative numbering is now hidden from assistive technology.
-- Added browser globals to test lint configuration.
-- Adjusted the no-JavaScript assertion to verify the visible fallback address. Playwright disables execution but does not necessarily change HTML’s noscript parsing flag.
-- Used a 1x mobile screenshot scale to avoid excessively tall high-DPI captures; viewport remains iPhone 13 emulation.
-- Fixed local preview reachability by restarting the owned server outside the isolated sandbox. Both Lighthouse runs then completed successfully. Scores are local lab results, not production measurements. Local serving lacks Cloudflare compression and asset-cache behavior.
-
-## Environment and TLS
-
-Node v24.20.0, npm 11.19.0, Git 2.55.0.windows.5 and Wrangler 4.151.3 are available. Sandbox DNS blocked the initial registry lookup. Outside the sandbox, npm’s server certificate was not yet valid at the observed clock. The public Yarn mirror passed TLS validation and supplied installation packages. TLS validation was never disabled for dependency installation, authentication or deployment. No persistent npm TLS setting was changed.
-
-Astro telemetry is disabled for executed checks using an environment variable; this avoids an unnecessary write outside the workspace. The project has a lockfile. Package mirror URLs are recorded in that lockfile for reproducible installation.
-
-## DNS and email baseline
-
-Read-only public queries observed:
-
-- Nameservers: `eva.ns.cloudflare.com`, `everton.ns.cloudflare.com`.
-- MX: `route3.mx.cloudflare.net` priority 72, `route2.mx.cloudflare.net` priority 21, `route1.mx.cloudflare.net` priority 56.
-- SPF: `v=spf1 include:_spf.mx.cloudflare.net ~all`.
-- `www.slickk.online`: DNS name does not exist at the baseline query.
-- Apex HTTPS request: no address record usable by that request; no production page or TLS certificate verified.
-
-No DNS, registrar, DNSSEC, mail-routing rules or destination addresses were modified. DKIM/DMARC, the private routing dashboard and end-to-end mail delivery have not been inspected or retested. Public MX/SPF alone do not prove email delivery.
-
-## Cloudflare setup requested during implementation
-
-Fetched and applied the Codex instructions from https://developers.cloudflare.com/agent-setup/prompt.md.
-
-- Installed all 19 official Cloudflare skills under `C:\Users\mobta\.codex\skills` using the supported Codex skill installer.
-- Backed up existing Codex configuration beside the original: `config.toml.before-cloudflare-20261022-120243.bak`.
-- Registered `cloudflare` with `https://mcp.cloudflare.com/mcp` in `C:\Users\mobta\.codex\config.toml`.
-- Limited MCP OAuth to Pages access, account/user metadata, zone and DNS read access, plus offline access. Did not request DNS write or email-management permissions.
-- Owner approved OAuth. CLI returned `Successfully logged in to MCP server 'cloudflare'.` and `codex mcp list` reported enabled/OAuth.
-- Restart Codex to load the new MCP tools. Skills become available on the next turn.
-- Skipped the optional beta `cf` CLI and did not change global agent instructions to require it. The website brief explicitly specifies Wrangler and Pages.
-
-Wrangler’s earlier device authorization attempt timed out after five minutes. MCP OAuth does not automatically authenticate Wrangler. Correct-account zone ownership and Pages project access remain to be verified before deployment.
-
-An attempted Windows-keyring Wrangler login reported its optional keyring module missing. A local helper install did not satisfy Wrangler’s global module discovery; the unused local package was removed. No Wrangler OAuth success is claimed. Continue with the authenticated MCP after restarting Codex, or complete a separate supported Wrangler authentication flow.
-
-## Source control and release status
-
-GitHub connector and CLI identify authenticated user `shiyamprimetrade-sketch`. Search found no repository named SLICKK in that account. No remote repository has been created or pushed. A local Git checkpoint is preserved on `main`. Screenshots and actual Lighthouse summaries are retained in `docs/qa/`.
-
-| Item | State |
+| Item | Verified result |
 | --- | --- |
-| Local source and build | Complete, checks above verified |
-| Legal pages | Owner approved both for publication in this chat; draft notices removed |
-| Cloudflare MCP | Installed, configured, OAuth verified; tool loading requires restart |
-| Correct account / zone | Authenticated account verified by API to own active slickk.online |
-| Existing Pages projects | API inspection confirmed zero before project creation |
-| Pages project / deployment ID / URL | slickk created successfully; upload in progress |
-| Custom domain / production HTTPS | Not activated or verified |
-| Public email display | Verified in built output and browser checks |
-| Incoming email test | Not performed; prior working configuration left untouched |
-| GitHub remote | Not created |
-| New recurring charges | No purchases or paid features enabled |
+| Framework | Astro 7.4.2, TypeScript 6.0.3, static output |
+| Project | C:\Users\mobta\CodexWorkspace\Slickk-Website |
+| Private GitHub backup | https://github.com/shiyamprimetrade-sketch/slickk-website |
+| Cloudflare account | Wrangler OAuth authenticated; API verified ownership of the active slickk.online zone |
+| Pages project | slickk; Direct Upload; production branch main |
+| Production deployment | fe506cda-fac0-40a9-91ea-744badcaa42f; API status success |
+| Deployment URL | https://fe506cda.slickk.pages.dev |
+| Deployed content commit | 0bb1b23; later commits preserve verification scripts, evidence and documentation |
+| Custom domains | slickk.online and www.slickk.online both API-confirmed active |
+| Web DNS | Two proxied CNAMEs targeting slickk.pages.dev |
+| HTTPS | Native Windows curl validated public responses; regular Chrome rendered the live site without an interstitial |
+| Canonical redirect | Enabled Cloudflare Single Redirect SLICKK WWW to apex; 301 preserving path and query |
+| HTTP | Both hostnames return 301 to HTTPS |
+| Legal review | Owner explicitly approved both pages; draft-review notices removed |
+| Cost | No purchases, paid features or new paid subscriptions enabled |
 
-## Next checkpoint
+Fourteen requested HTML pages are complete: home, about, products, global sourcing, quality/logistics, why SLICKK, exporters, buyers, contact, FAQs, privacy, terms, responsible sourcing and branded 404. Shared components, responsive navigation, product filters, FAQ disclosures, original branding, optimized local images, local fonts, metadata, Organization JSON-LD, sitemap, robots and security headers are included.
 
-1. Load the authenticated Cloudflare MCP tools after restart, or complete separate Wrangler OAuth.
-2. Confirm the account contains the active `slickk.online` zone and inspect existing Pages/web DNS.
-3. Obtain the requested owner review of privacy/terms drafts and authorization for concrete production/account changes.
-4. Create/reuse Pages project, deploy tested `dist/`, attach approved domains, preserve email records and verify live HTTPS/pages/404/redirects.
-5. Create a private source repository if authorized, push reviewed source and record the actual URL.
+Products are a sourcing guide, not inventory. Countries are sourcing interests, not confirmed suppliers. Imagery is illustrative. No business achievements, prices, shipments or certifications were invented.
 
-Do not report the website live until independent production verification succeeds.
+## Executed verification
+
+| Check | Actual result |
+| --- | --- |
+| npm run check | 0 errors, 0 warnings, 0 hints across 25 files |
+| npm run lint | Passed |
+| npm run build | 14 HTML pages, sitemap and CSP hashes generated |
+| npm test | 5 passed, 0 failed |
+| npm run test:browser, local | 6 passed, 0 failed on final rerun |
+| Local Axe WCAG 2 A/AA and 2.1 A/AA | No detected violations across all 13 public pages at both viewport sizes |
+| Dependency audit | 0 vulnerabilities, 481 packages at final installation checkpoint |
+| Local Lighthouse mobile | Performance 96; accessibility, best practices and SEO 100 |
+| Local Lighthouse desktop | All four categories 100 |
+| npm run verify:live | All 13 pages HTTP 200 with brand, contact and CSP; assets, sitemap, robots, branded 404, WWW redirect and HTTP upgrades passed |
+| Live query/path redirect | WWW /contact/?product=grapes returned 301 to https://slickk.online/contact/?product=grapes |
+| Live regular Chrome | Homepage rendered; mobile menu, product navigation and orange filtering worked; no horizontal overflow at 390px |
+
+Local browser tests also cover skip-link focus, menu Escape handling, FAQs, product-prefilled email drafts, image loading, CSP/console errors and JavaScript-disabled fallback. Viewports are emulation, not physical phone tests. Manual screen-reader review was not performed. Local Lighthouse scores are not production measurements.
+
+### Isolated live-browser limitation
+
+The full Playwright suite against public HTTPS was attempted. All six tests stopped at navigation with net::ERR_CERT_DATE_INVALID. Node fetch also returned CERT_NOT_YET_VALID. The execution UTC clock and Cloudflare HTTP Date differed by six hours at the observed checkpoint. This discrepancy is evidence, not a proven root cause for every client.
+
+No certificate warning was bypassed and no TLS validator was disabled. On Windows, live HTTP checks use native curl with its platform certificate validator and require ssl_verify_result=0. Regular existing Chrome loaded the site successfully and supported the live mobile checks above. The complete automated live-browser/Axe suite is **not reported as passed**.
+
+## Email and privacy
+
+Before setup, the dashboard contained five mail-related rows: three MX, one SPF TXT and one DKIM TXT. After setup, all five row values compared equal to the captured baseline. Only the two web CNAMEs were added.
+
+- MX unchanged: route3.mx.cloudflare.net / 72; route2.mx.cloudflare.net / 21; route1.mx.cloudflare.net / 56.
+- SPF unchanged: v=spf1 include:_spf.mx.cloudflare.net ~all.
+- DKIM unchanged at cf2024-1._domainkey.slickk.online.
+- Nameservers unchanged: eva.ns.cloudflare.com and everton.ns.cloudflare.com.
+- Registrar, DNSSEC, forwarding rules and destination mailbox were not changed.
+- No private forwarding address is published.
+- No fresh end-to-end email was sent; mailbox delivery was not retested. Unchanged DNS does not prove delivery.
+
+The website uses contact@slickk.online. Inquiry actions prepare email drafts; visitors must review and send them. There is no backend form, database, analytics, tracking cookie, browser storage or remote visitor font/image dependency.
+
+## Operational notes
+
+Official Cloudflare setup installed 19 skills and authenticated the MCP server, with the existing Codex configuration backed up. Wrangler separately completed browser OAuth with account/user/zone read and Pages write scopes. Credentials remain outside project Git in the local Wrangler profile.
+
+Wrangler 4.151.3 initially delegated creation to Workers and failed without deploying anything. Creating the explicitly requested Pages project succeeded with --force, which selected Pages. Subsequent upload used ordinary wrangler pages deploy without force, after types, lint, build and tests passed.
+
+Pages does not support domain-level sources in _redirects. The effective WWW redirect is the dashboard Single Redirect documented in DEPLOYMENT.md. The source _redirects file now points maintainers there; removing its inactive sample does not change the deployed website content.
+
+The private repository was created and pushed after the owner explicitly approved the exact GitHub destination and contents. It is a source backup: Git pushes do not deploy this Direct Upload project. No CI/CD, Search Console verification or guaranteed indexing is claimed.
+
+## Evidence and maintenance
+
+- docs/qa/cloudflare-deployment.json: API deployment and active-domain states, without credentials.
+- docs/qa/live-http-checks.txt: successful live verification output.
+- docs/qa/production-home.png: actual HTTPS production screenshot.
+- docs/qa/desktop-home.png and mobile-home.png: local responsive evidence.
+- docs/qa/lighthouse-summary.json: measured local scores and runtime metadata.
+- README.md, DEPLOYMENT.md and ASSETS.md: setup, deployment/rollback and asset provenance.
+
+For future releases: review source, run checks, deploy, then run verify:live. Preserve the dashboard redirect and mail DNS. Resolve the isolated certificate-date issue before claiming the full live Playwright suite passed. Retest actual incoming email separately when an explicitly authorized test mechanism is available.

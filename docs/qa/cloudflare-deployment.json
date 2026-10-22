@@ -1,0 +1,20 @@
+{
+  "project": "slickk",
+  "subdomain": "slickk.pages.dev",
+  "productionBranch": "main",
+  "deploymentId": "fe506cda-fac0-40a9-91ea-744badcaa42f",
+  "deploymentUrl": "https://fe506cda.slickk.pages.dev",
+  "deploymentStatus": "success",
+  "domains": [
+    {
+      "name": "slickk.online",
+      "status": "active"
+    },
+    {
+      "name": "www.slickk.online",
+      "status": "active"
+    }
+  ],
+  "zoneOwnershipVerified": true,
+  "mailDnsComparison": "All 5 pre-existing MX/TXT rows unchanged in dashboard comparison"
+}

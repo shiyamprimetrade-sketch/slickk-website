@@ -44,16 +44,20 @@ Product categories are not live inventory. Sourcing countries are interests, not
 
 Email links and the optional inquiry builder open the visitor’s email client. The visitor must send the email. The website has no backend submission endpoint, automatic email sending, database, analytics, tracking cookies, third-party scripts or browser storage. The builder validates fields, encodes the draft and uses a fixed public recipient. Browser-native email apps are an external dependency; webmail users can copy the address.
 
-The owner must review `src/data/pages.ts` privacy and terms drafts before publication and confirm retention, infrastructure processing, actual data-sharing practices and business identity. No private forwarding address is included.
+The owner approved the privacy and terms pages for publication on 22 October 2026. Review `src/data/pages.ts` whenever business practices or website features change. No private forwarding address is included.
 
 ## Deployment
 
 Follow `DEPLOYMENT.md`. Use the Cloudflare account containing the existing `slickk.online` zone. Account email need not match the Codex account. Verify account, existing Pages projects and current web DNS before any production changes. Never alter nameservers, MX, SPF, DKIM, DMARC or Email Routing for this deployment.
 
-`dist/` is the upload directory. `npm run deploy` gates upload on types, lint, build and unit/output tests. Run browser tests separately before release. Deploy only after the requested owner review of legal drafts. Secrets are unnecessary for the website; prefer Wrangler OAuth for deployment. Never commit tokens or `.env` files.
+`dist/` is the upload directory. `npm run deploy` gates upload on types, lint, build and unit/output tests. Run browser tests separately before release. Secrets are unnecessary for the website; prefer Wrangler OAuth for deployment. Never commit tokens or `.env` files. The canonical WWW redirect is a Cloudflare Single Redirect, documented in `DEPLOYMENT.md`.
 
 Cloudflare Direct Upload cannot simply be converted to native Git integration. This project does not configure automatic deployment or incur paid services.
 
 ## Evidence and continuity
 
 See `REPORT.md` for executed results and current blockers. `PLAN.md` records scope and checkpoints. Do not treat planned tests, deployment commands or a Pages upload as proof that the custom domain is active. `npm run verify:live` requires a real public HTTPS deployment and checks pages, assets, CSP, 404 and WWW redirect.
+
+On Windows, live HTTP checks use native `curl.exe` with its platform TLS validator. Other platforms use Node fetch. Neither path disables certificate validation. Set `PLAYWRIGHT_BASE_URL=https://slickk.online` in the environment to run browser tests against production; omit it for the local server. See the report for the isolated automated browser’s certificate-date limitation.
+
+Private source backup: https://github.com/shiyamprimetrade-sketch/slickk-website . Public website: https://slickk.online . This is a Direct Upload project; pushing Git does not deploy automatically.

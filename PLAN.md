@@ -31,11 +31,13 @@ No database, tracking, accounts, checkout, live inventory, paid services or auto
 - No Cloudflare environment variable names or Wrangler default configuration were found at the two common paths checked.
 - Initial sandbox npm access could not resolve registry.npmjs.org; retrying with approved network access.
 
-## Verified checkpoint
+## Final verified checkpoint
 
-- All fourteen requested HTML pages built. Types, lint, five unit/output tests and six desktop/mobile browser tests passed.
+- All fourteen requested HTML pages built. Types, lint, five unit/output tests and six local desktop/mobile browser tests passed.
 - Local Lighthouse: mobile performance 96; desktop performance 100; accessibility, best practices and SEO 100 on both.
-- Original local assets, responsive design and mailto inquiry flow are complete. Legal drafts await owner review before publication.
+- Original local assets, responsive design and mailto inquiry flow are complete. Owner approved legal pages for publication.
 - Cloudflare official setup applied: nineteen skills installed, MCP configured with backup, OAuth verified. Restart Codex to load its tools.
-- Wrangler device flow timed out; no successful Wrangler login, Pages deployment, domain activation or public TLS verification.
-- No production, DNS, email routing or billing changes made. Full evidence and next steps in `REPORT.md`.
+- Wrangler browser OAuth and Pages deployment succeeded. Both custom domains are active. Live HTTPS pages, assets, 404, HTTP upgrades and canonical WWW redirect passed native curl checks.
+- Live mobile navigation and filtering passed in regular Chrome. The isolated live Playwright suite encountered a certificate-date error and is not marked passed.
+- Two web CNAMEs and one canonical redirect rule added. All five existing mail DNS rows compared unchanged. No routing or billing changes made.
+- Approved private GitHub backup created. Full evidence, remaining test limits and maintenance steps are in `REPORT.md`.
