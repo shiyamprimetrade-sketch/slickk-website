@@ -1,0 +1,71 @@
+---
+import { site, navigation, footerLinks } from '../data/site';
+import '../styles/global.css';
+interface Props { title: string; description: string; noindex?: boolean; }
+const { title, description, noindex = false } = Astro.props;
+const canonical = new URL(Astro.url.pathname, site.url).href;
+const schema = {
+  '@context': 'https://schema.org', '@type': 'Organization',
+  name: site.name, url: site.url, email: site.email,
+  description: 'International fresh fruit sourcing and importing focused on Bangladesh.',
+  logo: `${site.url}/wordmark.svg`, areaServed: { '@type': 'Country', name: 'Bangladesh' },
+};
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#143b2b" />
+    <meta name="description" content={description} />
+    <meta name="robots" content={noindex ? 'noindex, follow' : 'index, follow'} />
+    <title>{title} | SLICKK</title>
+    {!noindex && <link rel="canonical" href={canonical} />}
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="SLICKK" />
+    <meta property="og:title" content={`${title} | SLICKK`} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={`${site.url}/images/social.jpg`} />
+    <meta property="og:image:alt" content="SLICKK — Freshness Across Borders. International fresh fruit sourcing for Bangladesh." />
+    <meta name="twitter:card" content="summary_large_image" />
+    <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <div class="topbar"><div class="container"><span>International fresh fruit sourcing & importing</span><a href={`mailto:${site.email}`}>{site.email}<span aria-hidden="true"> ↗</span></a></div></div>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="wordmark" href="/" aria-label="SLICKK home">SLICKK<span class="brand-leaf" aria-hidden="true"></span><span class="brand-dot" aria-hidden="true">.</span></a>
+        <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav">Menu <span aria-hidden="true">☰</span></button>
+        <nav id="site-nav" aria-label="Main navigation">
+          {navigation.map(([label, href]) => <a href={href} aria-current={Astro.url.pathname === href ? 'page' : undefined}>{label}</a>)}
+          <a class="button button-small" href="/contact/">Let’s connect <span aria-hidden="true">↗</span></a>
+        </nav>
+      </div>
+    </header>
+    <main id="main"><slot /></main>
+    <footer class="site-footer">
+      <div class="container footer-top">
+        <div><a class="wordmark" href="/" aria-label="SLICKK home">SLICKK<span class="brand-dot" aria-hidden="true">.</span></a><p>Freshness Across Borders.</p><p class="footer-description">International fresh-fruit sourcing<br />with Bangladesh at heart.</p></div>
+        <div><h2>Explore</h2>{navigation.map(([label, href]) => <a href={href}>{label}</a>)}</div>
+        <div><h2>Connect & discover</h2>{footerLinks.slice(0, 6).map(([label, href]) => <a href={href}>{label}</a>)}</div>
+        <div class="footer-contact"><h2>Start a conversation</h2><a href={`mailto:${site.email}`}>{site.email} ↗</a><p>Bangladesh market focus.<br />International inquiries welcome.</p><p class="small">Product availability and commercial<br />terms require confirmation.</p></div>
+      </div>
+      <div class="container footer-bottom"><span>© {new Date().getFullYear()} SLICKK</span><span>Purposeful sourcing. Shared possibilities.</span><div><a href="/privacy/">Privacy policy</a><a href="/terms/">Terms of use</a></div></div>
+    </footer>
+    <script>
+      const toggle = document.querySelector<HTMLButtonElement>('.menu-toggle');
+      const nav = document.querySelector<HTMLElement>('#site-nav');
+      function closeMenu() { toggle?.setAttribute('aria-expanded', 'false'); nav?.classList.remove('is-open'); }
+      toggle?.addEventListener('click', () => {
+        const open = toggle.getAttribute('aria-expanded') !== 'true';
+        toggle.setAttribute('aria-expanded', String(open)); nav?.classList.toggle('is-open', open);
+      });
+      document.addEventListener('keydown', (event) => { if (event.key === 'Escape' && toggle?.getAttribute('aria-expanded') === 'true') { closeMenu(); toggle.focus(); } });
+      nav?.querySelectorAll('a').forEach((link) => link.addEventListener('click', closeMenu));
+      document.addEventListener('click', (event) => { if (event.target instanceof Node && !nav?.contains(event.target) && !toggle?.contains(event.target)) closeMenu(); });
+    </script>
+  </body>
+</html>

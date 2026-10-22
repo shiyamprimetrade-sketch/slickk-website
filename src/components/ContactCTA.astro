@@ -1,0 +1,5 @@
+---
+interface Props { title?: string; text?: string; }
+const { title = 'Good partnerships start\nwith a conversation.', text = 'A sourcing opportunity. A wholesale requirement. Let’s explore what comes next.' } = Astro.props;
+---
+<section class="contact-banner"><div class="container contact-banner-inner"><div><p class="eyebrow">Let’s grow possibilities</p><h2>{title.split('\n').map((line) => <span class="line">{line}</span>)}</h2><p>{text}</p></div><a class="button button-citrus" href="/contact/">Contact SLICKK <span aria-hidden="true">↗</span></a></div></section>

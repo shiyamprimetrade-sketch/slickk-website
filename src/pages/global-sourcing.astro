@@ -1,0 +1,18 @@
+---
+import Layout from '../layouts/Layout.astro';
+import SourcingMap from '../components/SourcingMap.astro';
+import ContactCTA from '../components/ContactCTA.astro';
+import { markets } from '../data/site';
+---
+<Layout title="Global Sourcing — China, South Africa & Egypt" description="Discover SLICKK’s sourcing markets of interest and approach to supplier discovery, specifications and fruit import planning for Bangladesh.">
+  <section class="page-hero"><div class="container"><p class="eyebrow">A world of opportunity</p><h1>Across origins.<br /><em>Connected by purpose.</em></h1><p class="page-intro">China. South Africa. Egypt. Three sourcing markets of interest, with the needs of Bangladesh’s produce trade in view.</p></div></section>
+  <section class="section container"><SourcingMap /><div class="market-grid">{markets.map((market) => <article><span class="market-code">{market.code}</span><h2>{market.name}</h2><p>{market.text}</p></article>)}</div><p class="small">These countries are sourcing targets. They do not represent confirmed partnerships, supply contracts or active shipments.</p></section>
+  <section class="section about-section"><div class="container purpose-grid"><div><p class="eyebrow">Why international sourcing matters</p><h2>More perspective.<br />Better questions.</h2></div><div><p class="lead">Different origins can offer different varieties, harvest windows and commercial possibilities.</p><p>For buyers in Bangladesh, comparing proposals means considering more than the fruit alone. Packing, handling, transport, documents and responsibilities all shape a potential transaction. Availability and commercial feasibility need confirmation in each case.</p></div></div></section>
+  <section class="section container"><div class="section-heading"><div><p class="eyebrow">From introduction to informed discussion</p><h2>A considered sourcing process.</h2></div></div><ol class="process-list">{[
+    ['Understand the requirement', 'Record the product, variety, grade, quantity, packing, destination and requested timing.'],
+    ['Discover and evaluate suppliers', 'Review business identity, proposed products, supporting documentation and the information needed for supplier assessment.'],
+    ['Compare the commercial proposal', 'Clarify price, currency, quantities, payment, shipment terms, offer validity and open questions.'],
+    ['Plan the journey', 'Discuss transport, handling, temperature management, inspection responsibilities and documentation with the relevant parties.'],
+    ['Confirm before proceeding', 'Check current import requirements and agree the transaction in writing. A sourcing discussion is not a confirmed order.'],
+  ].map(([title, text], index) => <li><span>{String(index + 1).padStart(2, '0')}</span><div><h3>{title}</h3><p>{text}</p></div></li>)}</ol></section><ContactCTA />
+</Layout>

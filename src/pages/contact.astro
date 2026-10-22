@@ -1,0 +1,49 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { inquiryLink } from '../data/site';
+---
+<Layout title="Contact SLICKK — Business & Wholesale Inquiries" description="Contact SLICKK at contact@slickk.online for fresh-fruit sourcing, exporter introductions, wholesale requirements and business partnership inquiries.">
+  <section class="page-hero"><div class="container"><p class="eyebrow">Let’s connect</p><h1>A conversation today.<br /><em>A possibility tomorrow.</em></h1><p class="page-intro">For sourcing opportunities, wholesale requirements and introductions, reach SLICKK by email.</p></div></section>
+  <section class="section container contact-layout"><div class="contact-information"><p class="eyebrow">Your direct line to SLICKK</p><h2><a href="mailto:contact@slickk.online">contact@<wbr />slickk.online <span aria-hidden="true">↗</span></a></h2><p>International inquiries welcome.<br />Primary language: English.<br />Market focus: Bangladesh.</p><div class="inquiry-types">{[
+    ['General inquiry', 'Questions about SLICKK and our sourcing interests.'],
+    ['Exporter introduction', 'Your origin, fruit, grades, packaging and proposed terms.'],
+    ['Wholesale buyer inquiry', 'Your product, quantity, origin preferences and timing.'],
+    ['Business partnership', 'A relevant idea or opportunity for collaboration.'],
+  ].map(([title, text]) => <a href={inquiryLink(`SLICKK — ${title}`)}><strong>{title} <span aria-hidden="true">↗</span></strong><span>{text}</span></a>)}</div></div>
+    <div class="inquiry-builder" id="inquiry-builder"><p class="eyebrow">Prepare your message</p><h2>Build an email inquiry.</h2><p id="draft-explanation">This opens a draft in your email app. You must review and send it yourself. Nothing is submitted through this website.</p><noscript><p><strong>JavaScript is off.</strong> Email <a href="mailto:contact@slickk.online">contact@slickk.online</a> directly with your business name, product, quantity and requirements.</p></noscript>
+      <form id="inquiry-form" aria-describedby="draft-explanation" hidden>
+        <div class="form-grid"><label>Your name <span aria-hidden="true">*</span><input name="name" autocomplete="name" required maxlength="100" /></label><label>Business name <span aria-hidden="true">*</span><input name="business" autocomplete="organization" required maxlength="140" /></label><label>Email <span aria-hidden="true">*</span><input name="email" type="email" autocomplete="email" required maxlength="254" /></label><label>Country <span aria-hidden="true">*</span><input name="country" autocomplete="country-name" required maxlength="80" /></label><label>Inquiry type<select name="type"><option>General inquiry</option><option>Exporter introduction</option><option>Wholesale buyer inquiry</option><option>Business partnership</option></select></label><label>Product of interest<select name="product"><option value="all">Not sure / multiple products</option><option value="apples">Apples</option><option value="oranges">Oranges</option><option value="grapes">Grapes</option></select></label></div>
+        <label>Your message <span aria-hidden="true">*</span><textarea name="message" rows="5" required minlength="20" maxlength="1200" placeholder="Tell us the product, quantity and unit, packaging, preferred origin and requested timing."></textarea></label><p class="small">Required fields marked *. Please avoid sensitive personal or payment information. <a href="/privacy/">Privacy policy</a>.</p><label class="consent"><input name="consent" type="checkbox" required /><span>I understand this prepares an email draft and that my email provider handles the message when I send it.</span></label><button class="button" type="submit">Open email draft <span aria-hidden="true">↗</span></button><p id="draft-status" class="small" role="status"></p>
+      </form><p class="small">No email app? Copy <button class="copy-email" type="button" hidden>contact@slickk.online</button><span class="no-js-email">contact@slickk.online</span> into your webmail.</p><p id="copy-status" class="small" role="status"></p>
+    </div>
+  </section>
+  <script>
+    import { buildInquiry, validProduct } from '../lib/inquiry';
+    const form = document.querySelector<HTMLFormElement>('#inquiry-form');
+    if (form) {
+      form.hidden = false;
+      const product = validProduct(new URLSearchParams(window.location.search).get('product'));
+      const select = form.elements.namedItem('product');
+      if (select instanceof HTMLSelectElement) select.value = product;
+      form.addEventListener('submit', (event) => {
+        event.preventDefault();
+        if (!form.reportValidity()) return;
+        const status = document.querySelector('#draft-status');
+        try {
+          const link = buildInquiry(new FormData(form));
+          window.location.href = link;
+          if (status) status.textContent = 'Your email app was requested. Review and send the draft there. If no app opens, email contact@slickk.online from your webmail. No message has been sent by this website.';
+        } catch { if (status) status.textContent = 'Please check your fields and consent, or email contact@slickk.online directly.'; }
+      });
+    }
+    const copy = document.querySelector<HTMLButtonElement>('.copy-email');
+    if (copy) {
+      copy.hidden = false; document.querySelector('.no-js-email')?.setAttribute('hidden', '');
+      copy.addEventListener('click', async () => {
+        const status = document.querySelector('#copy-status');
+        try { await navigator.clipboard.writeText('contact@slickk.online'); if (status) status.textContent = 'Email address copied.'; }
+        catch { if (status) status.textContent = 'Copy is unavailable. Select and copy contact@slickk.online manually.'; }
+      });
+    }
+  </script>
+</Layout>
