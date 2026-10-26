@@ -133,7 +133,7 @@ export const detailedServices: AgencyPage[] = [
     {title:'Capabilities',text:'Corporate sites, landing pages, e-commerce options, redesigns and CMS integration by consultation.',items:['UI and content architecture','Responsive, accessible interfaces','SEO foundation and metadata','Deployment and handover planning']},
     {title:'Delivery process',text:'Discover → plan → design → build → QA → owner review → deployment. Hosting and third-party services are scoped separately.'}
   ]},
-  {slug:'app-development',title:'App Development',label:'Applications',intro:'Thoughtful mobile products and internal applications with clear user journeys.',description:'Android and cross-platform application development consultation from Slickk Digital Solutions.',sections:[
+  {slug:'app-development',title:'App Design & Development',label:'Applications',intro:'Thoughtful mobile products and internal applications with clear user journeys.',description:'Android and cross-platform application development consultation from Slickk Digital Solutions.',sections:[
     {title:'Mobile with a purpose',text:'Identify important workflows, offline needs, integrations, onboarding and ongoing maintenance before engineering.'},
     {title:'Development options',text:'Android, cross-platform and business utility applications are evaluated case by case.',items:['Product discovery and interface flows','Prototype and architecture planning','Implementation and quality assurance','Release requirements and support review']},
     {title:'Responsible scoping',text:'Platform accounts, stores, third-party APIs and advanced integrations have separate cost and access requirements.'}
@@ -153,7 +153,7 @@ export const detailedServices: AgencyPage[] = [
     {title:'Design applications',text:'Corporate presentations, annual report layouts, company profiles, packaging, flyers, posters and social assets.',items:['Social creative and infographics','Print-ready brochures and catalogues','Presentation, stationery and exhibition graphics']},
     {title:'Working agreement',text:'Each project defines file dimensions, output formats, source asset responsibilities, revisions and licensing.'}
   ]},
-  {slug:'ai-automation',title:'AI & Business Automation',label:'Intelligent workflows',intro:'Explore practical automations without losing oversight of your data and processes.',description:'Slickk Digital Solutions AI business automation consultation: knowledge assistants, CRM workflows and reporting.',sections:[
+  {slug:'ai-automation',title:'AI Automation & Workflow Consulting',label:'Intelligent workflows',intro:'Explore practical automations without losing oversight of your data and processes.',description:'Slickk Digital Solutions AI business automation consultation: knowledge assistants, CRM workflows and reporting.',sections:[
     {title:'Appropriate automation',text:'Useful opportunities can include structured intake, document workflows, support drafting and reporting.'},
     {title:'Options by consultation',text:'Feasibility, security, human review and integration constraints are established before accepting work.',items:['Knowledge-base assistants and chatbots','Document processing and categorization','Lead qualification and workflow routing','Reporting dashboards and AI integration planning']},
     {title:'Risk and accountability',text:'Sensitive-data access, hallucination risks, costs and fallback behavior require documented controls and validation.'}
