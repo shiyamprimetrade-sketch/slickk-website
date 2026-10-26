@@ -1,4 +1,4 @@
-/* global Response, URL, fetch, URLSearchParams */
+/* global Response, URL, fetch, URLSearchParams, crypto */
 // Cloudflare Pages Function. No credentials or customer inquiries belong in the static bundle.
 // Required: TURNSTILE_SECRET and INQUIRIES_DB (D1) or a restricted EMAIL send binding + INQUIRY_DESTINATION.
 // Optional: INQUIRY_RATE_LIMIT binding with limit({ key }) and Cloudflare WAF rate limiting.
