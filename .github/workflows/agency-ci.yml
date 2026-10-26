@@ -25,6 +25,18 @@ jobs:
       - run: npm test
       - run: npx playwright install --with-deps chrome
       - run: npm run test:browser
+      - name: Lighthouse mobile and desktop lab reports
+        run: |
+          node scripts/serve.mjs > /tmp/slickk-preview.log 2>&1 &
+          server_pid=$!
+          trap 'kill $server_pid || true' EXIT
+          for attempt in {1..20}; do
+            if curl -fsS http://127.0.0.1:4321/ > /dev/null; then break; fi
+            sleep 1
+          done
+          npx lighthouse http://127.0.0.1:4321/ --chrome-flags="--headless --no-sandbox" --only-categories=performance,accessibility,best-practices,seo --output=json --output-path=test-results/lighthouse-mobile.json --quiet
+          npx lighthouse http://127.0.0.1:4321/ --preset=desktop --chrome-flags="--headless --no-sandbox" --only-categories=performance,accessibility,best-practices,seo --output=json --output-path=test-results/lighthouse-desktop.json --quiet
+          node -e "for(const mode of ['mobile','desktop']){const r=require('./test-results/lighthouse-'+mode+'.json');console.log(mode+': '+Object.entries(r.categories).map(([k,v])=>k+'='+Math.round(v.score*100)).join(' '))}"
       - uses: actions/upload-artifact@v4
         if: always()
         with:
