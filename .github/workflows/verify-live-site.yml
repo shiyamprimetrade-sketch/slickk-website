@@ -1,0 +1,41 @@
+name: Verify Slickk live deployment
+on:
+  push:
+    branches:
+      - agency-transformation-2026-10-26
+  workflow_dispatch:
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    timeout-minutes: 5
+    steps:
+      - name: Check public site, routes, and new agency identity
+        shell: bash
+        run: |
+          set -uo pipefail
+          failed=0
+          for path in / /services/ /software-development/ /app-development/ /web-development/ /seo-services/ /digital-marketing/ /content-creation/ /about/ /pricing/ /portfolio/ /contact/ /privacy/ /terms/; do
+            file="/tmp/slickk-$(echo "$path" | tr '/' '_').html"
+            code=$(curl -L --silent --show-error --max-time 18 -A 'Mozilla/5.0 (compatible; SlickkReleaseVerification/1.0)' -o "$file" -w '%{http_code}' "https://slickk.online$path") || code="network-error"
+            title=$(grep -oim1 '<title>[^<]*</title>' "$file" 2>/dev/null | head -c 140 || true)
+            echo "$path : HTTP $code : $title"
+            if [[ "$code" != "200" ]]; then failed=1; fi
+          done
+          if grep -qi 'Build Better\.' /tmp/slickk-_.html && grep -qi 'Grow Smarter' /tmp/slickk-_.html; then
+            echo "AGENCY_HOMEPAGE=PASS"
+          else
+            echo "AGENCY_HOMEPAGE=FAIL: the public homepage does not show the new Slickk agency hero"
+            failed=1
+          fi
+          if grep -qi 'software development' /tmp/slickk-_software-development_.html; then
+            echo "AGENCY_SERVICE_PAGE=PASS"
+          else
+            echo "AGENCY_SERVICE_PAGE=FAIL"
+            failed=1
+          fi
+          code=$(curl -L --silent --show-error --max-time 18 -o /dev/null -w '%{http_code}' 'https://www.slickk.online/') || code="network-error"
+          echo "www.slickk.online : HTTP $code"
+          if [[ "$code" != "200" ]]; then failed=1; fi
+          exit "$failed"
