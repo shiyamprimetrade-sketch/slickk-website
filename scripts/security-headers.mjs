@@ -17,7 +17,9 @@ async function inspect(directory) {
   }
 }
 await inspect('dist');
-const csp = `default-src 'none'; script-src 'self' ${[...hashes].join(' ')}; style-src 'self'; img-src 'self'; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'; form-action 'none'; upgrade-insecure-requests`;
+const turnstile = Boolean(process.env.PUBLIC_TURNSTILE_SITE_KEY);
+const cf = turnstile ? ' https://challenges.cloudflare.com' : '';
+const csp = `default-src 'none'; script-src 'self' ${[...hashes].join(' ')}${cf}; style-src 'self'; img-src 'self'; font-src 'self'; connect-src 'self'${cf}; frame-src ${turnstile ? 'https://challenges.cloudflare.com' : "'none'"}; object-src 'none'; base-uri 'none'; frame-ancestors 'none'; form-action 'self'; upgrade-insecure-requests`;
 await writeFile('dist/_headers', `/*
   Content-Security-Policy: ${csp}
   X-Content-Type-Options: nosniff
