@@ -25,7 +25,8 @@ export async function onRequestPost({ request, env }) {
   const service = text(data.service, 50), budget = text(data.budget, 50);
   const token = text(data['cf-turnstile-response'], 2048);
   const phone = text(data.phone || '',30), timeline = text(data.timeline || 'Flexible',50), reference = text(data.reference || '',500);
-  if(phone === null || timeline === null || reference === null || (reference && !/^https:\/\/[a-z\d.-]+(?::\d{1,5})?(?:\/|$)/i.test(reference))) return json(422,{ok:false,error:'Invalid optional fields'});
+  const referenceValid = !reference || (() => { try { return new URL(reference).protocol === 'https:'; } catch { return false; } })();
+  if(phone === null || timeline === null || reference === null || !referenceValid) return json(422,{ok:false,error:'Invalid optional fields'});
   if (!name || !email || !message || message.length < 20 || !service || !services.has(service) || !budget || !budgets.has(budget) || data.consent !== 'on' || !token || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return json(422, { ok: false, error: 'Invalid fields' });
   const ip = request.headers.get('CF-Connecting-IP') || 'unknown';
   if (env.INQUIRY_RATE_LIMIT) {
@@ -44,7 +45,7 @@ export async function onRequestPost({ request, env }) {
   const host = new URL(request.url).hostname;
   if (!verification?.success || verification.hostname !== host) return json(403, { ok: false, error: 'Verification failed' });
   const destination = text(env.INQUIRY_DESTINATION || '',254);
-  if (env.EMAIL?.send && (!destination || !/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(destination))) return json(503,{ok:false,error:'Destination unavailable'});
+  if (env.EMAIL?.send && (!destination || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(destination))) return json(503,{ok:false,error:'Destination unavailable'});
   const hasDB = Boolean(env.INQUIRIES_DB?.prepare);
   const id = crypto.randomUUID();
   if (hasDB) {
