@@ -3,7 +3,7 @@ import AxeBuilder from '@axe-core/playwright';
 
 const routes = ['/', '/about/', '/services/', '/software-development/', '/app-development/', '/web-development/', '/seo-services/', '/digital-marketing/', '/content-creation/', '/portfolio/', '/pricing/', '/contact/', '/faq/', '/privacy/', '/terms/', '/cookies/'];
 
-test('all pages have responsive layout and no detected WCAG A/AA violations', async ({ page }) => {
+test('all pages have responsive layout and no detected WCAG A/AA violations', async ({ page }, testInfo) => {
   const errors = [];
   page.on('pageerror', (err) => errors.push(err.message));
   for (const route of routes) {
@@ -11,6 +11,7 @@ test('all pages have responsive layout and no detected WCAG A/AA violations', as
     expect(response.status(), route).toBe(200);
     await expect(page.locator('h1')).toHaveCount(1);
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth), route).toBe(true);
+    if (route === '/') await page.screenshot({ path: 'test-results/' + testInfo.project.name + '-agency-home.png', fullPage: true });
     const accessibility = await new AxeBuilder({page}).withTags(['wcag2a','wcag2aa','wcag21a','wcag21aa']).analyze();
     expect(accessibility.violations, route).toEqual([]);
   }
