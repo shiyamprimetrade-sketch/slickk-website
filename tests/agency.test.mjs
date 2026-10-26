@@ -6,7 +6,7 @@ import { load } from 'cheerio';
 import { onRequestPost } from '../functions/api/inquiry.js';
 
 const base = resolve('dist');
-const routes = ['/', '/about/', '/services/', '/software-development/', '/app-development/', '/web-development/', '/seo-services/', '/digital-marketing/', '/content-creation/', '/portfolio/', '/pricing/', '/contact/', '/faq/', '/privacy/', '/terms/', '/cookies/'];
+const routes = ["/","/about/","/services/","/software-development/","/app-development/","/web-development/","/seo-services/","/digital-marketing/","/content-creation/","/portfolio/","/pricing/","/contact/","/faq/","/privacy/","/terms/","/cookies/","/industries/","/process/","/insights/","/request-quote/","/branding-graphic-design/","/ai-automation/","/services/logo-design/","/services/brochure-design/","/services/brand-identity/","/services/company-profile-design/","/services/website-development/","/services/app-development/","/services/digital-marketing/","/services/seo/","/services/graphic-design/","/services/ai-automation/","/portfolio/identity-system/","/portfolio/corporate-brochure/","/portfolio/commerce-experience/","/portfolio/operations-dashboard/","/portfolio/social-campaign/"];
 const fileFor = (path) => join(base, path, path === '/404.html' ? '' : 'index.html');
 
 test('all agency pages have unique SEO, headings, accessible landmarks and working internal links', async () => {
@@ -92,4 +92,15 @@ test('server verifies Turnstile and only sends to configured recipient (mocked)'
     const rejected = await onRequestPost({request:request(valid),env});
     assert.equal(rejected.status,403);
   } finally { globalThis.fetch = oldFetch; }
+});
+
+test('V2 creative disciplines and case-study routes are present with no fictitious client endorsements',async()=>{
+ const home=await readFile('dist/index.html','utf8');
+ assert.match(home,/We Design\./);assert.match(home,/We Elevate\./);
+ assert.match(home,/branding-graphic-design/);assert.match(home,/brochure-design/);
+ const portfolio=await readFile('dist/portfolio/index.html','utf8');
+ assert.match(portfolio,/Demonstration project gallery/);
+ assert.doesNotMatch(portfolio,/Trusted by BAT|Trusted by Unilever|99% customer satisfaction|100\+ completed projects/);
+ const content=await readFile('dist/services/logo-design/index.html','utf8');
+ assert.match(content,/Logo Essentials/);
 });
