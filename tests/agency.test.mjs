@@ -30,7 +30,7 @@ test('all agency pages have unique SEO, headings, accessible landmarks and worki
       const raw = $(link).attr('href') || $(link).attr('src');
       if (!raw || /^(mailto:|https?:|tel:|#)/.test(raw)) continue;
       const target = new URL(raw, 'https://slickk.online' + route);
-      await stat(fileFor(target.pathname.endsWith('/') ? target.pathname : target.pathname).replace(/index\.html$/, target.pathname.endsWith('/') ? 'index.html' : ''));
+      await stat(join(base, target.pathname, target.pathname.endsWith('/') ? 'index.html' : ''));
     }
   }
 });
