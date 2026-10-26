@@ -1,9 +1,9 @@
 export const brand = {
-  name: 'Slickk',
+  name: 'Slickk Digital Solutions',
   url: 'https://slickk.online',
   email: 'contact@slickk.online',
-  tagline: 'Software. Creativity. Growth.',
-  description: 'Slickk helps businesses build websites, custom software, mobile applications and effective digital growth campaigns.',
+  tagline: 'Digital Experiences. Extraordinary Results.',
+  description: 'Slickk Digital Solutions is a Bangladesh-based creative technology studio for identity design, digital experiences, software, SEO and business automation.',
   location: 'Bangladesh',
   social: {
     facebook: '', instagram: '', linkedin: '', github: '', youtube: '', whatsapp: ''
@@ -12,9 +12,11 @@ export const brand = {
 export const mainNavigation = [
   { label: 'Services', href: '/services/' }, { label: 'About', href: '/about/' },
   { label: 'Portfolio', href: '/portfolio/' }, { label: 'Pricing', href: '/pricing/' },
-  { label: 'FAQs', href: '/faq/' }
+  { label: 'Insights', href: '/insights/' }
 ];
 export const services = [
+  { slug: 'branding-graphic-design', name: 'Branding & Graphic Design', icon: '00', short: 'Memorable visual identities, logos, brochures and corporate materials.', description: 'Strategy-led identities, logo design, brand guidelines, corporate brochures, company profiles, catalogues, packaging and presentations.', bullets: ['Logo and brand identity systems', 'Corporate brochures and company profiles', 'Packaging, print and presentation design', 'Social campaigns and reusable creative assets'] },
+  { slug: 'ai-automation', name: 'AI & Business Automation', icon: '07', short: 'Purposeful workflow automation with human oversight.', description: 'Explore practical AI-enabled assistants, reporting dashboards, customer-support workflows and secure integrations by consultation.', bullets: ['Automation opportunity discovery', 'Business chatbots and knowledge assistants', 'Document and reporting workflows', 'Privacy, testing and handover planning'] },
   { slug: 'software-development', name: 'Software Development', icon: '01', short: 'Smart systems tailored to real business workflows.', description: 'Plan and build custom business applications, automation, dashboards, internal tools and integrations.', bullets: ['Workflow discovery and technical planning', 'Custom business applications and dashboards', 'API integrations and process automation', 'Testing, documentation and maintenance'] },
   { slug: 'app-development', name: 'App Development', icon: '02', short: 'Mobile experiences designed around the people using them.', description: 'Design and develop Android, iOS and cross-platform apps, from discovery to testing and release planning.', bullets: ['Product discovery and prototypes', 'Android and iOS development options', 'Cross-platform engineering', 'Quality assurance and post-launch support'] },
   { slug: 'web-development', name: 'Web Development', icon: '03', short: 'Fast, accessible websites built to explain and convert.', description: 'Build company websites, landing pages, e-commerce storefronts and responsive web experiences.', bullets: ['Corporate and service websites', 'Landing pages and e-commerce planning', 'Responsive performance and accessibility', 'Maintenance and technical improvements'] },
@@ -23,12 +25,13 @@ export const services = [
   { slug: 'content-creation', name: 'Content Creation', icon: '06', short: 'Creative content with a clear purpose and consistent brand voice.', description: 'Create copy, graphics, campaign assets, brand materials and production plans for short-form video.', bullets: ['Website and marketing copywriting', 'Brand and social graphics', 'Content calendars and campaign assets', 'Video concepts, editing and production planning'] },
 ] as const;
 export const pricing = [
-  { name: 'Business Website', price: 'From ৳25,000', period: 'per project', description: 'Scope-based company website package with responsive pages and essential on-page SEO.' },
-  { name: 'Website Maintenance', price: 'From ৳5,000', period: '/month', description: 'Agreed maintenance hours, updates and site-health checks.' },
-  { name: 'SEO Management', price: 'From ৳15,000', period: '/month', description: 'SEO priorities, technical improvements, content planning and reporting.' },
-  { name: 'Digital Marketing', price: 'Custom quote', period: '', description: 'Campaign scope, platforms and creative deliverables priced after discovery.' },
-  { name: 'Software Development', price: 'Custom quote', period: '', description: 'Based on requirements, integrations, complexity and delivery phases.' },
-  { name: 'Mobile App Development', price: 'Custom quote', period: '', description: 'Quoted for platform, functionality, testing and maintenance requirements.' },
+  { name: 'Logo Essentials', price: 'From ৳2,000', period: 'per project', description: 'Discovery, two initial concepts, two revision rounds and approved logo image exports; vector output if created.' },
+  { name: 'Brand Identity', price: 'From ৳8,000', period: 'per project', description: 'Identity system, color and typography selection, basic brand guideline and practical branded templates.' },
+  { name: 'Corporate Brochure', price: 'From ৳5,000', period: 'per project', description: 'Up to four pages using client-provided content, two revisions and a print-ready PDF.' },
+  { name: 'Business Website', price: 'From ৳10,000', period: 'per project', description: 'Up to five responsive pages, contact experience, basic on-page SEO and deployment assistance; hosting and third-party charges separate.' },
+  { name: 'Social Media Creative', price: 'From ৳5,000', period: '/month', description: 'Eight branded static creatives, basic captions, planned delivery and agreed revision rounds.' },
+  { name: 'Growth & SEO', price: 'Custom quote', period: '', description: 'Scope-based technical SEO, local visibility, content strategy and reporting without promised rankings.' },
+  { name: 'Custom Development', price: 'Custom quote', period: '', description: 'Web apps, mobile experiences, dashboards and automation proposed after requirements and security review.' },
 ] as const;
 export const faqs = [
   { question: 'What does Slickk help businesses with?', answer: 'We focus on websites, software, mobile applications, search visibility, digital marketing and creative content. We discuss the deliverables and practical constraints before confirming a project.' },
@@ -95,4 +98,89 @@ export const agencyPages: AgencyPage[] = [
       { title: 'Your options', text: 'You can manage browser cookies and site permissions in your browser settings. For questions, write to contact@slickk.online.' },
     ] },
 ];
-export const indexablePaths = ['/', '/contact/', '/faq/', ...agencyPages.map((p) => '/' + p.slug + '/')];
+export type PortfolioConcept = { slug:string; title:string; discipline:string; eyebrow:string; summary:string; objective:string; deliverables:readonly string[]; note:string };
+export const portfolioConcepts: PortfolioConcept[] = [
+  { slug:'identity-system', title:'An identity built to travel', discipline:'Branding', eyebrow:'Identity concept / self-initiated', summary:'A cohesive contemporary identity system for a fictional independent hospitality group.', objective:'Explore how distinctive color, typography and design tokens can carry across signage, stationery and digital touchpoints.', deliverables:['Logo exploration and identity system','Brand color and typography study','Stationery and mockups'], note:'Demonstration project. No commercial client or quantified result is claimed.' },
+  { slug:'corporate-brochure', title:'Clarity on every page', discipline:'Brochure Design', eyebrow:'Brochure concept / self-initiated', summary:'An editorial four-page corporate brochure concept for a fictional professional services practice.', objective:'Show how a print-ready document could present complex services with elegant hierarchy and purposeful spacing.', deliverables:['Four-page editorial layout direction','Typography and visual hierarchy','Print production checklist'], note:'Visual concept only, not an actual commissioned or printed deliverable.' },
+  { slug:'commerce-experience', title:'A cleaner path to purchase', discipline:'Website Development', eyebrow:'Commerce concept / self-initiated', summary:'A concept for a responsive digital storefront with thoughtful navigation and product storytelling.', objective:'Explore product discovery, mobile checkout patterns and a clear content architecture.', deliverables:['Responsive storefront wireframes','Product and category page direction','Performance and accessibility considerations'], note:'Proposed concept. Not a live shop and no conversion results are claimed.' },
+  { slug:'operations-dashboard', title:'Information, made actionable', discipline:'Automation', eyebrow:'Software concept / self-initiated', summary:'A conceptual dashboard for internal workflow visibility, approvals and useful reporting.', objective:'Present complex operational information in a way that helps a team take the next action.', deliverables:['Dashboard interface study','Role-based workflow outline','Reporting data model sketch'], note:'Demonstration interface, not a shipped customer product.' },
+  { slug:'social-campaign', title:'Creative with a purpose', discipline:'Digital Marketing', eyebrow:'Marketing concept / self-initiated', summary:'A coordinated visual campaign concept for a fictional local lifestyle brand.', objective:'Illustrate cohesive messaging across formats while maintaining identifiable campaign hierarchy.', deliverables:['Social creative direction','Caption and content themes','Channel adaptation concept'], note:'Self-initiated work. No advertising spend, reach or sales claims.' },
+] as const;
+export const detailedServices: AgencyPage[] = [
+  { slug:'logo-design', title:'Professional Logo Design', label:'Branding & design', intro:'A recognizable visual signature, designed for a real audience and practical applications.', description:'Explore professional logo design services by Slickk Digital Solutions in Bangladesh, from concept exploration to approved files.', sections:[
+    {title:'The challenge',text:'A logo should feel recognizable across storefronts, websites, packaging and smaller mobile displays. Good design starts by understanding the audience and competitive context.'},
+    {title:'What we can deliver',text:'Discovery brief, concepts, refinement, version variations and final export formats agreed in writing.',items:['Initial concept exploration','Color and monochrome usage','PNG and JPG; vector file when created','Revision scope and use guidance']},
+    {title:'Our design process',text:'Brief → references and strategic direction → concept review → refinement → approved export. Timelines depend on feedback and complexity.'},
+    {title:'Pricing & next step',text:'Logo Essentials is an illustrative launch package from ৳2,000; the written proposal confirms deliverables, file formats and revision rounds.'}
+  ]},
+  { slug:'brochure-design', title:'Corporate Brochure Design', label:'Corporate design', intro:'Clear, carefully paced documents that explain your business and make a professional impression.', description:'Slickk corporate brochure design service in Bangladesh for company introductions, products and B2B communication.', sections:[
+    {title:'Where brochures help',text:'Corporate introductions, trade discussions, sales meetings, proposals and event marketing often benefit from a coherent print or digital brochure.'},
+    {title:'Deliverables',text:'Editorial layout, typography, content placement and print-ready PDF to an agreed page count.',items:['Company-provided copy and imagery','Up to four pages in the illustrative starter package','Two proposed revision rounds','Print-ready PDF and documented production assumptions']},
+    {title:'Process',text:'Review content and audience, agree page architecture, design sample spreads, refine with feedback and prepare final files.'}
+  ]},
+  {slug:'brand-identity', title:'Brand Identity Systems', label:'Branding & design', intro:'Build a consistent recognizable brand across every relevant touchpoint.', description:'Brand identity systems, guidelines and reusable design assets by Slickk Digital Solutions.', sections:[
+    {title:'Beyond a logo',text:'An identity includes colors, typography, tone, layouts, graphical language and usage rules that work together.'},
+    {title:'Practical assets',text:'Depending on scope, deliver logo rules, palette, type selections, social layouts, stationery and starter guidelines.',items:['Brand discovery and positioning session','Visual direction and identity exploration','Guide PDF and reusable templates']},
+    {title:'Collaboration',text:'We validate decisions against your communication needs and propose only the deliverables useful to your business.'}
+  ]},
+  {slug:'company-profile-design',title:'Company Profile Design',label:'Corporate design',intro:'Introduce your organization with a credible, structured company profile.',description:'Company profile design for Bangladesh businesses preparing proposals, tenders and B2B partnerships.',sections:[
+    {title:'Business-first storytelling',text:'Organize capabilities, mission, business background and useful proof points into a clear narrative.'},
+    {title:'Typical sections',text:'Company overview, services, process, industry coverage and contact details, with factual claims verified by the client.',items:['Content hierarchy and editorial design','Visual identity alignment','Digital PDF and optional print specifications']},
+    {title:'Production',text:'A project plan includes content owner, review cycles, page count and file preparation.'}
+  ]},
+  {slug:'website-development',title:'Website Development',label:'Digital experiences',intro:'High-performance websites built around business goals, accessibility and clear messaging.',description:'Website development services in Bangladesh: company websites, e-commerce, landing pages and performance optimization.',sections:[
+    {title:'Websites built to perform',text:'Scoping covers information architecture, responsive layouts, fast loading, content quality and contact journeys.'},
+    {title:'Capabilities',text:'Corporate sites, landing pages, e-commerce options, redesigns and CMS integration by consultation.',items:['UI and content architecture','Responsive, accessible interfaces','SEO foundation and metadata','Deployment and handover planning']},
+    {title:'Delivery process',text:'Discover → plan → design → build → QA → owner review → deployment. Hosting and third-party services are scoped separately.'}
+  ]},
+  {slug:'app-development',title:'App Development',label:'Applications',intro:'Thoughtful mobile products and internal applications with clear user journeys.',description:'Android and cross-platform application development consultation from Slickk Digital Solutions.',sections:[
+    {title:'Mobile with a purpose',text:'Identify important workflows, offline needs, integrations, onboarding and ongoing maintenance before engineering.'},
+    {title:'Development options',text:'Android, cross-platform and business utility applications are evaluated case by case.',items:['Product discovery and interface flows','Prototype and architecture planning','Implementation and quality assurance','Release requirements and support review']},
+    {title:'Responsible scoping',text:'Platform accounts, stores, third-party APIs and advanced integrations have separate cost and access requirements.'}
+  ]},
+  {slug:'digital-marketing',title:'Digital Marketing Services',label:'Digital growth',intro:'Purposeful campaigns, thoughtful creative and measurable reporting.',description:'Digital marketing in Bangladesh including social media management, campaign content, analytics and conversion planning.',sections:[
+    {title:'Start with the objective',text:'Reach, qualified inquiries, retention and useful measurement require different campaign approaches.'},
+    {title:'Our approach',text:'Discovery, audience research, messaging, content production, channel planning, reporting and iterative improvement.',items:['Social media content direction','Meta and Google Ads planning by consultation','Campaign visuals and landing pages','Reporting with clear caveats']},
+    {title:'No guaranteed outcomes',text:'Platform rules, budgets, audiences and market conditions affect results. Advertising spend and provider fees are separate.'}
+  ]},
+  {slug:'seo',title:'SEO & Search Visibility',label:'Search strategy',intro:'Build a stronger foundation for discovery by the customers who matter.',description:'SEO services in Bangladesh: technical audits, on-page optimization, local visibility and search-intent research.',sections:[
+    {title:'Technical foundations',text:'Audit crawlability, page hierarchy, metadata, internal linking, structured data and Core Web Vitals opportunities.'},
+    {title:'Content and local relevance',text:'Map actual search intent to useful pages and improve clarity without keyword stuffing.',items:['Technical SEO recommendations','Local business visibility planning','Search intent and information architecture','Transparent measurement and next-step reporting']},
+    {title:'Expectations',text:'No agency can guarantee a specific Google ranking, traffic level or conversion outcome.'}
+  ]},
+  {slug:'graphic-design',title:'Graphic Design Services',label:'Creative production',intro:'Clear visual communication for digital and print touchpoints.',description:'Graphic design agency services including stationery, packaging, product catalogues and social graphics by Slickk.',sections:[
+    {title:'Designed for context',text:'Good creative balances brand recognition, legibility, practical dimensions and the place it will appear.'},
+    {title:'Design applications',text:'Corporate presentations, annual report layouts, company profiles, packaging, flyers, posters and social assets.',items:['Social creative and infographics','Print-ready brochures and catalogues','Presentation, stationery and exhibition graphics']},
+    {title:'Working agreement',text:'Each project defines file dimensions, output formats, source asset responsibilities, revisions and licensing.'}
+  ]},
+  {slug:'ai-automation',title:'AI & Business Automation',label:'Intelligent workflows',intro:'Explore practical automations without losing oversight of your data and processes.',description:'Slickk Digital Solutions AI business automation consultation: knowledge assistants, CRM workflows and reporting.',sections:[
+    {title:'Appropriate automation',text:'Useful opportunities can include structured intake, document workflows, support drafting and reporting.'},
+    {title:'Options by consultation',text:'Feasibility, security, human review and integration constraints are established before accepting work.',items:['Knowledge-base assistants and chatbots','Document processing and categorization','Lead qualification and workflow routing','Reporting dashboards and AI integration planning']},
+    {title:'Risk and accountability',text:'Sensitive-data access, hallucination risks, costs and fallback behavior require documented controls and validation.'}
+  ]},
+];
+agencyPages.push(
+  {slug:'industries',title:'Industries We Serve',label:'Where we can help',intro:'From growing local businesses to complex B2B teams, digital solutions begin with real industry needs.',description:'Slickk Digital Solutions welcomes inquiries from retail, professional services, hospitality, education, logistics and other industries.',sections:[
+    {title:'Professional services',text:'Clear company profiles, informative websites and useful lead-intake experiences.'},
+    {title:'Retail and e-commerce',text:'Digital storefront concepts, product communication, performance and conversion planning.'},
+    {title:'Education, hospitality and logistics',text:'Audience-specific websites, accessible content and practical operational workflows by consultation.'}
+  ]},
+  {slug:'process',title:'Our Process',label:'How we collaborate',intro:'A clear, documented journey from first conversation to reliable handover.',description:'Discover how Slickk Digital Solutions plans, designs, develops, tests and hands over digital projects.',sections:[
+    {title:'01 — Discover',text:'Discuss the business outcome, audience, constraints, budget and existing assets before suggesting solutions.'},
+    {title:'02 — Define',text:'Provide a written proposal with deliverables, ownership, revisions, schedule, payment assumptions and review gates.'},
+    {title:'03 — Design & develop',text:'Produce agreed assets or working software, review progress against objectives and manage changes transparently.'},
+    {title:'04 — Validate & hand over',text:'Run applicable functionality, accessibility, performance and security checks, document findings and provide agreed handover materials.'}
+  ]},
+  {slug:'insights',title:'Insights & Resources',label:'Practical knowledge',intro:'Useful starting points for building a more credible digital presence.',description:'Read introductory guides from Slickk Digital Solutions about business websites, branding and digital growth foundations.',sections:[
+    {title:'What makes a business website credible?',text:'Consistent messaging, truthful proof, reliable contact options, fast loading and accessibility make it easier for visitors to understand an offer and take the next step.'},
+    {title:'A practical logo and branding brief',text:'Document your audience, competitors, tone, usage contexts, preferred deliverables and revision process before a designer begins concept work.'},
+    {title:'Before you pay for SEO',text:'Make sure search engines can access useful pages, your business details are accurate, and you know how changes will be measured. Beware guaranteed-ranking promises.'}
+  ]},
+  {slug:'request-quote',title:'Request a Project Quote',label:'Start a project',intro:'Share your goals, timeline and approximate budget, and we can discuss a realistic scope.',description:'Start an inquiry for graphic design, websites, branding, SEO and digital solutions at Slickk Digital Solutions.',sections:[
+    {title:'Prepare your brief',text:'Include your company, target audience, deliverables, reference examples, desired timeframe and budget range. Do not share passwords or sensitive financial information.'},
+    {title:'Send securely',text:'Use the contact page to prepare an email inquiry. Email draft mode requires your confirmation before sending. Automated submission is not claimed unless independently enabled and verified.'}
+  ]}
+);
+export const caseStudyPaths = portfolioConcepts.map((p) => '/portfolio/' + p.slug + '/');
+export const detailServicePaths = detailedServices.map((p) => '/services/' + p.slug + '/');
+export const indexablePaths = ['/', '/contact/', '/faq/', ...agencyPages.map((p) => '/' + p.slug + '/'), ...detailServicePaths, ...caseStudyPaths];
