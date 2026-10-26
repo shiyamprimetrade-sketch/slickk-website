@@ -1,4 +1,4 @@
-/* global Response, crypto, TextEncoder */
+/* global Response, URL, crypto, TextEncoder */
 // Authenticated staff-only API for a Cloudflare D1-backed lead inbox.
 // LEADS_ADMIN_TOKEN: random >=32-character secret; never expose as PUBLIC_*.
 const json=(code,value)=>new Response(JSON.stringify(value),{status:code,headers:{'Content-Type':'application/json; charset=utf-8','Cache-Control':'no-store','X-Content-Type-Options':'nosniff'}});
