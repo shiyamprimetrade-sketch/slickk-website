@@ -1,0 +1,76 @@
+name: Release Slickk V2 to Cloudflare Pages
+on:
+  push:
+    branches:
+      - release-slickk-v2-2026-10-26
+  workflow_dispatch:
+    inputs:
+      confirmation:
+        description: "Type DEPLOY-SLICKK-V2 to authorize a production update"
+        required: true
+        type: string
+permissions:
+  contents: read
+concurrency:
+  group: slickk-pages-production
+  cancel-in-progress: false
+jobs:
+  release:
+    name: Test, deploy and verify production
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    environment: slickk-production
+    steps:
+      - name: Check explicit manual authorization
+        if: ${{ github.event_name == 'workflow_dispatch' }}
+        env:
+          CONFIRMATION: ${{ inputs.confirmation }}
+        run: |
+          test "$CONFIRMATION" = "DEPLOY-SLICKK-V2" || { echo "::error::Explicit confirmation missing"; exit 1; }
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - run: npm ci
+      - run: npm run check
+      - run: npm run lint
+      - run: npm run build
+      - run: npm test
+      - run: npm run test:browser
+      - name: Verify Cloudflare account credentials exist
+        env:
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+        run: |
+          if [ -z "$CLOUDFLARE_ACCOUNT_ID" ] || [ -z "$CLOUDFLARE_API_TOKEN" ]; then
+            echo "::error::Cloudflare credentials missing. Add CLOUDFLARE_ACCOUNT_ID and CLOUDFLARE_API_TOKEN as GitHub Actions secrets. No deployment was attempted."
+            exit 1
+          fi
+      - name: Publish to existing Cloudflare Pages project slickk
+        env:
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+        run: npx wrangler pages deploy dist --project-name=slickk --branch=main
+      - name: Confirm live domain serves V2 homepage
+        run: |
+          set -euo pipefail
+          verified=0
+          for attempt in 1 2 3 4 5 6; do
+            html=$(curl -fsSL --max-time 20 -H 'Cache-Control: no-cache' "https://slickk.online/?v2-release=${GITHUB_SHA}" || true)
+            if printf '%s' "$html" | grep -q 'We Design\.' && printf '%s' "$html" | grep -q 'We Elevate\.'; then
+              verified=1
+              break
+            fi
+            sleep 10
+          done
+          if [ "$verified" != "1" ]; then
+            echo "::error::A deployment may have occurred, but the public site does not yet verify as V2. Inspect Cloudflare and restore previous deployment if necessary."
+            exit 1
+          fi
+          for route in /services/logo-design/ /services/brochure-design/ /portfolio/ /pricing/ /contact/; do
+            code=$(curl -L -sS -o /dev/null -w '%{http_code}' --max-time 20 "https://slickk.online$route")
+            echo "$route HTTP $code"
+            test "$code" = "200" || exit 1
+          done
+          echo "SLICKK_V2_PUBLIC_RELEASE=VERIFIED"
