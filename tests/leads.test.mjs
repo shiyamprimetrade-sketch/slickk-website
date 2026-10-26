@@ -41,11 +41,11 @@ test('private API denies missing and invalid administrator credentials',async()=
 });
 test('private API serves filtered records, CSV protects against formula injection and updates status',async()=>{
  const db=mockDb();const env={INQUIRIES_DB:db,LEADS_ADMIN_TOKEN:adminToken};
- const request=(uri,more={})=>new Request('https://slickk.online'+uri,{headers:{Authorization:'Bearer '+adminToken,...(more.headers||{})},...more});
+ const request=(uri,more={})=>new Request('https://slickk.online'+uri,{...more,headers:{Authorization:'Bearer '+adminToken,...(more.headers||{})}});
  const res=await onRequestGet({request:request('/api/admin/leads?status=new'),env});
  assert.equal(res.status,200);assert.equal((await res.json()).results.length,1);
  const csv=await onRequestGet({request:request('/api/admin/leads?export=csv'),env});
- const data=await csv.text();assert.equal(csv.status,200);assert.ok(data.includes('\\\'=HYPERLINK')||data.includes("'=HYPERLINK"),data);
+ const data=await csv.text();assert.equal(csv.status,200);assert.ok(data.includes("'=HYPERLINK"),data);
  const patch=await onRequestPatch({request:request('/api/admin/leads',{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({id:'00000000-0000-4000-8000-000000000000',status:'contacted'})}),env});
  assert.equal(patch.status,200);assert.ok(db.calls.some(x=>/UPDATE leads SET status/.test(x.sql)));
 });
