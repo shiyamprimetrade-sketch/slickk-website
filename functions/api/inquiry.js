@@ -3,7 +3,7 @@
 // Required: TURNSTILE_SECRET, INQUIRY_DESTINATION, and a restricted EMAIL send binding.
 // Optional: INQUIRY_RATE_LIMIT binding with limit({ key }) and Cloudflare WAF rate limiting.
 const json = (status, body) => new Response(JSON.stringify(body), { status, headers: { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store' } });
-const services = new Set(['general','software-development','app-development','web-development','seo-services','digital-marketing','content-creation']);
+const services = new Set(['general','software-development','app-development','web-development','seo-services','digital-marketing','content-creation','branding-graphic-design','ai-automation','logo-design','brochure-design','brand-identity','company-profile-design','website-development','seo','graphic-design']);
 const budgets = new Set(['Not specified','Under BDT 25000','BDT 25000-50000','BDT 50000-100000','BDT 100000+']);
 const text = (value, max) => typeof value === 'string' && value.trim().length <= max ? value.trim() : null;
 export async function onRequestPost({ request, env }) {
@@ -24,6 +24,8 @@ export async function onRequestPost({ request, env }) {
   const email = text(data.email, 254), message = text(data.message, 3000);
   const service = text(data.service, 50), budget = text(data.budget, 50);
   const token = text(data['cf-turnstile-response'], 2048);
+  const phone = text(data.phone || '',30), timeline = text(data.timeline || 'Flexible',50), reference = text(data.reference || '',500);
+  if(phone === null || timeline === null || reference === null || (reference && !/^https:\/\/[a-z\d.-]+(?::\d{1,5})?(?:\/|$)/i.test(reference))) return json(422,{ok:false,error:'Invalid optional fields'});
   if (!name || !email || !message || message.length < 20 || !service || !services.has(service) || !budget || !budgets.has(budget) || data.consent !== 'on' || !token || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return json(422, { ok: false, error: 'Invalid fields' });
   const ip = request.headers.get('CF-Connecting-IP') || 'unknown';
   if (env.INQUIRY_RATE_LIMIT) {
@@ -47,7 +49,7 @@ export async function onRequestPost({ request, env }) {
     await env.EMAIL.send({
       from: 'contact@slickk.online', to: dest, replyTo: email,
       subject: 'Slickk project inquiry — ' + service,
-      text: ['Name: '+name,'Company: '+company,'Email: '+email,'Service: '+service,'Budget: '+budget,'','Project:',''+message].join('\n'),
+      text: ['Name: '+name,'Company: '+company,'Email: '+email,'Service: '+service,'Budget: '+budget,'Phone / WhatsApp: '+phone,'Timeline: '+timeline,'Reference: '+reference,'','Project:',''+message].join('\n'),
     });
     return json(200, { ok: true });
   } catch { return json(502, { ok: false, error: 'Delivery unavailable' }); }
