@@ -37,6 +37,13 @@ jobs:
           npx lighthouse http://127.0.0.1:4321/ --chrome-flags="--headless --no-sandbox" --only-categories=performance,accessibility,best-practices,seo --output=json --output-path=test-results/lighthouse-mobile.json --quiet
           npx lighthouse http://127.0.0.1:4321/ --preset=desktop --chrome-flags="--headless --no-sandbox" --only-categories=performance,accessibility,best-practices,seo --output=json --output-path=test-results/lighthouse-desktop.json --quiet
           node -e "for(const mode of ['mobile','desktop']){const r=require('./test-results/lighthouse-'+mode+'.json');console.log(mode+': '+Object.entries(r.categories).map(([k,v])=>k+'='+Math.round(v.score*100)).join(' '))}"
+      - name: Package static Slickk website for Cloudflare dashboard upload
+        uses: actions/upload-artifact@v4
+        with:
+          name: slickk-agency-site-for-cloudflare
+          path: dist/
+          retention-days: 30
+          if-no-files-found: error
       - uses: actions/upload-artifact@v4
         if: always()
         with:
