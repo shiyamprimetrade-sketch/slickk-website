@@ -22,7 +22,7 @@ const options = [
     <div class="contact-form">
       <h2>Project inquiry</h2>
       <p id="form-explanation" class="muted">{siteKey ? 'We will attempt a secure form submission. You will see confirmation only after the server accepts your request.' : 'This form prepares an email draft on your device. You must review and send the message from your email app; it does not automatically reach Slickk.'}</p>
-      <form id="project-inquiry" data-mode={siteKey ? 'secure' : 'draft'} aria-describedby="form-explanation">
+      <form id="project-inquiry" method="post" action="/api/inquiry" hidden data-mode={siteKey ? 'secure' : 'draft'} aria-describedby="form-explanation">
         <div class="form-grid">
           <label class="field">Your name *<input name="name" autocomplete="name" required maxlength="100" /></label>
           <label class="field">Business / company<input name="company" autocomplete="organization" maxlength="140" /></label>
@@ -47,6 +47,7 @@ const options = [
     const status = document.querySelector<HTMLElement>('#inquiry-status');
     const options = new Set(['general', 'software-development', 'app-development', 'web-development', 'seo-services', 'digital-marketing', 'content-creation']);
     if (form) {
+      form.hidden = false;
       const queryService = new URLSearchParams(location.search).get('service') || '';
       const serviceSelect = form.elements.namedItem('service');
       if (serviceSelect instanceof HTMLSelectElement && options.has(queryService)) serviceSelect.value = queryService;
