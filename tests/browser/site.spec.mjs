@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 
-const routes = ['/', '/about/', '/services/', '/software-development/', '/app-development/', '/web-development/', '/seo-services/', '/digital-marketing/', '/content-creation/', '/portfolio/', '/pricing/', '/contact/', '/faq/', '/privacy/', '/terms/', '/cookies/'];
+const routes = ["/","/about/","/services/","/software-development/","/app-development/","/web-development/","/seo-services/","/digital-marketing/","/content-creation/","/portfolio/","/pricing/","/contact/","/faq/","/privacy/","/terms/","/cookies/","/industries/","/process/","/insights/","/request-quote/","/branding-graphic-design/","/ai-automation/","/services/logo-design/","/services/brochure-design/","/services/brand-identity/","/services/company-profile-design/","/services/website-development/","/services/app-development/","/services/digital-marketing/","/services/seo/","/services/graphic-design/","/services/ai-automation/","/portfolio/identity-system/","/portfolio/corporate-brochure/","/portfolio/commerce-experience/","/portfolio/operations-dashboard/","/portfolio/social-campaign/"];
 
 test('all pages have responsive layout and no detected WCAG A/AA violations', async ({ page }, testInfo) => {
   const errors = [];
@@ -53,4 +53,16 @@ test('contact fallback visible with JavaScript disabled', async ({ browser, base
   await expect(page.locator('#project-inquiry')).toBeHidden();
   await expect(page.locator('noscript').first()).toHaveCount(1);
   await ctx.close();
+});
+
+test('V2 demonstration portfolio filters work with keyboard-accessible controls',async({page})=>{
+ await page.goto('/portfolio/');
+ const gallery=page.locator('[data-project-discipline]');
+ await expect(gallery).toHaveCount(5);
+ const filter=page.getByRole('button',{name:'Brochure Design'});
+ await filter.click();
+ await expect(filter).toHaveAttribute('aria-pressed','true');
+ await expect(gallery.filter({visible:true})).toHaveCount(1);
+ await page.getByRole('button',{name:'All Projects'}).click();
+ await expect(gallery.filter({visible:true})).toHaveCount(5);
 });
