@@ -19,19 +19,19 @@ const organization = {
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#101827" />
-    <title>{title} | Slickk</title>
+    <meta name="theme-color" content="#080b14" />
+    <title>{title} | Slickk Digital Solutions</title>
     <meta name="description" content={description} />
     <meta name="robots" content={noindex ? 'noindex, follow' : 'index, follow'} />
     {!noindex && <link rel="canonical" href={canonical} />}
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content={brand.name} />
-    <meta property="og:title" content={title + ' | Slickk'} />
+    <meta property="og:title" content={title + ' | Slickk Digital Solutions'} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
     <meta property="og:image" content={brand.url + '/agency-social.svg'} />
-    <meta property="og:image:alt" content="Slickk — Software. Creativity. Growth." />
+    <meta property="og:image:alt" content="Slickk Digital Solutions — We Design. We Build. We Elevate." />
     <meta name="twitter:card" content="summary_large_image" />
     <script type="application/ld+json" set:html={JSON.stringify(organization)} />
   </head>
@@ -51,12 +51,12 @@ const organization = {
     <footer class="footer">
       <div class="container">
         <div class="footer-grid">
-          <div><a class="logo" href="/">slickk<span>.</span></a><p>{brand.tagline}</p><p>Software development & digital growth services.<br />Based in Bangladesh, welcoming international inquiries.</p><a href={'mailto:' + brand.email}>{brand.email}</a></div>
+          <div><a class="logo" href="/">slickk<span>.</span></a><p>{brand.tagline}</p><p>Brand identity, corporate design, websites, software & digital growth.<br />Based in Bangladesh, welcoming international inquiries.</p><a href={'mailto:' + brand.email}>{brand.email}</a></div>
           <div><h3>Explore</h3>{mainNavigation.map((item) => <a href={item.href}>{item.label}</a>)}<a href="/contact/">Contact</a></div>
-          <div><h3>Services & policies</h3><a href="/software-development/">Software</a><a href="/web-development/">Web development</a><a href="/seo-services/">SEO</a><a href="/digital-marketing/">Digital marketing</a><a href="/privacy/">Privacy</a><a href="/terms/">Terms</a><a href="/cookies/">Cookies</a></div>
+          <div><h3>Services & policies</h3><a href="/services/logo-design/">Logo design</a><a href="/services/brochure-design/">Brochures</a><a href="/software-development/">Software</a><a href="/web-development/">Web development</a><a href="/seo-services/">SEO</a><a href="/digital-marketing/">Digital marketing</a><a href="/ai-automation/">AI automation</a><a href="/privacy/">Privacy</a><a href="/terms/">Terms</a><a href="/cookies/">Cookies</a></div>
         </div>
         {socials.length > 0 && <div aria-label="Social profiles">{socials.map(([name, href]) => <a href={href} rel="me noopener noreferrer" target="_blank">{name}</a>)}</div>}
-        <div class="footer-bottom"><span>© {new Date().getFullYear()} Slickk. All rights reserved.</span><span>Bangladesh · Global inquiries welcome</span></div>
+        <div class="footer-bottom"><span>© {new Date().getFullYear()} Slickk Digital Solutions. All rights reserved.</span><span>Bangladesh · Global inquiries welcome</span></div>
       </div>
     </footer>
     <script>

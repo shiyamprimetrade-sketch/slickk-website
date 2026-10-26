@@ -1,0 +1,21 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import GradientButton from '../../components/GradientButton.astro';
+import { portfolioConcepts } from '../../data/agency';
+export function getStaticPaths(){return portfolioConcepts.map(concept=>({params:{slug:concept.slug},props:{concept}}));}
+const {concept}=Astro.props;
+---
+<Layout title={concept.title+' — Demonstration Concept'} description={concept.summary+' This is a clearly identified self-initiated demonstration, not a client commission.'}>
+  <section class="page-hero aurora-surface"><div class="container">
+    <nav class="breadcrumbs" aria-label="Breadcrumb"><a href="/">Home</a> / <a href="/portfolio/">Portfolio</a> / {concept.title}</nav>
+    <p class="eyebrow">{concept.eyebrow}</p><h1>{concept.title}</h1><p class="lead">{concept.summary}</p>
+  </div></section>
+  <section class="section container concept-layout"><div class="concept-art" aria-hidden="true"><span class="concept-art-orbit"></span><strong>Concept / {concept.discipline}</strong></div>
+    <div><p class="eyebrow">The design challenge</p><h2>What this exploration sets out to do.</h2><p>{concept.objective}</p>
+      <h3>Proposed outputs</h3><ul>{concept.deliverables.map(item=><li>{item}</li>)}</ul>
+      <div class="notice">{concept.note} The visual is an original illustrative treatment, not a client-approved work sample.</div>
+      <GradientButton href="/contact/">Discuss something similar</GradientButton>
+    </div>
+  </section>
+  <section class="section section-soft"><div class="container"><p class="eyebrow">Continue exploring</p><h2>More creative possibilities</h2><div class="grid cards-3">{portfolioConcepts.filter(p=>p.slug!==concept.slug).slice(0,3).map(p=><article class="card"><p class="card-number">{p.discipline}</p><h3>{p.title}</h3><p>{p.summary}</p><a href={'/portfolio/'+p.slug+'/'}>View concept →</a></article>)}</div></div></section>
+</Layout>

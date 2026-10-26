@@ -1,0 +1,21 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import GradientButton from '../../components/GradientButton.astro';
+import { detailedServices } from '../../data/agency';
+export function getStaticPaths() { return detailedServices.map(page=>({params:{slug:page.slug},props:{page}})); }
+const {page}=Astro.props;
+---
+<Layout title={page.title} description={page.description}>
+  <section class="page-hero aurora-surface"><div class="container">
+    <nav class="breadcrumbs" aria-label="Breadcrumb"><a href="/">Home</a> / <a href="/services/">Services</a> / {page.title}</nav>
+    <p class="eyebrow">{page.label}</p><h1>{page.title}</h1><p class="lead">{page.intro}</p>
+    <GradientButton href={'/contact/?service='+encodeURIComponent(page.slug)}>Request a quote</GradientButton>
+  </div></section>
+  <div class="container section editorial">
+    <aside><p class="eyebrow">Explore this service</p><nav aria-label="Page sections">{page.sections.map((part,i)=><a href={'#part-'+(i+1)}>{part.title}</a>)}</nav><a href="/pricing/" class="btn">View launch packages</a></aside>
+    <article>{page.sections.map((part,i)=><section id={'part-'+(i+1)}><h2>{part.title}</h2><p>{part.text}</p>{part.items && <ul>{part.items.map(item=><li>{item}</li>)}</ul>}</section>)}
+      <div class="notice"><strong>Good to know:</strong> Scope, timelines and delivery capacity are confirmed in writing before work starts. Illustrative concepts are not presented as actual client outcomes.</div>
+    </article>
+  </div>
+  <section class="section container"><div class="cta"><div><p class="eyebrow">Your brief</p><h2>Ready to shape the right solution?</h2><p>Tell us the business goal, practical requirements and timeframe.</p></div><GradientButton href="/contact/">Start a project</GradientButton></div></section>
+</Layout>

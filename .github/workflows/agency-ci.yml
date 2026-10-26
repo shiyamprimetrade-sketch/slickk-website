@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - agency-transformation-2026-10-26
+      - slickk-digital-solutions-v2-2026-10-26
   pull_request:
     branches:
       - main
@@ -40,7 +41,7 @@ jobs:
       - name: Package static Slickk website for Cloudflare dashboard upload
         uses: actions/upload-artifact@v4
         with:
-          name: slickk-agency-site-for-cloudflare
+          name: slickk-digital-solutions-v2-site
           path: dist/
           retention-days: 30
           if-no-files-found: error

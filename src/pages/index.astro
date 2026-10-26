@@ -1,45 +1,44 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import { brand, services, pricing, faqs } from '../data/agency';
+import GradientButton from '../components/GradientButton.astro';
+import { brand, services, pricing, faqs, portfolioConcepts } from '../data/agency';
 ---
-<Layout title="Software Development & Digital Growth Agency" description="Slickk is a Bangladesh-based software development and digital growth agency building websites, apps, custom software, SEO and marketing solutions for businesses.">
-  <section class="hero">
+<Layout title="Creative Technology, Branding & Digital Solutions" description="Slickk Digital Solutions creates distinctive brands, corporate brochures, powerful websites, software, SEO and digital growth experiences for Bangladesh and international business clients.">
+  <section class="hero aurora-surface" aria-label="Slickk Digital Solutions introduction">
     <div class="container hero-grid">
-      <div>
-        <p class="eyebrow">Slickk · Digital technology & marketing</p>
-        <h1>Build Better.<br /><em>Grow Smarter.</em></h1>
-        <p class="lead">From powerful business websites and custom applications to SEO and digital marketing, Slickk helps ambitious businesses turn ideas into digital solutions.</p>
-        <div class="actions"><a class="btn" href="/contact/">Get a Free Consultation</a><a class="btn btn-outline" href="/services/">Explore Our Services</a></div>
-        <p class="badge-note" style="color:#c6d7df;margin-top:25px">Bangladesh-based · International inquiries welcome</p>
+      <div class="hero-copy">
+        <p class="eyebrow">Creative technology & digital solutions</p>
+        <h1>We Design.<br /><em>We Build.</em><br />We Elevate.</h1>
+        <p class="lead">From unforgettable brand identities to high-performance websites and digital growth strategies, Slickk turns business ambitions into powerful digital experiences.</p>
+        <div class="actions"><GradientButton href="/contact/">Start Your Project</GradientButton><a class="btn btn-outline" href="/portfolio/">Explore Our Work</a></div>
+        <p class="hero-footnote">Bangladesh-based creative studio · International project inquiries welcome</p>
       </div>
-      <div class="hero-panel" aria-label="Slickk technology and creative services">
-        <div class="panel-brand">slickk<span>.</span></div>
-        <h2>{brand.tagline}</h2>
-        <p>Technology that works. Design that communicates. Strategy grounded in your business goals.</p>
-        <div class="chips"><span class="chip">Websites</span><span class="chip">Software</span><span class="chip">Apps</span><span class="chip">SEO</span><span class="chip">Marketing</span><span class="chip">Creative</span></div>
+      <div class="hero-visual" aria-label="Abstract luminous creative technology illustration">
+        <div class="visual-orbit orbit-one"></div><div class="visual-orbit orbit-two"></div>
+        <div class="visual-core"><span class="visual-kicker">SLICKK / DIGITAL</span><span class="visual-wordmark">S<span>.</span></span><span class="visual-caption">{brand.tagline}</span></div>
+        <span class="orbit-label orbit-label-one">Design systems</span><span class="orbit-label orbit-label-two">Digital growth</span>
       </div>
     </div>
   </section>
   <section class="section container" id="services">
-    <div class="section-head"><p class="eyebrow">Our expertise</p><h2>One partner. Six digital disciplines.</h2><p>Choose what matters now, then expand when there is a clear business case.</p></div>
-    <div class="grid cards-3">{services.map((service) => <article class="card"><span class="card-number">{service.icon} / Service</span><h3>{service.name}</h3><p>{service.short}</p><a href={'/' + service.slug + '/'}>Explore service →</a></article>)}</div>
+    <div class="section-head"><p class="eyebrow">Integrated creative capabilities</p><h2>Everything connects.<br />Every detail matters.</h2><p>One consistent partner for professional design, digital products and measurable technical improvements. Start with the service your business actually needs.</p></div>
+    <div class="bento-grid">{services.map((service,i)=><article class:list={['card','service-bento',i < 2 && 'service-featured']}><span class="card-number">{String(i+1).padStart(2,'0')} / Expertise</span><h3>{service.name}</h3><p>{service.short}</p><a href={'/'+service.slug+'/'}>Discover {service.name} →</a></article>)}</div>
+    <div class="actions"><a class="btn btn-outline" href="/services/">All services</a><a class="btn btn-outline" href="/services/logo-design/">Logo design</a><a class="btn btn-outline" href="/services/brochure-design/">Brochure design</a></div>
   </section>
-  <section class="section section-soft"><div class="container"><div class="section-head"><p class="eyebrow">Why Slickk</p><h2>Clarity before complexity.</h2><p>Thoughtful delivery starts with an honest discussion of goals, constraints and expected outcomes.</p></div><div class="grid cards-3">
-    <article class="card"><h3>Business-first planning</h3><p>We begin with the problem to solve, not the technology to sell.</p></article>
-    <article class="card"><h3>Transparent scope</h3><p>Proposals describe deliverables, assumptions, fees and review points.</p></article>
-    <article class="card"><h3>Ownership and handover</h3><p>Support, documentation and ownership terms are agreed before work begins.</p></article>
-  </div></div></section>
-  <section class="section container"><div class="section-head"><p class="eyebrow">How we work</p><h2>From first conversation to delivery.</h2></div><div class="grid cards-2">
-    {[
-      ['01 — Discover', 'Understand objectives, audience, constraints and priorities.'],
-      ['02 — Plan', 'Define scope, approach, deliverables and a written proposal.'],
-      ['03 — Build', 'Create and review the agreed design, software or campaign assets.'],
-      ['04 — Test & improve', 'Check against acceptance criteria, hand over and discuss ongoing support.'],
-    ].map(([title, body]) => <div class="step"><strong>{title}</strong><p>{body}</p></div>)}
+  <section class="section section-dark"><div class="container split-highlight"><div><p class="eyebrow">Creative by design · Practical by nature</p><h2>Strong design is only the beginning.</h2><p>We believe a memorable identity should work across a sales proposal, corporate brochure, storefront, mobile app and marketing campaign—not just in one polished mockup.</p><a href="/services/brand-identity/" class="text-link">Explore brand identity services →</a></div>
+    <div class="highlights-grid"><div><span class="highlight-index">01</span><strong>Discover</strong><p>Understand the brief, audience and constraints.</p></div><div><span class="highlight-index">02</span><strong>Design</strong><p>Build a visual or technical direction with purpose.</p></div><div><span class="highlight-index">03</span><strong>Validate</strong><p>Review accessibility, quality and intended outcomes.</p></div><div><span class="highlight-index">04</span><strong>Deliver</strong><p>Agree the assets, handover and next steps.</p></div></div>
   </div></section>
-  <section class="section section-dark"><div class="container"><div class="section-head"><p class="eyebrow">Industries we can explore</p><h2>Digital needs cross industry boundaries.</h2><p>We welcome conversations with retail, professional services, education, hospitality, logistics, e-commerce and other organizations. This is a target-market list, not a client list.</p></div><div class="chips">{['Professional services','Retail & e-commerce','Education','Hospitality','Logistics','Startups & small business'].map((name) => <span class="chip">{name}</span>)}</div></div></section>
-  <section class="section container"><div class="section-head"><p class="eyebrow">Demonstration portfolio</p><h2>Explore what we could build.</h2><p>Concepts only, clearly labeled as demonstrations—not commissioned client work or performance claims.</p><a class="btn" href="/portfolio/">View demo concepts</a></div></section>
-  <section class="section section-soft"><div class="container"><div class="section-head"><p class="eyebrow">Transparent starting points</p><h2>Services that fit the scope.</h2><p>Provisional starting rates in BDT. A written quote confirms final deliverables and price.</p></div><div class="grid cards-3">{pricing.slice(0,3).map((item) => <article class="card"><h3>{item.name}</h3><div class="price">{item.price}</div><div class="price-period">{item.period}</div><p style="margin-top:20px">{item.description}</p><a href="/pricing/">See details →</a></article>)}</div></div></section>
-  <section class="section container faq"><div class="section-head"><p class="eyebrow">Frequently asked questions</p><h2>Before we get started.</h2></div>{faqs.slice(0,4).map((item) => <details><summary>{item.question}</summary><p>{item.answer}</p></details>)}<div class="actions"><a href="/faq/" class="btn btn-outline">All FAQs</a></div></section>
-  <section class="section container"><div class="cta"><div><p class="eyebrow">Your next project</p><h2>Tell us what you want to build.</h2><p>Share a challenge, request an estimate or start a discovery conversation.</p></div><a href="/contact/" class="btn">Get a Free Consultation</a></div></section>
+  <section class="section container" id="work"><div class="section-head"><p class="eyebrow">Our creative laboratory</p><h2>Ideas worth exploring.</h2><p>These are self-initiated demonstration concepts. They are not represented as commissioned client work or proven commercial results.</p></div>
+    <div class="grid cards-3">{portfolioConcepts.slice(0,3).map((concept,i)=><article class="project-tile"><div class:list={['project-visual','project-visual-'+(i+1)]} aria-hidden="true"><span>{concept.discipline}</span><strong>{String(i+1).padStart(2,'0')}</strong></div><div class="project-meta"><span>{concept.eyebrow}</span><h3>{concept.title}</h3><p>{concept.summary}</p><a href={'/portfolio/'+concept.slug+'/'}>View concept →</a></div></article>)}</div>
+    <div class="actions"><GradientButton href="/portfolio/">Explore all concepts</GradientButton></div>
+  </section>
+  <section class="section section-soft"><div class="container"><div class="section-head"><p class="eyebrow">Transparent launch packages</p><h2>Start focused. Grow deliberately.</h2><p>Illustrative starting prices in Bangladeshi taka, subject to written scoping. No invented guarantees or hidden advertising spend.</p></div>
+    <div class="grid cards-3">{pricing.slice(0,3).map(item=><article class="card"><p class="card-number">Starter package</p><h3>{item.name}</h3><div class="price">{item.price}</div><p>{item.description}</p><a href={'/contact/?service='+encodeURIComponent(item.name)}>Discuss scope →</a></article>)}</div>
+    <div class="actions"><a class="btn btn-outline" href="/pricing/">See all packages</a></div>
+  </div></section>
+  <section class="section container faq"><div class="section-head"><p class="eyebrow">Clarity upfront</p><h2>Good questions lead to better work.</h2></div>
+    {faqs.slice(0,4).map(item=><details><summary>{item.question}</summary><p>{item.answer}</p></details>)}
+    <div class="actions"><a href="/faq/" class="btn btn-outline">View all FAQs</a></div>
+  </section>
+  <section class="section container"><div class="cta aurora-surface"><div><p class="eyebrow">Let's create something useful</p><h2>What will your next project make possible?</h2><p>Tell us what you want to communicate, improve or build. Start with a thoughtful, scope-based discussion.</p></div><GradientButton href="/contact/">Request a consultation</GradientButton></div></section>
 </Layout>
