@@ -92,3 +92,11 @@
 @media(max-width:900px){.hero-grid{grid-template-columns:1fr}.hero-visual{width:min(460px,85%);margin:0 auto}.split-highlight,.concept-layout{grid-template-columns:1fr}}
 @media(max-width:690px){.bento-grid{grid-template-columns:1fr}.service-bento:nth-child(n){grid-column:span 1}.hero h1{font-size:clamp(2.9rem,12vw,4.5rem)}.hero-visual{width:min(350px,92%)}.visual-wordmark{font-size:clamp(4rem,18vw,7rem)}.visual-caption{font-size:.74rem}.orbit-label{font-size:.62rem}.gradient-button{width:auto;max-width:100%}.project-visual{height:200px}.highlights-grid{grid-template-columns:1fr 1fr;gap:12px}.highlights-grid>div{padding:15px}.hero{padding:62px 0}}
 @media(prefers-reduced-motion:reduce){.aurora-surface::before,.gradient-button{animation:none!important}.service-bento:hover,.gradient-button:hover{transform:none!important}}
+
+/* Lower-powered/mobile devices get the same visual language without a constantly moving large gradient paint layer. */
+@media(max-width:750px){
+  .aurora-surface::before{animation:none;will-change:auto;inset:-10%;opacity:.48}
+  .hero-visual::before{filter:none;opacity:.75}
+  .gradient-button{animation:none;background-position:0 0,50% 0}
+  .service-bento{transition:none}
+}
