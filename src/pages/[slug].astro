@@ -1,17 +1,20 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import ContactCTA from '../components/ContactCTA.astro';
-import { editorialPages } from '../data/pages';
-import { inquiryLink } from '../data/site';
-export function getStaticPaths() { return editorialPages.map((page) => ({ params: { slug: page.slug }, props: { page } })); }
+import { agencyPages, services, pricing } from '../data/agency';
+export function getStaticPaths() { return agencyPages.map((page) => ({ params: { slug: page.slug }, props: { page } })); }
 const { page } = Astro.props;
-const legal = ['privacy', 'terms'].includes(page.slug);
+const isPricing = page.slug === 'pricing';
+const isServices = page.slug === 'services';
 ---
-<Layout title={`${page.title.replace('\n', ' ')}`} description={page.description}>
-  <section class="page-hero"><div class="container"><a class="breadcrumb" href="/">Home <span aria-hidden="true">/</span></a><p class="eyebrow">{page.eyebrow}</p><h1>{page.title.split('\n').map((line) => <span class="line">{line}</span>)}</h1><p class="page-intro">{page.intro}</p></div></section>
-  <div class={`container section editorial-layout ${legal ? 'legal-layout' : ''}`}>
-    <aside class="contents"><p class="eyebrow">On this page</p><nav aria-label="Page contents">{page.sections.map((section, index) => <a href={`#section-${index + 1}`}>{section.title}</a>)}</nav>{page.cta && <a class="button" href={inquiryLink(`SLICKK — ${page.cta}`)}>{page.cta} <span aria-hidden="true">↗</span></a>}</aside>
-    <div class="editorial-copy">{page.sections.map((section, index) => <section id={`section-${index + 1}`}><span class="section-number">{String(index + 1).padStart(2, '0')}</span><h2>{section.title}</h2><p>{section.text}</p>{section.items && <ul>{section.items.map((item) => <li>{item}</li>)}</ul>}</section>)}</div>
+<Layout title={page.title} description={page.description}>
+  <section class="page-hero"><div class="container"><div class="breadcrumbs"><a href="/">Home</a> / {page.title}</div><p class="eyebrow">{page.label}</p><h1>{page.title}</h1><p class="lead">{page.intro}</p></div></section>
+  <div class="container section editorial">
+    <aside><p class="eyebrow">On this page</p><nav aria-label="Page sections">{page.sections.map((part,i) => <a href={'#part-' + (i + 1)}>{part.title}</a>)}</nav>{!page.legal && <a class="btn" href={'/contact/?service=' + encodeURIComponent(page.slug)}>Discuss your project</a>}</aside>
+    <article>{page.sections.map((part,i) => <section id={'part-' + (i + 1)}><h2>{part.title}</h2><p>{part.text}</p>{part.items && <ul>{part.items.map((item) => <li>{item}</li>)}</ul>}</section>)}
+      {isServices && <div class="grid cards-2">{services.map((service) => <section class="card"><h3>{service.name}</h3><p>{service.description}</p><a href={'/' + service.slug + '/'}>Explore this service →</a></section>)}</div>}
+      {isPricing && <div class="grid cards-2">{pricing.map((item) => <section class="card"><h3>{item.name}</h3><div class="price">{item.price}</div><span class="price-period">{item.period}</span><p>{item.description}</p><a href={'/contact/?service=' + encodeURIComponent(item.name)}>Request a quote →</a></section>)}</div>}
+      {page.legal && <p class="notice">Initial policy draft, subject to business and legal review. Last prepared 26 October 2026.</p>}
+    </article>
   </div>
-  {!legal && <ContactCTA />}
+  {!page.legal && <section class="section container"><div class="cta"><div><h2>Have a project in mind?</h2><p>Tell Slickk about your requirements to explore the next steps.</p></div><a class="btn" href="/contact/">Start an inquiry</a></div></section>}
 </Layout>
