@@ -10,25 +10,26 @@ function mockDb(){
  const calls=[];
  return {calls,prepare(sql){return {bind(...args){return {
     run:async()=>{calls.push({kind:'run',sql,args});return {meta:{changes:1}};},
+    first:async()=>({attempts:1}),
     all:async()=>({results:[{id:'00000000-0000-4000-8000-000000000000',name:'Test Buyer',company:'=HYPERLINK("https://example.com")',email:'test@example.com',phone:'',service:'logo-design',budget:'Not specified',timeline:'Flexible',reference:'',message:'Example',consent_at:'2026-10-26',status:'new',created_at:'2026-10-26',updated_at:'2026-10-26'}]})
   };}};}};
 }
 test('D1 lead is accepted and persisted after a valid Turnstile check without email service',async()=>{
  const before=globalThis.fetch;const db=mockDb();
  try{
-  globalThis.fetch=async()=>new Response(JSON.stringify({success:true,hostname:'slickk.online'}),{headers:{'Content-Type':'application/json'}});
+  globalThis.fetch=async()=>new Response(JSON.stringify({success:true,hostname:'slickk.online',action:'inquiry'}),{headers:{'Content-Type':'application/json'}});
   const response=await onRequestPost({request:incoming(),env:{INQUIRIES_DB:db,TURNSTILE_SECRET:'test-only'}});
   assert.equal(response.status,200);assert.equal((await response.json()).stored,true);
-  assert.equal(db.calls.length,1);assert.match(db.calls[0].sql,/INSERT INTO leads/);
-  assert.equal(db.calls[0].args[1],'Test Buyer');
-  assert.equal(db.calls[0].args[6],'Not specified');
+  const inserts=db.calls.filter(call=>/INSERT INTO leads/.test(call.sql));assert.equal(inserts.length,1);
+  assert.equal(inserts[0].args[1],'Test Buyer');
+  assert.equal(inserts[0].args[6],'Not specified');
  }finally{globalThis.fetch=before;}
 });
 test('D1 lead intake fails closed on storage errors',async()=>{
  const before=globalThis.fetch;try{
-  globalThis.fetch=async()=>new Response(JSON.stringify({success:true,hostname:'slickk.online'}));
+  globalThis.fetch=async()=>new Response(JSON.stringify({success:true,hostname:'slickk.online',action:'inquiry'}));
   const badDB={prepare(){return{bind(){return{run:async()=>{throw Error('db failure');}};}};}};
-  const response=await onRequestPost({request:incoming(),env:{INQUIRIES_DB:badDB,TURNSTILE_SECRET:'test-only'}});
+  const response=await onRequestPost({request:incoming(),env:{INQUIRIES_DB:badDB,TURNSTILE_SECRET:'test-only',INQUIRY_RATE_LIMIT:{limit:async()=>({success:true})}}});
   assert.equal(response.status,503);
  }finally{globalThis.fetch=before;}
 });

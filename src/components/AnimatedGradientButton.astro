@@ -1,0 +1,13 @@
+---
+interface Props {
+  href?: string;
+  variant?: 'primary' | 'secondary';
+  label?: string;
+  type?: 'button' | 'submit';
+  disabled?: boolean;
+  loading?: boolean;
+}
+const { href, variant = 'primary', label, type = 'button', disabled = false, loading = false } = Astro.props;
+const classes = ['gradient-button', variant === 'secondary' && 'gradient-button-secondary'];
+---
+{href ? <a href={disabled || loading ? undefined : href} class:list={classes} aria-label={label} aria-disabled={disabled || loading ? 'true' : undefined} aria-busy={loading ? 'true' : undefined}><span><slot /></span><span class="button-arrow" aria-hidden="true">↗</span></a> : <button type={type} class:list={classes} disabled={disabled || loading} aria-busy={loading ? 'true' : undefined} aria-label={label}><span><slot /></span><span class="button-arrow" aria-hidden="true">↗</span></button>}

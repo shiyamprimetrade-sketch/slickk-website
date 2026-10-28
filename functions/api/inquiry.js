@@ -1,4 +1,6 @@
 /* global Response, URL, fetch, URLSearchParams, crypto */
+import { limitedJson } from '../lib/body.js';
+import { allowRequest } from '../lib/rate-limit.js';
 // Cloudflare Pages Function. No credentials or customer inquiries belong in the static bundle.
 // Required: TURNSTILE_SECRET and INQUIRIES_DB (D1) or a restricted EMAIL send binding + INQUIRY_DESTINATION.
 // Optional: INQUIRY_RATE_LIMIT binding with limit({ key }) and Cloudflare WAF rate limiting.
@@ -14,11 +16,9 @@ export async function onRequestPost({ request, env }) {
   if (Number(request.headers.get('Content-Length') || 0) > 12_000) return json(413, { ok: false, error: 'Request too large' });
   let data;
   try {
-    const raw = await request.text();
-    if (raw.length > 12_000) return json(413, { ok: false, error: 'Request too large' });
-    data = JSON.parse(raw);
+    data = await limitedJson(request, 12_000);
     if (!data || typeof data !== 'object' || Array.isArray(data)) throw Error('Invalid payload');
-  } catch { return json(400, { ok: false, error: 'Invalid request' }); }
+  } catch (error) { return json(error instanceof RangeError ? 413 : 400, { ok: false, error: 'Invalid request' }); }
   if (data.website) return json(200, { ok: true }); // Honeypot traps automated spam without sending.
   const name = text(data.name, 100), company = text(data.company || '', 140);
   const email = text(data.email, 254), message = text(data.message, 3000);
@@ -26,24 +26,22 @@ export async function onRequestPost({ request, env }) {
   const token = text(data['cf-turnstile-response'], 2048);
   const phone = text(data.phone || '',30), timeline = text(data.timeline || 'Flexible',50), reference = text(data.reference || '',500);
   const referenceValid = !reference || (() => { try { return new URL(reference).protocol === 'https:'; } catch { return false; } })();
-  if(phone === null || timeline === null || reference === null || !referenceValid) return json(422,{ok:false,error:'Invalid optional fields'});
+  const inquiryType = data.inquiryType ?? 'contact';
+  if(company === null || phone === null || timeline === null || reference === null || !referenceValid || !['contact','quote'].includes(inquiryType)) return json(422,{ok:false,error:'Invalid optional fields'});
   if (!name || !email || !message || message.length < 20 || !service || !services.has(service) || !budget || !budgets.has(budget) || data.consent !== 'on' || !token || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return json(422, { ok: false, error: 'Invalid fields' });
   const ip = request.headers.get('CF-Connecting-IP') || 'unknown';
-  if (env.INQUIRY_RATE_LIMIT) {
-    try {
-      const limited = await env.INQUIRY_RATE_LIMIT.limit({ key: ip });
-      if (!limited.success) return json(429, { ok: false, error: 'Try again later' });
-    } catch { return json(503, { ok: false, error: 'Rate limiting unavailable' }); }
-  }
+  try { if(!await allowRequest(env,ip,'inquiry',5,600))return json(429,{ok:false,error:'Try again later'}); }
+  catch { return json(503,{ok:false,error:'Rate limiting unavailable'}); }
   let verification;
   try {
     const check = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
       method: 'POST', body: new URLSearchParams({ secret: env.TURNSTILE_SECRET, response: token, remoteip: ip })
     });
+    if (!check.ok) return json(503,{ok:false,error:'Verification unavailable'});
     verification = await check.json();
   } catch { return json(503, { ok: false, error: 'Verification unavailable' }); }
   const host = new URL(request.url).hostname;
-  if (!verification?.success || verification.hostname !== host) return json(403, { ok: false, error: 'Verification failed' });
+  if (!verification?.success || verification.hostname !== host || verification.action !== 'inquiry') return json(403, { ok: false, error: 'Verification failed' });
   const destination = text(env.INQUIRY_DESTINATION || '',254);
   if (env.EMAIL?.send && (!destination || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(destination))) return json(503,{ok:false,error:'Destination unavailable'});
   const hasDB = Boolean(env.INQUIRIES_DB?.prepare);
@@ -51,19 +49,23 @@ export async function onRequestPost({ request, env }) {
   if (hasDB) {
     try {
       await env.INQUIRIES_DB.prepare(
-        'INSERT INTO leads(id,name,company,email,phone,service,budget,timeline,reference,message,consent_at,status) VALUES (?,?,?,?,?,?,?,?,?,?,CURRENT_TIMESTAMP,?)'
-      ).bind(id,name,company,email,phone,service,budget,timeline,reference,message,'new').run();
+        'INSERT INTO leads(id,name,company,email,phone,service,budget,timeline,reference,message,consent_at,status,inquiry_type) VALUES (?,?,?,?,?,?,?,?,?,?,CURRENT_TIMESTAMP,?,?)'
+      ).bind(id,name,company,email,phone,service,budget,timeline,reference,message,'new',inquiryType).run();
     } catch {
       // An unconfirmed database write is not a successful lead intake.
       return json(503,{ok:false,error:'Inquiry storage unavailable'});
     }
+  }
+  if (hasDB) {
+    try { await env.INQUIRIES_DB.prepare('DELETE FROM inquiry_limits WHERE expires_at < unixepoch()').bind().run(); }
+    catch { /* Expired keys cannot match a new time bucket; maintenance failure must not reject a saved inquiry. */ }
   }
   if (env.EMAIL?.send) {
     try {
       await env.EMAIL.send({
         from:'contact@slickk.online',to:destination,replyTo:email,
         subject:'Slickk project inquiry — '+service,
-        text:['ID: '+id,'Name: '+name,'Company: '+company,'Email: '+email,'Phone / WhatsApp: '+phone,'Service: '+service,'Budget: '+budget,'Timeline: '+timeline,'Reference: '+reference,'','Project:',message].join('\\n')
+        text:['ID: '+id,'Name: '+name,'Company: '+company,'Email: '+email,'Phone / WhatsApp: '+phone,'Service: '+service,'Budget: '+budget,'Timeline: '+timeline,'Reference: '+reference,'','Project:',message].join('\n')
       });
     } catch {
       // A stored submission is still accepted; notification failure must not erase it.

@@ -1,7 +1,8 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import { agencyPages, services, pricing, detailedServices, portfolioConcepts } from '../data/agency';
-export function getStaticPaths() { return agencyPages.map((page) => ({ params: { slug: page.slug }, props: { page } })); }
+import { packageServices, packageScopes, portfolioCategories, portfolioTags, serviceFaqs } from '../data/v4';
+export function getStaticPaths() { return agencyPages.filter(page=>page.slug!=='request-quote').map((page) => ({ params: { slug: page.slug }, props: { page } })); }
 const { page } = Astro.props;
 const isPricing = page.slug === 'pricing';
 const isServices = page.slug === 'services';
@@ -16,12 +17,14 @@ const isPortfolio = page.slug === 'portfolio';
       {isServices && <><h2>Specialist creative services</h2><div class="grid cards-2">{detailedServices.map(item => <section class="card"><h3>{item.title}</h3><p>{item.intro}</p><a href={'/services/'+item.slug+'/'}>Explore service →</a></section>)}</div></>}
       {isPortfolio && <><h2>Demonstration project gallery</h2><p>Self-initiated concept work only. No paid-client project, performance result or endorsement is implied.</p>
         <div class="portfolio-filters" role="group" aria-label="Filter demonstration projects">
-          {['All Projects','Branding','Brochure Design','Website Development','Automation','Digital Marketing'].map((name,i)=><button type="button" class="filter-chip" data-discipline={name} aria-pressed={i===0?'true':'false'}>{name}</button>)}
+          {portfolioCategories.map((name,i)=><button type="button" class="filter-chip" data-discipline={name} aria-pressed={i===0?'true':'false'}>{name}</button>)}
         </div>
-        <div class="grid cards-2">{portfolioConcepts.map((concept,i)=><section class="project-tile" data-project-discipline={concept.discipline}><div class:list={['project-visual','project-visual-'+(i%3+1)]} aria-hidden="true"><span>{concept.discipline}</span><strong>{String(i+1).padStart(2,'0')}</strong></div><div class="project-meta"><span>{concept.eyebrow}</span><h3>{concept.title}</h3><p>{concept.summary}</p><a href={'/portfolio/'+concept.slug+'/'}>View demonstration →</a></div></section>)}</div>
+        <div class="grid cards-2">{portfolioConcepts.map((concept)=><section class="project-tile" data-project-discipline={portfolioTags[concept.slug].join('|')}><a class="project-visual" href={'/portfolio/'+concept.slug+'/'}><img src={'/images/portfolio/'+concept.slug+'.svg'} width="1200" height="850" alt={concept.title+' — original self-initiated study'} loading="lazy" /></a><div class="project-meta"><span>{concept.eyebrow}</span><h3>{concept.title}</h3><p>{concept.summary}</p><a href={'/portfolio/'+concept.slug+'/'}>View demonstration →</a></div></section>)}</div>
+        <p class="filter-status" id="portfolio-status" role="status">Showing all 5 concept studies.</p>
         <p id="portfolio-empty" hidden>No demonstration project in this category yet.</p>
       </>}
-      {isPricing && <div class="grid cards-2">{pricing.map((item) => <section class="card"><h3>{item.name}</h3><div class="price">{item.price}</div><span class="price-period">{item.period}</span><p>{item.description}</p><a href={'/contact/?service=' + encodeURIComponent(item.name)}>Request a quote →</a></section>)}</div>}
+      {isPricing && <div class="grid cards-2">{pricing.map((item) => <section class="card"><h3>{item.name}</h3><div class="price">{item.price}</div><span class="price-period">{item.period}</span><p>{item.description}</p><ul class="package-details"><li><strong>Includes:</strong> {packageScopes[item.name].included}</li><li><strong>Revisions:</strong> {packageScopes[item.name].revisions}</li><li><strong>Handover:</strong> {packageScopes[item.name].files}</li><li><strong>Separate scope:</strong> {packageScopes[item.name].excluded}</li></ul><a href={'/request-quote/?service=' + packageServices[item.name]}>Request a quote →</a></section>)}</div>}
+      {serviceFaqs[page.slug] && <section class="faq service-faq"><h2>Questions about {page.title.toLowerCase()}</h2>{serviceFaqs[page.slug].map(([question,answer])=><details><summary>{question}</summary><p>{answer}</p></details>)}<a class="text-link" href="/portfolio/">Explore our labeled concept studies →</a></section>}
       {page.legal && <p class="notice">Initial policy draft, subject to business and legal review. Last prepared 26 October 2026.</p>}
     </article>
   </div>
@@ -34,8 +37,10 @@ const isPortfolio = page.slug === 'portfolio';
       const selected = button.dataset.discipline;
       buttons.forEach(other=>other.setAttribute('aria-pressed',String(other===button)));
       let count=0;
-      projects.forEach(project=>{const show=selected==='All Projects'||project.dataset.projectDiscipline===selected;project.hidden=!show;if(show)count++;});
+      projects.forEach(project=>{const show=selected==='All Projects'||project.dataset.projectDiscipline?.split('|').includes(selected || '');project.hidden=!show;if(show)count++;});
       if(empty)empty.hidden=count>0;
+      const status=document.querySelector('#portfolio-status');
+      if(status)status.textContent=`Showing ${count} concept ${count===1?'study':'studies'}.`;
     }));
   </script>}
 </Layout>

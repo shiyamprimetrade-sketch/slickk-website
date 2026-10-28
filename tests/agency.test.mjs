@@ -21,7 +21,7 @@ test('all agency pages have unique SEO, headings, accessible landmarks and worki
     assert.equal($('main').length, 1, route);
     assert.equal($('html').attr('lang'), 'en', route);
     assert.equal($('link[rel=canonical]').attr('href'), 'https://slickk.online' + route, route);
-    assert.equal($('meta[property="og:image"]').attr('content'), 'https://slickk.online/agency-social.svg');
+    assert.equal($('meta[property="og:image"]').attr('content'), 'https://slickk.online/images/agency-social.jpg');
     assert.ok($('a[href="mailto:contact@slickk.online"]').length > 0, route);
     const jsonld = JSON.parse($('script[type="application/ld+json"]').html());
     assert.equal(jsonld.email, 'contact@slickk.online');
@@ -80,8 +80,8 @@ test('server inquiry refuses cross-origin, invalid fields and fails closed', asy
 test('server verifies Turnstile and only sends to configured recipient (mocked)', async () => {
   const oldFetch = globalThis.fetch; let sent;
   try {
-    globalThis.fetch = async () => new Response(JSON.stringify({success:true,hostname:'slickk.online'}), {status:200,headers:{'Content-Type':'application/json'}});
-    const env = { EMAIL: { send: async (payload) => { sent = payload; return { messageId: 'test-only' }; } }, TURNSTILE_SECRET:'private', INQUIRY_DESTINATION:'verified@example.com' };
+    globalThis.fetch = async () => new Response(JSON.stringify({success:true,hostname:'slickk.online',action:'inquiry'}), {status:200,headers:{'Content-Type':'application/json'}});
+    const env = { INQUIRY_RATE_LIMIT:{limit:async()=>({success:true})}, EMAIL: { send: async (payload) => { sent = payload; return { messageId: 'test-only' }; } }, TURNSTILE_SECRET:'private', INQUIRY_DESTINATION:'verified@example.com' };
     const response = await onRequestPost({request:request(valid),env});
     assert.equal(response.status,200);
     assert.equal(sent.to,'verified@example.com');

@@ -1,5 +1,6 @@
 ---
+import AnimatedGradientButton from './AnimatedGradientButton.astro';
 interface Props { href:string; variant?:'primary'|'secondary'; label?:string; }
 const {href,variant='primary',label}=Astro.props;
 ---
-<a href={href} class:list={['gradient-button',variant === 'secondary' && 'gradient-button-secondary']} aria-label={label}><span><slot /></span></a>
+<AnimatedGradientButton href={href} variant={variant} label={label}><slot /></AnimatedGradientButton>

@@ -4,11 +4,13 @@ import Layout from '../layouts/Layout.astro';
 <Layout title="Private Lead Inbox" description="Private Slickk staff-only inquiry management. Requires a separately configured Cloudflare D1 backend." noindex={true}>
   <section class="page-hero"><div class="container"><p class="eyebrow">Restricted administrative workspace</p><h1>Inquiry inbox</h1><p class="lead">Private, temporary session access. The administrator secret is not saved to this browser or to the website.</p></div></section>
   <section class="section container">
-    <div class="contact-form" style="max-width:920px">
-      <p class="notice">This interface requires the private Cloudflare Functions backend, D1 database and an administrator token. If the site was deployed with a dashboard ZIP upload, use the regular contact email; this dashboard will not connect.</p>
+    <div class="contact-form inbox-panel">
+      <p class="notice">Authorized staff only. Inquiries contain personal information. Clear this session when finished and store exports privately. Automatic email notifications require a separately configured sender.</p>
       <label class="field">Administrator token (session only) <input type="password" id="admin-token" autocomplete="off" spellcheck="false" minlength="32" placeholder="Private access token" /></label>
       <div class="actions"><button class="btn" type="button" id="load-leads">Load inquiries</button><button class="btn btn-outline" type="button" id="export-leads">Export visible page as CSV</button><button class="btn btn-outline" type="button" id="clear-leads">Clear session</button></div>
       <p id="admin-status" role="status" aria-live="polite"></p>
+      <button class="btn btn-outline" type="button" id="load-metrics">View inquiry and interaction totals</button>
+      <div id="metrics-results" aria-live="polite"></div>
       <div class="grid cards-2" id="leads-results"></div>
       <div class="actions"><button type="button" class="btn btn-outline" id="prev-page">Previous</button><button type="button" class="btn btn-outline" id="next-page">Next</button></div>
     </div>
@@ -47,9 +49,19 @@ import Layout from '../layouts/Layout.astro';
       }catch(error){setStatus(String(error));}
     }
     document.querySelector('#load-leads')?.addEventListener('click',()=>load(0));
+    document.querySelector('#load-metrics')?.addEventListener('click',async()=>{try{
+      const data=await (await request('/api/admin/metrics')).json();
+      const target=document.querySelector('#metrics-results');
+      if(target){target.replaceChildren();const notice=document.createElement('p');notice.textContent=data.notice;target.append(notice);
+        for(const [label,rows] of [['Stored inquiries',data.leads],['Last 30 days: optional interactions',data.interactions]] as const){
+          const heading=document.createElement('h3');heading.textContent=label;target.append(heading);
+          for(const row of rows||[]){const p=document.createElement('p');p.textContent=[row.inquiry_type,row.service,row.status,row.event,': '+row.total].filter(Boolean).join(' · ');target.append(p);}
+        }
+      }setStatus('Loaded stored totals.');
+    }catch(error){setStatus(String(error));}});
     document.querySelector('#prev-page')?.addEventListener('click',()=>{if(currentPage>0)load(currentPage-1);});
     document.querySelector('#next-page')?.addEventListener('click',()=>{if(hasMore)load(currentPage+1);});
-    document.querySelector('#clear-leads')?.addEventListener('click',()=>{if(tokenEl)tokenEl.value='';if(results)results.replaceChildren();currentPage=0;setStatus('Session cleared.');});
+    document.querySelector('#clear-leads')?.addEventListener('click',()=>{if(tokenEl)tokenEl.value='';if(results)results.replaceChildren();document.querySelector('#metrics-results')?.replaceChildren();currentPage=0;setStatus('Session cleared.');});
     document.querySelector('#export-leads')?.addEventListener('click',async()=>{try{
       const response=await request('/api/admin/leads?page='+currentPage+'&export=csv');
       const blob=await response.blob();const url=URL.createObjectURL(blob);

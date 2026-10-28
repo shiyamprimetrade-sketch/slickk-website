@@ -2,6 +2,7 @@
 import Layout from '../layouts/Layout.astro';
 import GradientButton from '../components/GradientButton.astro';
 import { brand, services, pricing, faqs, portfolioConcepts } from '../data/agency';
+import { packageServices } from '../data/v4';
 ---
 <Layout title="Creative Technology, Branding & Digital Solutions" description="Slickk Digital Solutions creates distinctive brands, corporate brochures, powerful websites, software, SEO and digital growth experiences for Bangladesh and international business clients.">
   <section class="hero aurora-surface" aria-label="Slickk Digital Solutions introduction">
@@ -9,7 +10,7 @@ import { brand, services, pricing, faqs, portfolioConcepts } from '../data/agenc
       <div class="hero-copy">
         <p class="eyebrow">Creative technology & digital solutions</p>
         <h1>We Design.<br /><em>We Build.</em><br />We Elevate.</h1>
-        <p class="lead">From unforgettable brand identities to high-performance websites and digital growth strategies, Slickk turns business ambitions into powerful digital experiences.</p>
+        <p class="lead">From memorable brands and professional websites to powerful software and digital growth solutions, Slickk helps businesses turn ambitious ideas into exceptional digital experiences.</p>
         <div class="actions"><GradientButton href="/contact/">Start Your Project</GradientButton><a class="btn btn-outline" href="/portfolio/">Explore Our Work</a></div>
         <p class="hero-footnote">Bangladesh-based creative studio · International project inquiries welcome</p>
       </div>
@@ -20,20 +21,21 @@ import { brand, services, pricing, faqs, portfolioConcepts } from '../data/agenc
       </div>
     </div>
   </section>
+  <div class="container capability-strip"><span>Independent by design</span><b aria-hidden="true">✳</b><span>Bangladesh · Global collaboration</span><b aria-hidden="true">✳</b><span>Clear scope. Thoughtful delivery.</span></div>
   <section class="section container" id="services">
     <div class="section-head"><p class="eyebrow">Integrated creative capabilities</p><h2>Everything connects.<br />Every detail matters.</h2><p>One consistent partner for professional design, digital products and measurable technical improvements. Start with the service your business actually needs.</p></div>
-    <div class="bento-grid">{services.map((service,i)=><article class:list={['card','service-bento',i < 2 && 'service-featured']}><span class="card-number">{String(i+1).padStart(2,'0')} / Expertise</span><h3>{service.name}</h3><p>{service.short}</p><a href={'/'+service.slug+'/'}>Discover {service.name} →</a></article>)}</div>
+    <div class="bento-grid">{services.map((service,i)=><article class:list={['card','service-bento','spotlight-card',i < 2 && 'service-featured']}><span class="card-number">{String(i+1).padStart(2,'0')} / Expertise</span><h3>{service.name}</h3><p>{service.short}</p><a href={'/'+service.slug+'/'}>Discover {service.name} →</a></article>)}</div>
     <div class="actions"><a class="btn btn-outline" href="/services/">All services</a><a class="btn btn-outline" href="/services/logo-design/">Logo design</a><a class="btn btn-outline" href="/services/brochure-design/">Brochure design</a></div>
   </section>
   <section class="section section-dark"><div class="container split-highlight"><div><p class="eyebrow">Creative by design · Practical by nature</p><h2>Strong design is only the beginning.</h2><p>We believe a memorable identity should work across a sales proposal, corporate brochure, storefront, mobile app and marketing campaign—not just in one polished mockup.</p><a href="/services/brand-identity/" class="text-link">Explore brand identity services →</a></div>
     <div class="highlights-grid"><div><span class="highlight-index">01</span><strong>Discover</strong><p>Understand the brief, audience and constraints.</p></div><div><span class="highlight-index">02</span><strong>Design</strong><p>Build a visual or technical direction with purpose.</p></div><div><span class="highlight-index">03</span><strong>Validate</strong><p>Review accessibility, quality and intended outcomes.</p></div><div><span class="highlight-index">04</span><strong>Deliver</strong><p>Agree the assets, handover and next steps.</p></div></div>
   </div></section>
   <section class="section container" id="work"><div class="section-head"><p class="eyebrow">Our creative laboratory</p><h2>Ideas worth exploring.</h2><p>These are self-initiated demonstration concepts. They are not represented as commissioned client work or proven commercial results.</p></div>
-    <div class="grid cards-3">{portfolioConcepts.slice(0,3).map((concept,i)=><article class="project-tile"><div class:list={['project-visual','project-visual-'+(i+1)]} aria-hidden="true"><span>{concept.discipline}</span><strong>{String(i+1).padStart(2,'0')}</strong></div><div class="project-meta"><span>{concept.eyebrow}</span><h3>{concept.title}</h3><p>{concept.summary}</p><a href={'/portfolio/'+concept.slug+'/'}>View concept →</a></div></article>)}</div>
+    <div class="grid cards-3">{portfolioConcepts.slice(0,3).map((concept)=><article class="project-tile"><a class="project-visual" href={'/portfolio/'+concept.slug+'/'}><img src={'/images/portfolio/'+concept.slug+'.svg'} width="1200" height="850" alt={concept.title+' — original self-initiated concept study'} loading="lazy" decoding="async" /></a><div class="project-meta"><span>{concept.eyebrow}</span><h3>{concept.title}</h3><p>{concept.summary}</p><a href={'/portfolio/'+concept.slug+'/'}>View concept →</a></div></article>)}</div>
     <div class="actions"><GradientButton href="/portfolio/">Explore all concepts</GradientButton></div>
   </section>
   <section class="section section-soft"><div class="container"><div class="section-head"><p class="eyebrow">Transparent launch packages</p><h2>Start focused. Grow deliberately.</h2><p>Illustrative starting prices in Bangladeshi taka, subject to written scoping. No invented guarantees or hidden advertising spend.</p></div>
-    <div class="grid cards-3">{pricing.slice(0,3).map(item=><article class="card"><p class="card-number">Starter package</p><h3>{item.name}</h3><div class="price">{item.price}</div><p>{item.description}</p><a href={'/contact/?service='+encodeURIComponent(item.name)}>Discuss scope →</a></article>)}</div>
+    <div class="grid cards-3">{pricing.slice(0,3).map(item=><article class="card"><p class="card-number">Starter package</p><h3>{item.name}</h3><div class="price">{item.price}</div><p>{item.description}</p><a href={'/request-quote/?service='+packageServices[item.name]}>Discuss scope →</a></article>)}</div>
     <div class="actions"><a class="btn btn-outline" href="/pricing/">See all packages</a></div>
   </div></section>
   <section class="section container faq"><div class="section-head"><p class="eyebrow">Clarity upfront</p><h2>Good questions lead to better work.</h2></div>

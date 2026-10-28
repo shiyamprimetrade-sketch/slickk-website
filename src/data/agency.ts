@@ -1,8 +1,9 @@
+import { enrichServicePages } from './v4';
 export const brand = {
   name: 'Slickk Digital Solutions',
   url: 'https://slickk.online',
   email: 'contact@slickk.online',
-  tagline: 'Digital Experiences. Extraordinary Results.',
+  tagline: 'Design with purpose. Technology that works.',
   description: 'Slickk Digital Solutions is a Bangladesh-based creative technology studio for identity design, digital experiences, software, SEO and business automation.',
   location: 'Bangladesh',
   social: {
@@ -18,7 +19,7 @@ export const services = [
   { slug: 'branding-graphic-design', name: 'Branding & Graphic Design', icon: '00', short: 'Memorable visual identities, logos, brochures and corporate materials.', description: 'Strategy-led identities, logo design, brand guidelines, corporate brochures, company profiles, catalogues, packaging and presentations.', bullets: ['Logo and brand identity systems', 'Corporate brochures and company profiles', 'Packaging, print and presentation design', 'Social campaigns and reusable creative assets'] },
   { slug: 'ai-automation', name: 'AI & Business Automation', icon: '07', short: 'Purposeful workflow automation with human oversight.', description: 'Explore practical AI-enabled assistants, reporting dashboards, customer-support workflows and secure integrations by consultation.', bullets: ['Automation opportunity discovery', 'Business chatbots and knowledge assistants', 'Document and reporting workflows', 'Privacy, testing and handover planning'] },
   { slug: 'software-development', name: 'Software Development', icon: '01', short: 'Smart systems tailored to real business workflows.', description: 'Plan and build custom business applications, automation, dashboards, internal tools and integrations.', bullets: ['Workflow discovery and technical planning', 'Custom business applications and dashboards', 'API integrations and process automation', 'Testing, documentation and maintenance'] },
-  { slug: 'app-development', name: 'App Development', icon: '02', short: 'Mobile experiences designed around the people using them.', description: 'Design and develop Android, iOS and cross-platform apps, from discovery to testing and release planning.', bullets: ['Product discovery and prototypes', 'Android and iOS development options', 'Cross-platform engineering', 'Quality assurance and post-launch support'] },
+  { slug: 'app-development', name: 'App Development', icon: '02', short: 'Mobile experiences designed around the people using them.', description: 'Plan Android-first and mobile web applications, with platform feasibility, testing and release responsibilities agreed before implementation.', bullets: ['Product discovery and prototypes', 'Platform feasibility and device coverage', 'Cross-platform engineering', 'Quality assurance and post-launch support'] },
   { slug: 'web-development', name: 'Web Development', icon: '03', short: 'Fast, accessible websites built to explain and convert.', description: 'Build company websites, landing pages, e-commerce storefronts and responsive web experiences.', bullets: ['Corporate and service websites', 'Landing pages and e-commerce planning', 'Responsive performance and accessibility', 'Maintenance and technical improvements'] },
   { slug: 'seo-services', name: 'Search Engine Optimization', icon: '04', short: 'Improve the technical and editorial foundations of search visibility.', description: 'Audit technical SEO, research relevant search intent, improve on-page content and measure organic performance.', bullets: ['Technical SEO audits and fixes', 'Keyword and search-intent research', 'On-page optimization and internal linking', 'Content planning and reporting'] },
   { slug: 'digital-marketing', name: 'Digital Marketing', icon: '05', short: 'Campaigns informed by business objectives, not vanity metrics.', description: 'Plan and manage digital campaigns, social content and performance reporting for relevant audiences.', bullets: ['Marketing strategy and audience discovery', 'Campaign creation and management', 'Social media planning', 'Lead funnel and performance reporting'] },
@@ -55,7 +56,7 @@ const servicePages: AgencyPage[] = services.map((service) => ({
 export const agencyPages: AgencyPage[] = [
   { slug: 'about', title: 'About Slickk', label: 'Our story', intro: 'A Bangladesh-based technology and digital growth business, built to make better digital solutions more accessible.', description: 'Learn about Slickk, our mission, values and approach to software development and digital growth services in Bangladesh and beyond.',
     sections: [
-      { title: 'Who we are', text: 'Slickk is a new business in development, serving Bangladesh-based and international businesses. We focus on useful technology, clear communication and realistic project commitments.' },
+      { title: 'Who we are', text: 'Slickk Digital Solutions is an independent practice led by a solo founder in Bangladesh. We combine focused visual design and practical technology for local and international inquiries. Project capabilities, availability and any specialist support are confirmed before work is accepted.' },
       { title: 'Our mission', text: 'To make professional digital technology and growth solutions accessible to businesses of different sizes.' },
       { title: 'Our vision', text: 'To become a trusted international technology partner known for useful software, thoughtful design, and measurable business value.' },
       { title: 'How we work', text: 'We value transparency, innovation, reliability, continuous improvement and customer ownership. Client requirements and delivery terms are recorded before a project begins.' },
@@ -75,13 +76,13 @@ export const agencyPages: AgencyPage[] = [
   { slug: 'pricing', title: 'Services & Pricing', label: 'Transparent starting points', intro: 'Clear starting prices for common services, with tailored quotes for projects that require discovery.', description: 'View Slickk provisional starting prices in BDT for business websites, SEO, website maintenance and custom development.',
     sections: [{ title: 'How quotes work', text: 'Prices are provisional starting points, not fixed offers or established market rates. Each proposal sets out scope, schedule, deliverables, payment terms, revisions and any extra third-party costs.' },
       { title: 'International projects', text: 'International inquiries receive individual written quotes. Currency and payment method will be confirmed before engagement.' }] },
-  { slug: 'privacy', title: 'Privacy Policy', label: 'Legal draft — review before publication', intro: 'How Slickk intends to handle information provided when you contact us.', description: 'Read the draft Slickk privacy policy covering inquiries, optional measurement tools and data-handling requests.', legal: true,
+  { slug: 'privacy', title: 'Privacy Policy', label: 'Privacy and data handling', intro: 'How Slickk intends to handle information provided when you contact us.', description: 'How SLICKK handles secure inquiries, optional first-party analytics and data-handling requests.', legal: true,
     sections: [
-      { title: 'Information you choose to provide', text: 'If you email Slickk, your email provider and ours process your message, reply details and the information you include. When a secure inquiry backend is configured, submitted name, email, company, service, budget range and message may be processed to respond to your request.' },
+      { title: 'Information you choose to provide', text: 'If you email Slickk, your email provider and ours process your message, reply details and the information you include. The secure inquiry form stores your name, email, optional company and phone, selected service, budget, timeline, reference link and message in a private Cloudflare D1 database. Your consent time and inquiry status are recorded. Authorized staff use a private inbox to respond.' },
       { title: 'Use of information', text: 'Inquiry information is used to respond, evaluate requested services and manage related communications. Avoid sharing payment card data or sensitive personal information in an initial message.' },
-      { title: 'Technical services and analytics', text: 'Hosting and anti-abuse providers may process technical information needed to operate the site. Analytics or advertising measurement should only be activated after review of applicable consent and privacy requirements; activation is not claimed here.' },
+      { title: 'Technical services and analytics', text: 'Hosting and anti-abuse providers may process technical information needed to operate the site. Cloudflare Turnstile checks inquiry submissions for abuse. Temporary salted request hashes support rate limits; raw IP addresses are not stored in the inquiry database. Optional first-party analytics records daily page and action totals only after you choose Allow analytics. Counts contain no message contents, email addresses or visitor identifiers. Hosting and security providers may process IP addresses under their own policies.' },
       { title: 'Retention and rights', text: 'Inquiry correspondence is retained only as reasonably needed for the communication and business records, subject to applicable legal requirements. Contact contact@slickk.online to request access, correction or deletion where applicable.' },
-      { title: 'Changes and contact', text: 'This is an initial policy draft for review before launch. Updated terms will be published if the website’s collection, hosting or marketing practices change. Questions: contact@slickk.online.' },
+      { title: 'Changes and contact', text: 'Updated notices will be published if collection, hosting or marketing practices change. Questions: contact@slickk.online.' },
     ] },
   { slug: 'terms', title: 'Terms of Service', label: 'Legal draft — review before publication', intro: 'General conditions for using this informational website.', description: 'Read the initial Slickk terms draft covering website content, project proposals and limitations.', legal: true,
     sections: [
@@ -91,10 +92,10 @@ export const agencyPages: AgencyPage[] = [
       { title: 'Use and ownership', text: 'Do not misuse the website or submit unlawful material. Website designs and content may not be reproduced without appropriate permission. Customer ownership is defined by each signed agreement.' },
       { title: 'Changes', text: 'These are preliminary terms pending legal and commercial review. Contact contact@slickk.online for questions.' },
     ] },
-  { slug: 'cookies', title: 'Cookie Policy', label: 'Legal draft — review before publication', intro: 'An explanation of website cookies and optional tracking.', description: 'Slickk cookie policy draft for necessary hosting technologies and future optional analytics.', legal: true,
+  { slug: 'cookies', title: 'Cookie Policy', label: 'Legal draft — review before publication', intro: 'An explanation of website cookies and optional tracking.', description: 'How SLICKK uses necessary security services and your optional first-party analytics preference.', legal: true,
     sections: [
       { title: 'Current website design', text: 'The public website is designed to work without optional tracking cookies. Hosting and security infrastructure may use necessary cookies or technical signals to protect service availability.' },
-      { title: 'Future analytics and marketing', text: 'If analytics or marketing tools are activated, this notice and any required consent controls must be updated before enabling optional tracking. We do not claim such tracking is currently active.' },
+      { title: 'Optional first-party analytics', text: 'Optional first-party analytics is disabled until you choose Allow analytics. It records daily aggregate page and inquiry-action counts without visitor identifiers or contact/message data. The slickk-analytics preference in local browser storage remembers yes or no. Use Analytics preferences in the footer to change your choice; Necessary only stops future optional events. No advertising pixels are configured.' },
       { title: 'Your options', text: 'You can manage browser cookies and site permissions in your browser settings. For questions, write to contact@slickk.online.' },
     ] },
 ];
@@ -172,9 +173,9 @@ agencyPages.push(
     {title:'04 — Validate & hand over',text:'Run applicable functionality, accessibility, performance and security checks, document findings and provide agreed handover materials.'}
   ]},
   {slug:'insights',title:'Insights & Resources',label:'Practical knowledge',intro:'Useful starting points for building a more credible digital presence.',description:'Read introductory guides from Slickk Digital Solutions about business websites, branding and digital growth foundations.',sections:[
-    {title:'What makes a business website credible?',text:'Consistent messaging, truthful proof, reliable contact options, fast loading and accessibility make it easier for visitors to understand an offer and take the next step.'},
-    {title:'A practical logo and branding brief',text:'Document your audience, competitors, tone, usage contexts, preferred deliverables and revision process before a designer begins concept work.'},
-    {title:'Before you pay for SEO',text:'Make sure search engines can access useful pages, your business details are accurate, and you know how changes will be measured. Beware guaranteed-ranking promises.'}
+    {title:'What makes a business website credible?',text:'Begin with the customer question: what do you offer, who is it for, and how can someone ask about it? Use a distinct service page, readable navigation and a direct contact route. Check the site on a real phone, test the form and publish only proof you can support. A starting checklist: accurate contact details, HTTPS, clear pricing scope, helpful page titles, small images and keyboard access.'},
+    {title:'A practical logo and branding brief',text:'Write down the audience, the problem your business solves and three qualities the identity should communicate. Collect examples to explain direction without copying them. List where the logo will appear: social avatar, invoice, website, packaging or signage. Confirm background variants, minimum sizes, file formats and who holds font or image licenses. Agree the selected concept, consolidated revision rounds and approval owner before production.'},
+    {title:'Before you pay for SEO',text:'First check that important pages return HTTP 200, have one clear purpose and link from useful navigation. Confirm canonical URLs, sitemap access and helpful page titles. Use verified Search Console and Bing accounts to review indexing; a submitted sitemap does not guarantee inclusion. Separate delivered fixes from measured search results. Agree reporting dates, data sources and the page-to-keyword map, and reject guaranteed-ranking or purchased-link promises.'}
   ]},
   {slug:'request-quote',title:'Request a Project Quote',label:'Start a project',intro:'Share your goals, timeline and approximate budget, and we can discuss a realistic scope.',description:'Start an inquiry for graphic design, websites, branding, SEO and digital solutions at Slickk Digital Solutions.',sections:[
     {title:'Prepare your brief',text:'Include your company, target audience, deliverables, reference examples, desired timeframe and budget range. Do not share passwords or sensitive financial information.'},
@@ -182,5 +183,6 @@ agencyPages.push(
   ]}
 );
 export const caseStudyPaths = portfolioConcepts.map((p) => '/portfolio/' + p.slug + '/');
+enrichServicePages([...servicePages, ...detailedServices]);
 export const detailServicePaths = detailedServices.map((p) => '/services/' + p.slug + '/');
 export const indexablePaths = ['/', '/contact/', '/faq/', ...agencyPages.map((p) => '/' + p.slug + '/'), ...detailServicePaths, ...caseStudyPaths];
