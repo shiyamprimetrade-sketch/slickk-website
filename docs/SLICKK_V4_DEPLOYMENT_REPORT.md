@@ -12,7 +12,9 @@ Production is live at https://slickk.online. Deployment: 6f1409ab-7f45-4067-bb80
 
 Independent live checks passed for all 37 indexable routes, titles, canonical URLs, JSON-LD, raster sharing image, security headers, assets, HTTPS/WWW redirects, branded 404 and unauthorized private API rejection. Authenticated production metrics returned successfully using the encrypted local key, without printing credentials or customer data. Before/after Cloudflare DNS snapshots are identical.
 
-GitHub branch backup succeeded. CI run 40662729821 was in progress when this report was written; no CI success is claimed here. Later documentation-only commits do not change the deployed application.
+GitHub branch backup succeeded. CI run 40662729821 passed 17 browser tests but its 37-page desktop Axe crawl exceeded the default 30-second test timeout. That crawl now has a bounded 120-second allowance for shared runners. A new CI run is pending; no CI success is claimed here. Later documentation/test-only commits do not change the deployed application.
+
+A real quote submitted on slickk.online after production deployment passed Turnstile and was independently confirmed in D1 as inquiry_type=quote, service=logo-design. The success message correctly discloses that automatic email notification is not configured.
 
 ## Restore and rollback
 

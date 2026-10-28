@@ -10,6 +10,7 @@ test.beforeEach(async({page})=>{
 });
 
 test('all pages have responsive layout and no detected WCAG A/AA violations', async ({ page }, testInfo) => {
+  test.setTimeout(120_000); // A full 37-page Axe crawl needs more than 30 seconds on shared CI runners.
   const errors = [];
   page.on('pageerror', (err) => errors.push(err.message));
   for (const route of routes) {
