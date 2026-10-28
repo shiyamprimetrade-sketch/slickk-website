@@ -8,7 +8,11 @@ Existing pinned Wrangler and Cloudflare Pages project slickk are reused. The own
 
 Preview: https://v4-upgrade.slickk.pages.dev. Initial deployment 8f5e2c7c; corrected security-header deployment 58d26e61. Real contact/quote storage and event recording were verified on preview. All source changes are preserved in the upgrade branch.
 
-Production target: https://slickk.online. Final production deployment ID, commit and live verification will be appended after upload. A deployment URL alone does not establish completion.
+Production is live at https://slickk.online. Deployment: 6f1409ab-7f45-4067-bb80-b353e94e83ab, https://6f1409ab.slickk.pages.dev. Deployed source: 33cfd7ffadd68867a61402016fe6b6a3f6e3e6fd. The Cloudflare API confirms this deployment as canonical production with the matching source hash.
+
+Independent live checks passed for all 37 indexable routes, titles, canonical URLs, JSON-LD, raster sharing image, security headers, assets, HTTPS/WWW redirects, branded 404 and unauthorized private API rejection. Authenticated production metrics returned successfully using the encrypted local key, without printing credentials or customer data. Before/after Cloudflare DNS snapshots are identical.
+
+GitHub branch backup succeeded. CI run 40662729821 was in progress when this report was written; no CI success is claimed here. Later documentation-only commits do not change the deployed application.
 
 ## Restore and rollback
 
