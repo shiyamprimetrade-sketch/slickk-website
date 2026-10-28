@@ -1,0 +1,6 @@
+---
+import AnimatedGradientButton from './AnimatedGradientButton.astro';
+interface Props { href:string; variant?:'primary'|'secondary'; label?:string; }
+const {href,variant='primary',label}=Astro.props;
+---
+<AnimatedGradientButton href={href} variant={variant} label={label}><slot /></AnimatedGradientButton>

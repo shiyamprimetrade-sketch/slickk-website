@@ -1,9 +1,8 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import ContactCTA from '../components/ContactCTA.astro';
-import { faqs } from '../data/pages';
+import { faqs } from '../data/agency';
 ---
-<Layout title="Frequently Asked Questions" description="Answers to common SLICKK questions about products, sourcing markets, wholesale inquiries, exporter introductions, quotations and documentation.">
-  <section class="page-hero"><div class="container"><p class="eyebrow">A little more clarity</p><h1>Questions,<br /><em>answered.</em></h1><p class="page-intro">Practical information before your first sourcing conversation.</p></div></section>
-  <section class="section container faq-layout"><div><h2>Start here.</h2><p>For a question specific to your business, email <a class="text-link" href="mailto:contact@slickk.online">contact@slickk.online</a>.</p></div><div class="faq-list">{faqs.map(([question, answer]) => <details><summary>{question}<span aria-hidden="true">+</span></summary><p>{answer}</p></details>)}</div></section><ContactCTA />
+<Layout title="Frequently Asked Questions" description="Answers about Slickk services, website development, pricing, SEO expectations and project consultations for Bangladesh and international clients.">
+  <section class="page-hero"><div class="container"><div class="breadcrumbs"><a href="/">Home</a> / FAQs</div><p class="eyebrow">Frequently asked questions</p><h1>Clear answers. Better decisions.</h1><p class="lead">Learn how our service inquiries and project quotations work.</p></div></section>
+  <section class="section container faq"><h2>What would you like to know?</h2>{faqs.map((item) => <details><summary>{item.question}</summary><p>{item.answer}</p></details>)}<div class="actions"><a href="/contact/" class="btn">Ask us a question</a></div></section>
 </Layout>

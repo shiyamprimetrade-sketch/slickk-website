@@ -1,17 +1,46 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import ContactCTA from '../components/ContactCTA.astro';
-import { editorialPages } from '../data/pages';
-import { inquiryLink } from '../data/site';
-export function getStaticPaths() { return editorialPages.map((page) => ({ params: { slug: page.slug }, props: { page } })); }
+import { agencyPages, services, pricing, detailedServices, portfolioConcepts } from '../data/agency';
+import { packageServices, packageScopes, portfolioCategories, portfolioTags, serviceFaqs } from '../data/v4';
+export function getStaticPaths() { return agencyPages.filter(page=>page.slug!=='request-quote').map((page) => ({ params: { slug: page.slug }, props: { page } })); }
 const { page } = Astro.props;
-const legal = ['privacy', 'terms'].includes(page.slug);
+const isPricing = page.slug === 'pricing';
+const isServices = page.slug === 'services';
+const isPortfolio = page.slug === 'portfolio';
 ---
-<Layout title={`${page.title.replace('\n', ' ')}`} description={page.description}>
-  <section class="page-hero"><div class="container"><a class="breadcrumb" href="/">Home <span aria-hidden="true">/</span></a><p class="eyebrow">{page.eyebrow}</p><h1>{page.title.split('\n').map((line) => <span class="line">{line}</span>)}</h1><p class="page-intro">{page.intro}</p></div></section>
-  <div class={`container section editorial-layout ${legal ? 'legal-layout' : ''}`}>
-    <aside class="contents"><p class="eyebrow">On this page</p><nav aria-label="Page contents">{page.sections.map((section, index) => <a href={`#section-${index + 1}`}>{section.title}</a>)}</nav>{page.cta && <a class="button" href={inquiryLink(`SLICKK — ${page.cta}`)}>{page.cta} <span aria-hidden="true">↗</span></a>}</aside>
-    <div class="editorial-copy">{page.sections.map((section, index) => <section id={`section-${index + 1}`}><span class="section-number">{String(index + 1).padStart(2, '0')}</span><h2>{section.title}</h2><p>{section.text}</p>{section.items && <ul>{section.items.map((item) => <li>{item}</li>)}</ul>}</section>)}</div>
+<Layout title={page.title} description={page.description}>
+  <section class="page-hero"><div class="container"><div class="breadcrumbs"><a href="/">Home</a> / {page.title}</div><p class="eyebrow">{page.label}</p><h1>{page.title}</h1><p class="lead">{page.intro}</p></div></section>
+  <div class="container section editorial">
+    <aside><p class="eyebrow">On this page</p><nav aria-label="Page sections">{page.sections.map((part,i) => <a href={'#part-' + (i + 1)}>{part.title}</a>)}</nav>{!page.legal && <a class="btn" href={'/contact/?service=' + encodeURIComponent(page.slug)}>Discuss your project</a>}</aside>
+    <article>{page.sections.map((part,i) => <section id={'part-' + (i + 1)}><h2>{part.title}</h2><p>{part.text}</p>{part.items && <ul>{part.items.map((item) => <li>{item}</li>)}</ul>}</section>)}
+      {isServices && <div class="grid cards-2">{services.map((service) => <section class="card"><h3>{service.name}</h3><p>{service.description}</p><a href={'/' + service.slug + '/'}>Explore this service →</a></section>)}</div>}
+      {isServices && <><h2>Specialist creative services</h2><div class="grid cards-2">{detailedServices.map(item => <section class="card"><h3>{item.title}</h3><p>{item.intro}</p><a href={'/services/'+item.slug+'/'}>Explore service →</a></section>)}</div></>}
+      {isPortfolio && <><h2>Demonstration project gallery</h2><p>Self-initiated concept work only. No paid-client project, performance result or endorsement is implied.</p>
+        <div class="portfolio-filters" role="group" aria-label="Filter demonstration projects">
+          {portfolioCategories.map((name,i)=><button type="button" class="filter-chip" data-discipline={name} aria-pressed={i===0?'true':'false'}>{name}</button>)}
+        </div>
+        <div class="grid cards-2">{portfolioConcepts.map((concept)=><section class="project-tile" data-project-discipline={portfolioTags[concept.slug].join('|')}><a class="project-visual" href={'/portfolio/'+concept.slug+'/'}><img src={'/images/portfolio/'+concept.slug+'.svg'} width="1200" height="850" alt={concept.title+' — original self-initiated study'} loading="lazy" /></a><div class="project-meta"><span>{concept.eyebrow}</span><h3>{concept.title}</h3><p>{concept.summary}</p><a href={'/portfolio/'+concept.slug+'/'}>View demonstration →</a></div></section>)}</div>
+        <p class="filter-status" id="portfolio-status" role="status">Showing all 5 concept studies.</p>
+        <p id="portfolio-empty" hidden>No demonstration project in this category yet.</p>
+      </>}
+      {isPricing && <div class="grid cards-2">{pricing.map((item) => <section class="card"><h3>{item.name}</h3><div class="price">{item.price}</div><span class="price-period">{item.period}</span><p>{item.description}</p><ul class="package-details"><li><strong>Includes:</strong> {packageScopes[item.name].included}</li><li><strong>Revisions:</strong> {packageScopes[item.name].revisions}</li><li><strong>Handover:</strong> {packageScopes[item.name].files}</li><li><strong>Separate scope:</strong> {packageScopes[item.name].excluded}</li></ul><a href={'/request-quote/?service=' + packageServices[item.name]}>Request a quote →</a></section>)}</div>}
+      {serviceFaqs[page.slug] && <section class="faq service-faq"><h2>Questions about {page.title.toLowerCase()}</h2>{serviceFaqs[page.slug].map(([question,answer])=><details><summary>{question}</summary><p>{answer}</p></details>)}<a class="text-link" href="/portfolio/">Explore our labeled concept studies →</a></section>}
+      {page.legal && <p class="notice">Initial policy draft, subject to business and legal review. Last prepared 26 October 2026.</p>}
+    </article>
   </div>
-  {!legal && <ContactCTA />}
+  {!page.legal && <section class="section container"><div class="cta"><div><h2>Have a project in mind?</h2><p>Tell Slickk about your requirements to explore the next steps.</p></div><a class="btn" href="/contact/">Start an inquiry</a></div></section>}
+  {isPortfolio && <script>
+    const buttons = Array.from(document.querySelectorAll<HTMLButtonElement>('.filter-chip[data-discipline]'));
+    const projects = Array.from(document.querySelectorAll<HTMLElement>('[data-project-discipline]'));
+    const empty = document.querySelector<HTMLElement>('#portfolio-empty');
+    buttons.forEach(button=>button.addEventListener('click',()=>{
+      const selected = button.dataset.discipline;
+      buttons.forEach(other=>other.setAttribute('aria-pressed',String(other===button)));
+      let count=0;
+      projects.forEach(project=>{const show=selected==='All Projects'||project.dataset.projectDiscipline?.split('|').includes(selected || '');project.hidden=!show;if(show)count++;});
+      if(empty)empty.hidden=count>0;
+      const status=document.querySelector('#portfolio-status');
+      if(status)status.textContent=`Showing ${count} concept ${count===1?'study':'studies'}.`;
+    }));
+  </script>}
 </Layout>
