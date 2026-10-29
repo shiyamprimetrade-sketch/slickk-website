@@ -2,7 +2,7 @@
 
 ## Direction decision
 
-Three concepts were evaluated against originality, clarity of offer, accessibility, implementation cost and fit with a solo studio. Scores below are design judgments, not user research.
+The three side-by-side visual studies are in [design-directions.svg](design-directions.svg). Three concepts were evaluated against originality, clarity of offer, accessibility, implementation cost and fit with a solo studio. Scores below are design judgments, not user research.
 
 | Direction | Idea | Strength | Cost / weakness | Judgment |
 | --- | --- | --- | --- | --- |
