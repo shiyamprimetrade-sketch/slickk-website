@@ -14,7 +14,11 @@ The redesign was deployed only to Cloudflare Pages preview branch `v4-upgrade`: 
 
 ## Recovery
 
-Local ignored `.wrangler/flagship-before.bundle` contains Git refs; `.wrangler/flagship-before-production.zip` contains the pre-flagship static deployment. Earlier Desktop V4 backup contains a full source archive, output archive, Git history and Windows-encrypted credentials. Keep the old production deployment ID for Cloudflare rollback. Production promotion must be preceded by final preview validation and explicit authorization per the flagship brief. A matching new source/Desktop backup is prepared separately.
+Local ignored `.wrangler/flagship-before.bundle` contains Git refs; `.wrangler/flagship-before-production.zip` contains the pre-flagship static deployment. Earlier Desktop V4 backup contains a full source archive, output archive, Git history and Windows-encrypted credentials. Keep the old production deployment ID for Cloudflare rollback. Production promotion must be preceded by final preview validation and explicit authorization per the flagship brief. A matching Desktop backup contains source ZIP, preview-build ZIP, full Git bundle, brand guide, test report and a separate Windows-encrypted credential copy. The private GitHub branch is pushed at `43ea762`.
+
+## Verified preview response
+
+After the final upload, all 40 sitemap URLs returned 200 with one H1, expected canonical and CSP. The wordmark SVG, PNG favicon and sharing JPEG returned 200 with the expected media type. Both administrator APIs returned 401 without credentials. This was a static HTTP smoke check; a fresh real Turnstile-to-D1 form submission was not completed in the preview browser because its navigation timed out. The unchanged backend retains prior V4 production storage verification.
 
 ## Open operations
 

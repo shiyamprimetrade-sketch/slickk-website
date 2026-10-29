@@ -13,4 +13,4 @@
 
 ## Boundaries
 
-Automated Axe reports no detected violations; manual screen-reader testing remains unperformed. Form storage, Turnstile and private inbox were previously verified on V4 production; the flagship retains the backend. Preview form should receive a fresh end-to-end check before production. Search indexing and real visitor outcomes require external observation. Lighthouse tests used local preview and simulated network/CPU, not live production traffic.
+Automated Axe reports no detected violations; manual screen-reader testing remains unperformed. Form storage, Turnstile and private inbox were previously verified on V4 production; the flagship retains the backend. Preview form still needs a fresh end-to-end Turnstile-to-D1 check before production; the in-app browser navigation timed out. The 40-route preview HTTP smoke test passed after upload. Search indexing and real visitor outcomes require external observation. Lighthouse tests used local preview and simulated network/CPU, not live production traffic.
