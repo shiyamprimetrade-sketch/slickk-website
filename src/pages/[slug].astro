@@ -1,5 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import { guides } from '../data/guides';
+import ServiceStudy from '../components/ServiceStudy.astro';
 import { agencyPages, services, pricing, detailedServices, portfolioConcepts } from '../data/agency';
 import { packageServices, packageScopes, portfolioCategories, portfolioTags, serviceFaqs } from '../data/v4';
 export function getStaticPaths() { return agencyPages.filter(page=>page.slug!=='request-quote').map((page) => ({ params: { slug: page.slug }, props: { page } })); }
@@ -10,9 +12,10 @@ const isPortfolio = page.slug === 'portfolio';
 ---
 <Layout title={page.title} description={page.description}>
   <section class="page-hero"><div class="container"><div class="breadcrumbs"><a href="/">Home</a> / {page.title}</div><p class="eyebrow">{page.label}</p><h1>{page.title}</h1><p class="lead">{page.intro}</p></div></section>
+  {services.some(service => service.slug === page.slug) && <ServiceStudy slug={page.slug} />}
   <div class="container section editorial">
     <aside><p class="eyebrow">On this page</p><nav aria-label="Page sections">{page.sections.map((part,i) => <a href={'#part-' + (i + 1)}>{part.title}</a>)}</nav>{!page.legal && <a class="btn" href={'/contact/?service=' + encodeURIComponent(page.slug)}>Discuss your project</a>}</aside>
-    <article>{page.sections.map((part,i) => <section id={'part-' + (i + 1)}><h2>{part.title}</h2><p>{part.text}</p>{part.items && <ul>{part.items.map((item) => <li>{item}</li>)}</ul>}</section>)}
+    <article>{page.slug === 'insights' && <div class="guide-index">{guides.map(guide => <a class="insight-link" href={'/insights/'+guide.slug+'/'}><span class="eyebrow">{guide.readingTime}</span><h2>{guide.title}</h2><p>{guide.intro}</p><span>Read the guide →</span></a>)}</div>}{page.sections.map((part,i) => <section id={'part-' + (i + 1)}><h2>{part.title}</h2><p>{part.text}</p>{part.items && <ul>{part.items.map((item) => <li>{item}</li>)}</ul>}</section>)}
       {isServices && <div class="grid cards-2">{services.map((service) => <section class="card"><h3>{service.name}</h3><p>{service.description}</p><a href={'/' + service.slug + '/'}>Explore this service →</a></section>)}</div>}
       {isServices && <><h2>Specialist creative services</h2><div class="grid cards-2">{detailedServices.map(item => <section class="card"><h3>{item.title}</h3><p>{item.intro}</p><a href={'/services/'+item.slug+'/'}>Explore service →</a></section>)}</div></>}
       {isPortfolio && <><h2>Demonstration project gallery</h2><p>Self-initiated concept work only. No paid-client project, performance result or endorsement is implied.</p>

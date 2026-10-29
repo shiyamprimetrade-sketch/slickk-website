@@ -19,7 +19,7 @@ async function request(url, options = {}) {
 const origin = process.argv[2] ?? 'https://slickk.online';
 assert.match(origin, /^https:\/\//, 'Use HTTPS for production verification');
 const routes = [...readFileSync('dist/sitemap.xml','utf8').matchAll(/<loc>https:\/\/slickk\.online([^<]*)<\/loc>/g)].map(match=>match[1]||'/');
-assert.equal(routes.length,37,'Expected all indexable V4 routes');
+assert.equal(routes.length,40,'Expected all indexable flagship routes');
 for (const route of routes) {
   const response = await request(new URL(route, origin));
   assert.equal(response.status, 200, route); const html = await response.text();

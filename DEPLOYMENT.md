@@ -1,76 +1,60 @@
-# Cloudflare Pages deployment runbook
+# Deployment and recovery
 
-## Preconditions
+Target: existing Cloudflare Pages project `slickk`, serving https://slickk.online. Preserve its custom-domain bindings, DNS, mail records and Email Routing. No replacement project or domain setup is needed.
 
-1. Review the finished local website and privacy/terms drafts with the owner before publication.
-2. Confirm the account owns the active `slickk.online` zone. Do not change account email, registrar or nameservers.
-3. Inspect existing Pages projects and web DNS. Do not replace a working deployment without review.
-4. Record existing DNS and routing settings privately. Never publish the destination mailbox or tokens.
+## Prepare and verify
 
-Run commands one at a time in PowerShell, from `Slickk-Website`.
+Use the existing authenticated Wrangler installation pinned in `package-lock.json`. Run `npx wrangler whoami` to confirm the account before any deployment. If authentication has expired, complete the official Wrangler login flow; never copy credentials into this repository.
 
-## Authenticate and inspect
+Run each release check:
 
 ```powershell
-npx wrangler --version
-npx wrangler whoami
-npx wrangler login --scopes account:read user:read zone:read pages:write --no-use-keyring
-npx wrangler whoami
-npx wrangler pages project list
+npm ci
+npm run check
+npm run lint
+npm run build
+npm test
+npm run test:browser
 ```
 
-Only run login if authentication is missing or wrong. The normal browser callback flow succeeded for this release. Wrangler stores its OAuth profile locally, outside project Git. If a callback cannot be reached, device flow is an alternative on Wrangler 4.119.0+: `npx wrangler login --device --browser=false`. Approve using the Cloudflare account that contains `slickk.online`. Never paste passwords or API tokens into chat. `whoami` alone does not establish zone ownership: check the dashboard or authorized API as well. If multiple accounts exist, select the confirmed account with `CLOUDFLARE_ACCOUNT_ID` in the local environment.
+Inspect desktop and mobile layouts, navigation, keyboard focus, content accuracy and inquiry success/error states. Browser tests are a separate gate: `npm run deploy` does not run them.
 
-## Project and upload
+## Existing runtime configuration
 
-Reuse a suitable `slickk` project if present. Check its integration mode and production branch. If absent, creating this free Pages project changes the account and requires the owner’s authorization under workspace instructions:
+- `INQUIRIES_DB`: existing D1 database `slickk-leads-v4`.
+- `TURNSTILE_SECRET`: encrypted Pages runtime secret; validate challenges server-side.
+- `LEADS_ADMIN_TOKEN`: encrypted runtime secret protecting inbox APIs.
+- `PUBLIC_TURNSTILE_SITE_KEY`: public build setting for the existing widget.
+- `PUBLIC_TRACKING_ENABLED` and `EVENTS_ENABLED`: build/runtime consent-based event controls.
+
+Preserve production secrets and bindings. Preview requires its own working bindings/secrets and a hostname allowed by the Turnstile widget. Migration files record the already-applied schema; do not blindly rerun `0002_v4_intake.sql` against the existing database. Email notifications remain pending verified sender configuration.
+
+## Preview and production
+
+Upload a preview to an approved branch alias using:
 
 ```powershell
-npx wrangler pages project create slickk --production-branch=main --force
+npx wrangler pages deploy dist --project-name=slickk --branch=<approved-preview-branch>
 ```
 
-Wrangler 4.151.3 delegates creation to Workers by default. For a new project, `--force` selects the requested Pages product. The actual `slickk` project already exists: do not create it again, and do not pass `--force` on subsequent uploads.
+Replace the placeholder before running; confirm that alias is allowed by Turnstile. Verify the returned deployment URL, inquiry storage and authenticated inbox before production approval. Keep a recoverable source snapshot and previous deployment identifier.
 
-After all checks and legal review:
+After owner approval, from the verified source checkout:
 
 ```powershell
 npm run deploy
 ```
 
-Record project, account confirmation, deployment ID, timestamp and returned URL in `REPORT.md`. Visit the deployment URL independently. Do not claim domain activation from upload success.
+This checks, lints, rebuilds and tests before uploading to the Pages production branch `main`. Record the source revision, returned deployment ID, URL and actual verification results in the release report. A Git branch named `main` is not itself evidence that its contents match the current live agency release.
 
-## Custom domain
-
-In Cloudflare: Workers & Pages → confirmed Pages project → Custom domains → Set up a domain. Inspect existing attachments first. Add `slickk.online`, then `www.slickk.online` if available and authorized. Confirm the exact web records required before applying changes. Preserve MX, TXT and routing configuration.
-
-An authorized API client can use `POST /accounts/{actual_account_id}/pages/projects/{actual_project_name}/domains` with the discovered domain name. Do not invent IDs or print authentication material. Adding the domain through the API may still require DNS setup; check activation state and required web DNS records.
-
-The live domain-level redirect is the enabled Cloudflare Single Redirect **SLICKK WWW to apex**, under slickk.online → Rules → Redirect Rules. It matches `https://www.slickk.online/*`, targets `https://slickk.online/${1}`, returns HTTP 301, and preserves the query string. Both web CNAMEs target `slickk.pages.dev` and are proxied. Cloudflare Pages does not support domain-level sources in `_redirects`; that source file contains a pointer to this runbook. HTTP redirects to HTTPS before the canonical WWW redirect. Do not attach a conflicting existing hostname without owner approval.
-
-## Verification and rollback
+## Live checks and rollback
 
 ```powershell
 npm run verify:live
 ```
 
-Check the actual HTTPS website in a browser on desktop and mobile. Compare MX/SPF and private dashboard routing settings against the baseline. If authorized, send a real incoming email test and have the owner confirm receipt. DNS consistency alone does not prove delivery.
+Also verify HTTPS, www-to-apex behavior, rendered pages, static assets and a deliberate inquiry through the real production form. A successful upload or static page response does not prove intake or email delivery. Do not expose administrator credentials when capturing evidence.
 
-Use the Pages dashboard’s existing deployment history to roll back a release. Do not delete the project or mail DNS. Save prior web record values privately before a domain cutover. A rollback of website content does not automatically restore changed DNS.
+Use Cloudflare Pages deployment history to restore the recorded prior production deployment if needed; preserve D1 data and bindings. Do not apply destructive database rollback. The pre-flagship recovery bundle and production archive are recorded in `docs/LEGACY_CLEANUP_REPORT.md`. Test restore material separately before overwriting working source.
 
-## Source control
-
-Local Git is initialized on `main`; inspect `git status` before committing. Commit only reviewed project source and lockfile. No remote or GitHub URL should be reported until verified. Native Cloudflare Git integration and Direct Upload have different constraints; future CI can invoke Wrangler with a least-privilege secret held in the CI secret store.
-
-The approved private backup is https://github.com/shiyamprimetrade-sketch/slickk-website . Its `main` branch is backed up with Git push; automatic deployments are not configured.
-
-## Search Console
-
-After the owner verifies domain ownership in Google Search Console, submit `https://slickk.online/sitemap.xml`. Use the provided verification method and preserve other DNS records. This project does not claim verified Search Console access or guaranteed indexing.
-
-## Official references checked
-
-- https://docs.astro.build/en/install-and-setup/
-- https://developers.cloudflare.com/pages/get-started/direct-upload/
-- https://developers.cloudflare.com/pages/configuration/custom-domains/
-- https://developers.cloudflare.com/pages/configuration/headers/
-- https://developers.cloudflare.com/changelog/post/2026-08-04-wrangler-login-device-flow/
+Retired, unrelated legacy URLs should return the useful 404 page, not redirect visitors to unrelated agency offerings. Preserve existing valid agency URLs and internal links.

@@ -1,3 +1,4 @@
+import { guides } from './guides';
 import { enrichServicePages } from './v4';
 export const brand = {
   name: 'Slickk Digital Solutions',
@@ -185,4 +186,4 @@ agencyPages.push(
 export const caseStudyPaths = portfolioConcepts.map((p) => '/portfolio/' + p.slug + '/');
 enrichServicePages([...servicePages, ...detailedServices]);
 export const detailServicePaths = detailedServices.map((p) => '/services/' + p.slug + '/');
-export const indexablePaths = ['/', '/contact/', '/faq/', ...agencyPages.map((p) => '/' + p.slug + '/'), ...detailServicePaths, ...caseStudyPaths];
+export const indexablePaths = [...guides.map(guide=>'/insights/'+guide.slug+'/'), '/', '/contact/', '/faq/', ...agencyPages.map((p) => '/' + p.slug + '/'), ...detailServicePaths, ...caseStudyPaths];

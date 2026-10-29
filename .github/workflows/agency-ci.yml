@@ -5,6 +5,7 @@ on:
       - agency-transformation-2026-10-26
       - slickk-digital-solutions-v2-2026-10-26
       - slickk-v4-upgrade
+      - slickk-flagship-2026-10-28
   pull_request:
     branches:
       - main

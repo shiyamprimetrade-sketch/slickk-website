@@ -80,7 +80,11 @@ const options = [{name:'General inquiry',slug:'general'},...new Map([...services
           if (status) status.textContent = result.notified ? 'Your inquiry was saved and the notification service accepted the message. Thank you.' : 'Your inquiry was saved for Slickk to review. Automated email notification is not configured; you can also email contact@slickk.online.';
         } catch {
           if (status) status.textContent = 'The secure form could not send your inquiry. Please email contact@slickk.online directly.';
-        } finally { if (button) { button.disabled = false; button.removeAttribute('aria-busy'); } }
+        } finally {
+          // Turnstile tokens are single-use, including requests that fail after verification.
+          (window as Window & { turnstile?: { reset: () => void } }).turnstile?.reset();
+          if (button) { button.disabled = false; button.removeAttribute('aria-busy'); }
+        }
       });
     }
   </script>

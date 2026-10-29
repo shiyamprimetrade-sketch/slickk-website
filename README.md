@@ -1,30 +1,47 @@
-# Slickk — Software Development & Digital Growth Agency
+# SLICKK Digital Solutions
 
-Slickk is a new Bangladesh-based technology and digital marketing business serving domestic and international inquiries. Public email: contact@slickk.online. Domain: https://slickk.online.
+Independent digital agency website: software, web experiences, branding, marketing and business documents. Built with Astro and TypeScript; hosted on the existing Cloudflare Pages project `slickk` at https://slickk.online.
 
-## Current review status
+## Local development
 
-The agency transformation is under review on branch agency-transformation-2026-10-26, forked from source checkpoint 3393a0f5. Changes on this branch are not evidence of production deployment. See AGENCY_RELEASE.md for migration, Cloudflare and rollback instructions. The old fresh-fruit website is preserved in Git history and on the original main branch until the release is approved.
+Use Node.js 22.22 or newer (Node 24 recommended).
 
-## Build
+```powershell
+npm ci
+npm run dev
+```
 
-Requires Node 22.22+ (Node 24 recommended) and npm.
+Copy `.env.example` to an ignored local `.env` when configuring public build settings. Public Turnstile keys are safe in the browser; private keys and administrator tokens belong only in Cloudflare runtime secrets or ignored local credential storage.
 
-    npm ci
-    npm run check
-    npm run lint
-    npm run build
-    npm test
-    npm run test:browser
+## Verification
 
-All pages use Astro's static output. Frontend config, provisional prices and verified social links live in src/data/agency.ts. Never invent portfolio clients or publish social URLs that are not owned and verified.
+```powershell
+npm run check
+npm run lint
+npm run build
+npm test
+npm run test:browser
+```
 
-## Contact behavior
+Browser tests use Playwright; install its Chromium browser if missing with `npx playwright install chromium`. Static Astro preview does not execute Cloudflare Pages Functions, so live intake verification is a separate release check.
 
-Without PUBLIC_TURNSTILE_SITE_KEY the form prepares a mailto draft, which visitors must send themselves. If Turnstile is configured at build time, the form will attempt server-side submission through the Cloudflare Pages Function at functions/api/inquiry.js. This requires Cloudflare Email Sending, a restricted EMAIL send binding, verified recipient INQUIRY_DESTINATION, and TURNSTILE_SECRET configured privately. See AGENCY_RELEASE.md.
+## Project map
 
-No real delivery is claimed until test requests succeed and the destination mailbox confirms receipt. Do not commit private configuration, account secrets, inquiry data or API tokens.
+- `src/data/agency.ts`, `src/data/v4.ts` and `src/data/guides.ts`: services, packages, concept work and guides.
+- `src/pages`, `src/components`, `src/styles`: rendered website and interface.
+- `functions`: server-side intake, authenticated lead inbox and consent-based event handling.
+- `migrations`: existing D1 database schema history.
+- `public`: deployed images, fonts, icon and crawler configuration.
+- `tests`: content, backend and browser checks.
 
-## Deployment
+Concept portfolio studies are self-initiated examples, not client endorsements or delivery claims. Unverified contacts, social profiles and client references remain unpublished. See `ASSETS.md` and `docs/BRAND_GUIDELINES.md` for provenance and logo exports.
 
-Cloudflare Pages Direct Upload project: slickk (recorded in the historical deployment report). GitHub pushes do not auto-deploy. Preserve the Cloudflare domain, SSL and all email MX/SPF/DKIM/DMARC and routing records; do not move the registrar or zone. Preview with Wrangler on a non-production branch and perform a separate verified production upload only when ready.
+## Inquiries and administration
+
+Validated inquiries are saved through Pages Functions to the existing D1 database bound as `INQUIRIES_DB`, after server-side Turnstile verification. The private inbox at `/internal-leads/` requires the runtime `LEADS_ADMIN_TOKEN`; its API enforces authorization. The ignored Windows-encrypted local administrator file can be used by `scripts/open-private-inbox.ps1` on the Windows account that created it.
+
+Automatic email notification is not configured; monitor the private inbox. Tracking requires visitor consent and the corresponding build/runtime flags. Do not place private credentials in Git, static assets, screenshots or public archives.
+
+## Release and recovery
+
+See `DEPLOYMENT.md` for preview, production and rollback steps. Git pushes alone do not upload the website to Pages. Historical release records describe their dated releases, not the current deployment. The flagship cleanup and preserved recovery records are listed in `docs/LEGACY_CLEANUP_REPORT.md`; prior V4 verification remains under `docs/SLICKK_V4_*.md`.

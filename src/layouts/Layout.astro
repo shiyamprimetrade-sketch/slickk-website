@@ -2,12 +2,15 @@
 import { brand, mainNavigation, services, detailedServices } from '../data/agency';
 import '../styles/agency.css';
 import '../styles/v4.css';
+import '../styles/flagship.css';
+import BrandLogo from '../components/BrandLogo.astro';
+import { guides } from '../data/guides';
 interface Props { title: string; description: string; noindex?: boolean; }
 const { title, description, noindex = false } = Astro.props;
 const trackingEnabled = import.meta.env.PUBLIC_TRACKING_ENABLED === 'true';
 const canonical = new URL(Astro.url.pathname, brand.url).href;
 const segments = Astro.url.pathname.split('/').filter(Boolean);
-const parentName = segments[0] === 'portfolio' ? 'Portfolio' : 'Services';
+const parentName = segments[0] === 'portfolio' ? 'Portfolio' : segments[0] === 'insights' ? 'Insights' : 'Services';
 const breadcrumbs = { '@context':'https://schema.org', '@type':'BreadcrumbList', itemListElement:[
   { '@type':'ListItem', position:1, name:'Home', item:brand.url+'/' },
   ...(segments.length>1 ? [{ '@type':'ListItem', position:2, name:parentName, item:brand.url+'/'+segments[0]+'/' }] : []),
@@ -15,11 +18,13 @@ const breadcrumbs = { '@context':'https://schema.org', '@type':'BreadcrumbList',
 ] };
 const isService = services.some(service=>Astro.url.pathname==='/'+service.slug+'/') || detailedServices.some(service=>Astro.url.pathname==='/services/'+service.slug+'/');
 const serviceSchema = { '@context':'https://schema.org', '@type':'Service', name:title, description, url:canonical, serviceType:title, areaServed:['Bangladesh','International'], provider:{'@type':'Organization',name:brand.name,url:brand.url} };
+const guide = guides.find(item => Astro.url.pathname === '/insights/'+item.slug+'/');
+const articleSchema = guide && { '@context':'https://schema.org', '@type':'Article', headline:guide.title, description:guide.description, datePublished:guide.date, author:{'@type':'Organization',name:brand.name,url:brand.url}, mainEntityOfPage:canonical };
 const socials = Object.entries(brand.social).filter(([, url]) => /^https:\/\//.test(url));
 const organization = {
   '@context': 'https://schema.org',
   '@type': 'Organization',
-  name: brand.name, url: brand.url, email: brand.email,
+  name: brand.name, alternateName: 'SLICKK', url: brand.url, email: brand.email, logo: brand.url + '/brand/slickk-avatar.png',
   description: brand.description,
   areaServed: ['Bangladesh', 'International'],
   ...(socials.length ? { sameAs: socials.map(([, url]) => url) } : {}),
@@ -30,12 +35,14 @@ const organization = {
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#080b14" />
+    <meta name="theme-color" content="#080b10" />
     <title>{title} | Slickk Digital Solutions</title>
     <meta name="description" content={description} />
     <meta name="robots" content={noindex ? 'noindex, follow' : 'index, follow'} />
     {!noindex && <link rel="canonical" href={canonical} />}
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content={brand.name} />
     <meta property="og:title" content={title + ' | Slickk Digital Solutions'} />
@@ -48,13 +55,15 @@ const organization = {
     <meta name="twitter:card" content="summary_large_image" />
     <script type="application/ld+json" set:html={JSON.stringify(organization)} />
     {!noindex && segments.length>0 && <script type="application/ld+json" set:html={JSON.stringify(breadcrumbs)} />}
+    {segments.length === 0 && <script type="application/ld+json" set:html={JSON.stringify({'@context':'https://schema.org','@type':'WebSite',name:'SLICKK',alternateName:'Slickk Digital Solutions',url:brand.url+'/'})} />}
+    {articleSchema && <script type="application/ld+json" set:html={JSON.stringify(articleSchema)} />}
     {isService && <script type="application/ld+json" set:html={JSON.stringify(serviceSchema)} />}
   </head>
   <body data-tracking-enabled={String(trackingEnabled)}>
     <a href="#main" class="skip-link">Skip to content</a>
     <header class="masthead">
       <div class="container header-inner">
-        <a href="/" class="logo" aria-label="Slickk home">slickk<span>.</span></a>
+        <BrandLogo />
         <button class="menu-toggle" aria-expanded="false" aria-controls="site-navigation" type="button">Menu ☰</button>
         <nav id="site-navigation" class="primary" aria-label="Main navigation">
           {mainNavigation.map((item) => <a aria-current={Astro.url.pathname === item.href ? 'page' : undefined} href={item.href}>{item.label}</a>)}
@@ -66,7 +75,7 @@ const organization = {
     <footer class="footer">
       <div class="container">
         <div class="footer-grid">
-          <div><a class="logo" href="/">slickk<span>.</span></a><p>{brand.tagline}</p><p>Independent creative technology, led by a solo founder.<br />Based in Bangladesh. International inquiries welcome.</p><Fragment set:html={'<!--email_off--><a href="mailto:contact@slickk.online">contact@slickk.online</a><!--/email_off-->'} /></div>
+          <div><BrandLogo /><p>{brand.tagline}</p><p>Independent creative technology, led by a solo founder.<br />Based in Bangladesh. International inquiries welcome.</p><Fragment set:html={'<!--email_off--><a href="mailto:contact@slickk.online">contact@slickk.online</a><!--/email_off-->'} /></div>
           <div><h3>Explore</h3>{mainNavigation.map((item) => <a href={item.href}>{item.label}</a>)}<a href="/contact/">Contact</a></div>
           <div><h3>Services & policies</h3><a href="/services/logo-design/">Logo design</a><a href="/services/brochure-design/">Brochures</a><a href="/software-development/">Software</a><a href="/web-development/">Web development</a><a href="/seo-services/">SEO</a><a href="/digital-marketing/">Digital marketing</a><a href="/ai-automation/">AI automation</a><a href="/privacy/">Privacy</a><a href="/terms/">Terms</a><a href="/cookies/">Cookies</a></div>
         </div>

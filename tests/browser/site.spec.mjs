@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 
-const routes = ["/","/about/","/services/","/software-development/","/app-development/","/web-development/","/seo-services/","/digital-marketing/","/content-creation/","/portfolio/","/pricing/","/contact/","/faq/","/privacy/","/terms/","/cookies/","/industries/","/process/","/insights/","/request-quote/","/branding-graphic-design/","/ai-automation/","/services/logo-design/","/services/brochure-design/","/services/brand-identity/","/services/company-profile-design/","/services/website-development/","/services/app-development/","/services/digital-marketing/","/services/seo/","/services/graphic-design/","/services/ai-automation/","/portfolio/identity-system/","/portfolio/corporate-brochure/","/portfolio/commerce-experience/","/portfolio/operations-dashboard/","/portfolio/social-campaign/"];
+const routes = ['/insights/business-website-cost-bangladesh/','/insights/professional-brand-identity/','/insights/software-project-brief/',"/","/about/","/services/","/software-development/","/app-development/","/web-development/","/seo-services/","/digital-marketing/","/content-creation/","/portfolio/","/pricing/","/contact/","/faq/","/privacy/","/terms/","/cookies/","/industries/","/process/","/insights/","/request-quote/","/branding-graphic-design/","/ai-automation/","/services/logo-design/","/services/brochure-design/","/services/brand-identity/","/services/company-profile-design/","/services/website-development/","/services/app-development/","/services/digital-marketing/","/services/seo/","/services/graphic-design/","/services/ai-automation/","/portfolio/identity-system/","/portfolio/corporate-brochure/","/portfolio/commerce-experience/","/portfolio/operations-dashboard/","/portfolio/social-campaign/"];
 
 test.beforeEach(async({page})=>{
   await page.addInitScript(()=>localStorage.setItem('slickk-analytics','no'));
@@ -19,7 +19,7 @@ test('all pages have responsive layout and no detected WCAG A/AA violations', as
     await expect(page.locator('h1')).toHaveCount(1);
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth), route).toBe(true);
     if (route === '/') await page.screenshot({ path: 'test-results/' + testInfo.project.name + '-agency-home.png', fullPage: true });
-    const accessibility = await new AxeBuilder({page}).withTags(['wcag2a','wcag2aa','wcag21a','wcag21aa']).analyze();
+    const accessibility = await new AxeBuilder({page}).withTags(['wcag2a','wcag2aa','wcag21a','wcag21aa','wcag22aa']).analyze();
     expect(accessibility.violations, route).toEqual([]);
   }
   expect(errors).toEqual([]);
@@ -97,7 +97,7 @@ test('V4 quote prefill, motion safeguards and form loading/error states work',as
  await expect(page.locator('#inquiry-status')).toContainText('could not send');await expect(submit).toBeEnabled();
  await page.emulateMedia({reducedMotion:'reduce'});await page.goto('/');
  await expect(page.locator('html')).toHaveAttribute('data-motion','paused');
- expect(await page.locator('.aurora-surface').first().evaluate(element=>getComputedStyle(element,'::before').animationName)).toBe('none');
+ expect(await page.locator('.signal-mark').evaluate(element=>getComputedStyle(element).animationName)).toBe('none');
 });
 
 test('optional analytics sends only after consent and stops after withdrawal',async({page})=>{
@@ -110,4 +110,36 @@ test('optional analytics sends only after consent and stops after withdrawal',as
  await page.locator('#analytics-preferences').click();await page.getByRole('button',{name:'Necessary only',exact:true}).click();
  await page.goto('/services/');
  expect(events).toHaveLength(1);
+});
+
+
+test('flagship artwork dialog and responsive demos work with keyboard', async ({page}) => {
+  await page.goto('/portfolio/commerce-experience/');
+  const open = page.getByRole('button',{name:/view full artwork/i});
+  await open.click();
+  const dialog = page.getByRole('dialog');
+  await expect(dialog).toBeVisible();
+  await page.keyboard.press('Escape');
+  await expect(dialog).toBeHidden();
+  await expect(open).toBeFocused();
+  const mobile = page.getByRole('button',{name:'Mobile',exact:true});
+  await mobile.click();
+  await expect(mobile).toHaveAttribute('aria-pressed','true');
+  await expect(page.locator('#responsive-preview')).toHaveCSS('max-width','360px');
+  const dimensions = await page.locator('.demo-products').evaluate(el => getComputedStyle(el).gridTemplateColumns.split(' ').length);
+  expect(dimensions).toBe(1);
+  await page.goto('/portfolio/operations-dashboard/');
+  await page.getByRole('button',{name:'Tablet',exact:true}).click();
+  await expect(page.locator('#responsive-preview')).toHaveCSS('max-width','720px');
+});
+
+test('brand artwork and every portfolio image load', async ({page}) => {
+  await page.goto('/');
+  for (const image of await page.locator('img').all()) {
+    await image.scrollIntoViewIfNeeded();
+    await expect.poll(() => image.evaluate(el => el.complete && el.naturalWidth > 0)).toBe(true);
+  }
+  const icon = await page.request.get('/favicon-96.png');
+  expect(icon.status()).toBe(200);
+  expect(icon.headers()['content-type']).toContain('image/png');
 });

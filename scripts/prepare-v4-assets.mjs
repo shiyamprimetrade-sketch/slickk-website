@@ -1,5 +1,4 @@
 import { mkdir, writeFile } from 'node:fs/promises';
-import sharp from 'sharp';
 
 // Original, self-initiated SVG studies. Fictional brands and sample interfaces are not client work.
 const studies = {
@@ -14,5 +13,4 @@ for (const [slug, markup] of Object.entries(studies)) {
   const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="850" viewBox="0 0 1200 850"><title>${slug} — original concept study</title><g font-family="Arial,sans-serif">${markup}</g></svg>`;
   await writeFile(`public/images/portfolio/${slug}.svg`, svg);
 }
-await sharp('public/agency-social.svg').jpeg({ quality: 90 }).toFile('public/images/agency-social.jpg');
-console.log('Prepared five original concept studies and a 1200×630 raster sharing image.');
+console.log('Prepared five original concept studies.');

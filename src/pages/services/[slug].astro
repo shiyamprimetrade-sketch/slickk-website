@@ -1,6 +1,7 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import GradientButton from '../../components/GradientButton.astro';
+import ServiceStudy from '../../components/ServiceStudy.astro';
 import { detailedServices } from '../../data/agency';
 import { serviceFaqs } from '../../data/v4';
 export function getStaticPaths() { return detailedServices.map(page=>({params:{slug:page.slug},props:{page}})); }
@@ -12,6 +13,7 @@ const {page}=Astro.props;
     <p class="eyebrow">{page.label}</p><h1>{page.title}</h1><p class="lead">{page.intro}</p>
     <GradientButton href={'/contact/?service='+encodeURIComponent(page.slug)}>Request a quote</GradientButton>
   </div></section>
+  <ServiceStudy slug={page.slug} />
   <div class="container section editorial">
     <aside><p class="eyebrow">Explore this service</p><nav aria-label="Page sections">{page.sections.map((part,i)=><a href={'#part-'+(i+1)}>{part.title}</a>)}</nav><a href="/pricing/" class="btn">View launch packages</a></aside>
     <article>{page.sections.map((part,i)=><section id={'part-'+(i+1)}><h2>{part.title}</h2><p>{part.text}</p>{part.items && <ul>{part.items.map(item=><li>{item}</li>)}</ul>}</section>)}

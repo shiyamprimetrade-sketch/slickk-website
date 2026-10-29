@@ -32,6 +32,6 @@
     "globals": "17.13.0",
     "lighthouse": "13.5.0",
     "sharp": "0.35.5",
-    "wrangler": "4.151.3"
+    "wrangler": "4.155.0"
   }
 }
