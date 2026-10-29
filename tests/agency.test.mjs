@@ -46,6 +46,20 @@ test('robots, sitemap and retired fruit routes match migration', async () => {
   assert.equal(notFound('meta[name=robots]').attr('content'), 'noindex, follow');
 });
 
+test('editorial metadata and contextual discovery links match visible content', async () => {
+  const website = load(await readFile(fileFor('/services/website-development/'), 'utf8'));
+  assert.equal(website('meta[property="og:type"]').attr('content'), 'website');
+  assert.ok(website('a[href="/insights/business-website-cost-bangladesh/"]').length);
+  const guide = load(await readFile(fileFor('/insights/business-website-cost-bangladesh/'), 'utf8'));
+  assert.equal(guide('meta[property="og:type"]').attr('content'), 'article');
+  assert.equal(guide('meta[property="article:published_time"]').attr('content'), '2026-10-28');
+  assert.ok(guide('a[href="/services/website-development/"]').length);
+  const softwareGuide = load(await readFile(fileFor('/insights/software-project-brief/'), 'utf8'));
+  assert.ok(softwareGuide('a[href="/software-development/"]').length);
+  const servicesPage = load(await readFile(fileFor('/services/'), 'utf8'));
+  assert.ok(servicesPage('a[href="/industries/"]').length);
+});
+
 test('security headers retain restricted CSP and clear false marketing claims', async () => {
   const headers = await readFile('dist/_headers', 'utf8');
   assert.match(headers, /default-src 'none'/); assert.match(headers, /frame-ancestors 'none'/);

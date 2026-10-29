@@ -18,4 +18,4 @@ createServer(async (request, response) => {
     response.writeHead(status, { ...shared, 'Content-Type': types[extname(path)] ?? 'application/octet-stream' });
     response.end(body);
   } catch { response.writeHead(500); response.end('Unable to serve the page.'); }
-}).listen(4321, '127.0.0.1', () => console.log('Local: http://127.0.0.1:4321'));
+}).listen(Number(process.env.PORT || 4321), '127.0.0.1', () => console.log(`Local: http://127.0.0.1:${process.env.PORT || 4321}`));

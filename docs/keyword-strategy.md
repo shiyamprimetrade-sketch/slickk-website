@@ -1,0 +1,16 @@
+# Keyword strategy — 29 October 2026
+
+## Evidence and scoring
+
+Keyword Tool guest suggestions were queried for Bangladesh/English on 29 October 2026. They returned phrase ideas only: **no verified volume, difficulty, CPC, or rank**. Competitor pages below are public first-party pages, not proof of their rankings or market share. Score each opportunity 0–3 on service relevance, purchase intent, plausible attainability, and contribution to a paid inquiry; total 12. Attainability is an editorial hypothesis until Search Console data exists. No top-three rank is promised.
+
+| Primary keyword; secondary and long-tail | Intent, audience, matching service | Competing page | Commercial intent; target URL | Content requirement; priority; score | Source/confidence |
+| --- | --- | --- | --- | --- | --- |
+| website development service in bangladesh; website development cost in bangladesh, business website cost | Compare providers/budgets; Bangladesh SMEs; website package from BDT 10,000 | [iT Services BD pricing](https://itservices.com.bd/pricing/) | High; `/services/website-development/` and existing cost guide | Keep scope, exclusions, ownership and clear quote CTA; P1; 11/12 | Keyword Tool phrase; medium relevance, unknown demand |
+| brand identity design bangladesh; corporate identity design, brand brief | Commission identity; founders; brand identity package from BDT 8,000 | [Bykorp pricing](https://www.bykorp.com/pricing) | High; `/services/brand-identity/` and existing brief guide | Show deliverables, revision bounds and real concept labels; P1; 10/12 | Keyword Tool phrase; medium relevance, unknown demand |
+| custom software development company bangladesh; cost, business software brief | Scope project; operations teams; custom software consultation | [Againsoft web development](https://www.againsoft.com/services/website-development) (adjacent, not exact) | High; `/software-development/` and existing brief guide | Explain workflow, permissions, acceptance and custom quote; P1; 10/12 | Keyword Tool phrase; medium relevance, unknown demand |
+| ai automation agency in bangladesh; business automation bangladesh, workflow automation | Explore feasible workflow; SMEs; AI automation consultation | [REIT workflow automation](https://www.reit.com.bd/services/ai-workflow-automation/), [Cloud Point AI automation](https://cloudpoint.com.bd/ai-automation-agent) | Medium-high; `/ai-automation/` | Explain human review, data risk, integration assessment, limits; P1; 9/12 | Keyword Tool phrase; medium relevance, unknown demand |
+
+`ChatGPT`, `Gemini`, `free AI tools`, `online AI tools`, `AI API`, and `AI research` are not target terms: this site does not offer those products or verified named integrations. `API integration` may describe a custom project after scoping; it is not a standalone product page. Do not create comparison, affiliate, city doorway, or software application pages from these seeds.
+
+Next measurement: verify Search Console, review 28-day queries by landing page, inspect actual competitor results in target locale, and update scores using observed impressions, CTR, and qualified inquiries. Keep one primary intent per existing page; expand only where real customer questions support original content.
