@@ -44,10 +44,26 @@ export const faqs = [
 ] as const;
 type Section = { title: string; text: string; items?: readonly string[] };
 export type AgencyPage = { slug: string; title: string; label: string; intro: string; description: string; sections: Section[]; legal?: boolean };
+const categoryTitles: Record<string, string> = {
+  'web-development': 'Website Development for Businesses',
+  'software-development': 'Custom Software Development',
+  'app-development': 'Mobile App Development',
+  'seo-services': 'SEO Services & Search Visibility',
+  'digital-marketing': 'Digital Marketing for Businesses',
+  'content-creation': 'Content Creation for Websites & Campaigns',
+};
+const categoryDescriptions: Record<string, string> = {
+  'web-development': 'Plan a responsive business website, useful content and a clear inquiry path with SLICKK. Website work is scoped for businesses in Bangladesh and beyond.',
+  'software-development': 'Explore custom software for business workflows, dashboards and secure integrations. SLICKK defines users, requirements and a written delivery scope first.',
+  'app-development': 'Plan an Android or cross-platform app around real users, device needs and release responsibilities. Discuss mobile development with SLICKK in Bangladesh.',
+  'seo-services': 'Review technical SEO, search intent, on-page content and internal links with SLICKK. Scope practical improvements without promised rankings.',
+  'digital-marketing': 'Plan digital campaigns, social creative and measurement around a clear business objective. Discuss audience, channels and scope with SLICKK.',
+  'content-creation': 'Prepare website copy, brand graphics and campaign content with a clear audience and approval process. Discuss formats and ownership with SLICKK.',
+};
 const servicePages: AgencyPage[] = services.map((service) => ({
-  slug: service.slug, title: service.name, label: 'Slickk services',
+  slug: service.slug, title: categoryTitles[service.slug] ?? service.name, label: 'Slickk services',
   intro: service.description,
-  description: service.name + ' from Slickk, a Bangladesh-based software development and digital growth agency. Explore our approach and request a project quote.',
+  description: categoryDescriptions[service.slug] ?? service.name + ' from Slickk, a Bangladesh-based software development and digital growth agency. Explore our approach and request a project quote.',
   sections: [
     { title: 'What we can help with', text: service.short, items: service.bullets },
     { title: 'Our approach', text: 'We start with your objectives, audience, constraints and project scope. Then we agree on deliverables, review checkpoints and quality expectations before implementation.' },

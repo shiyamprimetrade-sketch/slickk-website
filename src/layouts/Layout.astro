@@ -5,16 +5,19 @@ import '../styles/v4.css';
 import '../styles/flagship.css';
 import BrandLogo from '../components/BrandLogo.astro';
 import { guides } from '../data/guides';
+import { parentForDetail } from '../data/serviceSilos';
 interface Props { title: string; description: string; noindex?: boolean; }
 const { title, description, noindex = false } = Astro.props;
 const trackingEnabled = import.meta.env.PUBLIC_TRACKING_ENABLED === 'true';
 const canonical = new URL(Astro.url.pathname, brand.url).href;
 const segments = Astro.url.pathname.split('/').filter(Boolean);
 const parentName = segments[0] === 'portfolio' ? 'Portfolio' : segments[0] === 'insights' ? 'Insights' : 'Services';
+const detailParent = segments[0] === 'services' ? parentForDetail(segments[1] ?? '') : undefined;
 const breadcrumbs = { '@context':'https://schema.org', '@type':'BreadcrumbList', itemListElement:[
   { '@type':'ListItem', position:1, name:'Home', item:brand.url+'/' },
   ...(segments.length>1 ? [{ '@type':'ListItem', position:2, name:parentName, item:brand.url+'/'+segments[0]+'/' }] : []),
-  { '@type':'ListItem', position:segments.length>1?3:2, name:title, item:canonical },
+  ...(detailParent ? [{ '@type':'ListItem', position:3, name:detailParent.name, item:brand.url+'/'+detailParent.slug+'/' }] : []),
+  { '@type':'ListItem', position:detailParent?4:segments.length>1?3:2, name:title, item:canonical },
 ] };
 const isService = services.some(service=>Astro.url.pathname==='/'+service.slug+'/') || detailedServices.some(service=>Astro.url.pathname==='/services/'+service.slug+'/');
 const serviceSchema = { '@context':'https://schema.org', '@type':'Service', name:title, description, url:canonical, serviceType:title, areaServed:['Bangladesh','International'], provider:{'@type':'Organization',name:brand.name,url:brand.url} };
@@ -85,7 +88,7 @@ const organization = {
         {trackingEnabled && <button class="filter-chip" id="analytics-preferences" type="button">Analytics preferences</button>}
       </div>
     </footer>
-    {trackingEnabled && <aside class="consent-panel" id="analytics-consent" aria-label="Optional analytics preferences" hidden><h2>Help us understand what is useful.</h2><p>Optional first-party analytics counts page and inquiry actions without visitor identifiers or message content. Your choice is stored on this device. <a href="/cookies/">Read the cookie notice</a>.</p><div class="actions"><button class="btn btn-outline" type="button" data-analytics-choice="no">Necessary only</button><button class="btn" type="button" data-analytics-choice="yes">Allow analytics</button></div></aside>}
+    {trackingEnabled && <aside class="consent-panel" id="analytics-consent" aria-label="Optional analytics preferences" aria-hidden="true" inert><h2>Help us understand what is useful.</h2><p>Optional first-party analytics counts page and inquiry actions without visitor identifiers or message content. Your choice is stored on this device. <a href="/cookies/">Read the cookie notice</a>.</p><div class="actions"><button class="btn btn-outline" type="button" data-analytics-choice="no">Necessary only</button><button class="btn" type="button" data-analytics-choice="yes">Allow analytics</button></div></aside>}
     <script>
       import '../scripts/motion';
       import { initAnalytics } from '../scripts/analytics';

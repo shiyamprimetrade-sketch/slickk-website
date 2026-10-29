@@ -1,8 +1,9 @@
 export function initAnalytics() {
   if (document.body.dataset.trackingEnabled !== 'true') return;
   const panel=document.querySelector<HTMLElement>('#analytics-consent');
+  const showPanel=(visible:boolean)=>{if(!panel)return;panel.classList.toggle('is-visible',visible);panel.inert=!visible;panel.setAttribute('aria-hidden',String(!visible));};
   let allowed=false;
-  try { allowed=localStorage.getItem('slickk-analytics')==='yes'; if(panel) panel.hidden=localStorage.getItem('slickk-analytics')!==null; } catch { if(panel)panel.hidden=false; }
+  try { allowed=localStorage.getItem('slickk-analytics')==='yes'; showPanel(localStorage.getItem('slickk-analytics')===null); } catch { showPanel(true); }
   const send=(event:string,service='')=>{
     if(!allowed)return;
     void fetch('/api/events',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({event,page:location.pathname,service:/^[a-z0-9-]{0,50}$/.test(service)?service:'',consent:'analytics'}),keepalive:true}).catch(()=>{});
@@ -10,10 +11,10 @@ export function initAnalytics() {
   document.querySelectorAll<HTMLButtonElement>('[data-analytics-choice]').forEach(button=>button.addEventListener('click',()=>{
     allowed=button.dataset.analyticsChoice==='yes';
     try{localStorage.setItem('slickk-analytics',allowed?'yes':'no');}catch{/* The choice still applies to this page if browser storage is unavailable. */}
-    if(panel)panel.hidden=true;
+    showPanel(false);
     if(allowed)send('page_view');
   }));
-  document.querySelector('#analytics-preferences')?.addEventListener('click',()=>{if(panel)panel.hidden=false;});
+  document.querySelector('#analytics-preferences')?.addEventListener('click',()=>showPanel(true));
   if(allowed)send('page_view');
   document.addEventListener('click',event=>{
     if(!(event.target instanceof Element))return;

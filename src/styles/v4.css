@@ -130,7 +130,8 @@ body { background: var(--night); color: var(--ink); }
 .footer-bottom { font-size: .7rem; border-color: var(--line); }
 .service-faq { margin-top: 45px; }
 .insight-link { display: block; border-block: 1px solid var(--line); padding-block: 24px; }
-.consent-panel { position: fixed; bottom: 18px; left: 18px; max-width: 430px; padding: 22px; z-index: 70; background: #152039; border: 1px solid #5b7092; border-radius: 18px; box-shadow: 0 20px 70px #0009; }
+.consent-panel { position: fixed; bottom: 18px; left: 18px; max-width: 430px; padding: 22px; z-index: 70; background: #152039; border: 1px solid #5b7092; border-radius: 18px; box-shadow: 0 20px 70px #0009; opacity: 0; pointer-events: none; transition: opacity .2s; }
+.consent-panel.is-visible { opacity: 1; pointer-events: auto; }
 .consent-panel p { font-size: .8rem; }
 .consent-panel h2 { font-size: 1.2rem; line-height: 1.3; }
 .consent-panel .actions { margin-top: 16px; }

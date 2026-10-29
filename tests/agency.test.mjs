@@ -4,6 +4,7 @@ import { readFile, stat } from 'node:fs/promises';
 import { resolve, join } from 'node:path';
 import { load } from 'cheerio';
 import { onRequestPost } from '../functions/api/inquiry.js';
+import { serviceSilos } from '../src/data/serviceSilos.ts';
 
 const base = resolve('dist');
 const routes = ['/insights/business-website-cost-bangladesh/','/insights/professional-brand-identity/','/insights/software-project-brief/',"/","/about/","/services/","/software-development/","/app-development/","/web-development/","/seo-services/","/digital-marketing/","/content-creation/","/portfolio/","/pricing/","/contact/","/faq/","/privacy/","/terms/","/cookies/","/industries/","/process/","/insights/","/request-quote/","/branding-graphic-design/","/ai-automation/","/services/logo-design/","/services/brochure-design/","/services/brand-identity/","/services/company-profile-design/","/services/website-development/","/services/app-development/","/services/digital-marketing/","/services/seo/","/services/graphic-design/","/services/ai-automation/","/portfolio/identity-system/","/portfolio/corporate-brochure/","/portfolio/commerce-experience/","/portfolio/operations-dashboard/","/portfolio/social-campaign/"];
@@ -58,6 +59,41 @@ test('editorial metadata and contextual discovery links match visible content', 
   assert.ok(softwareGuide('a[href="/software-development/"]').length);
   const servicesPage = load(await readFile(fileFor('/services/'), 'utf8'));
   assert.ok(servicesPage('a[href="/industries/"]').length);
+});
+
+test('six service silos have homepage paths and reciprocal detail links', async () => {
+  const home = load(await readFile(fileFor('/'), 'utf8'));
+  const sitemap = await readFile('dist/sitemap.xml', 'utf8');
+  const titles = new Set();
+  for (const silo of serviceSilos) {
+    const parentPath = `/${silo.slug}/`;
+    assert.ok(home(`a[href="${parentPath}"]`).length, parentPath + ' absent from homepage');
+    assert.ok(sitemap.includes(`https://slickk.online${parentPath}`));
+    const parent = load(await readFile(fileFor(parentPath), 'utf8'));
+    const title = parent('title').text();
+    const titleTerm = silo.slug === 'seo-services' ? 'SEO' : silo.name.split(' ')[0];
+    assert.ok(title.toLowerCase().includes(titleTerm.toLowerCase()), parentPath + ' title intent');
+    assert.ok(!titles.has(title), parentPath + ' duplicate category title'); titles.add(title);
+    for (const detail of silo.details) {
+      const detailPath = `/services/${detail.slug}/`;
+      assert.ok(parent(`a[href="${detailPath}"]`).length, parentPath + ' missing child');
+      assert.ok(sitemap.includes(`https://slickk.online${detailPath}`));
+      const child = load(await readFile(fileFor(detailPath), 'utf8'));
+      assert.ok(child(`a[href="${parentPath}"]`).length, detailPath + ' missing parent');
+      const breadcrumbs = child('script[type="application/ld+json"]').toArray().map(node => JSON.parse(child(node).html())).find(schema => schema['@type'] === 'BreadcrumbList');
+      assert.ok(breadcrumbs.itemListElement.some(item => item.item === `https://slickk.online${parentPath}`));
+    }
+  }
+  assert.match(home('h1').text(), /websites, software and digital growth/i);
+  assert.match(home('.hero-copy .lead').text(), /mobile apps, SEO, digital marketing and content creation/i);
+});
+
+test('optional analytics consent starts inert until its script makes it visible', async () => {
+  const home = load(await readFile(fileFor('/'), 'utf8'));
+  const panel = home('#analytics-consent');
+  assert.equal(panel.attr('aria-hidden'), 'true');
+  assert.notEqual(panel.attr('inert'), undefined);
+  assert.ok(!panel.hasClass('is-visible'));
 });
 
 test('security headers retain restricted CSP and clear false marketing claims', async () => {

@@ -4,11 +4,13 @@ import { guides } from '../data/guides';
 import ServiceStudy from '../components/ServiceStudy.astro';
 import { agencyPages, services, pricing, detailedServices, portfolioConcepts } from '../data/agency';
 import { packageServices, packageScopes, portfolioCategories, portfolioTags, serviceFaqs } from '../data/v4';
+import { serviceSilos } from '../data/serviceSilos';
 export function getStaticPaths() { return agencyPages.filter(page=>page.slug!=='request-quote').map((page) => ({ params: { slug: page.slug }, props: { page } })); }
 const { page } = Astro.props;
 const isPricing = page.slug === 'pricing';
 const isServices = page.slug === 'services';
 const isPortfolio = page.slug === 'portfolio';
+const serviceSilo = serviceSilos.find(silo => silo.slug === page.slug);
 ---
 <Layout title={page.title} description={page.description}>
   <section class="page-hero"><div class="container"><div class="breadcrumbs"><a href="/">Home</a> / {page.title}</div><p class="eyebrow">{page.label}</p><h1>{page.title}</h1><p class="lead">{page.intro}</p></div></section>
@@ -18,6 +20,7 @@ const isPortfolio = page.slug === 'portfolio';
     <article>{page.slug === 'insights' && <div class="guide-index">{guides.map(guide => <a class="insight-link" href={'/insights/'+guide.slug+'/'}><span class="eyebrow">{guide.readingTime}</span><h2>{guide.title}</h2><p>{guide.intro}</p><span>Read the guide →</span></a>)}</div>}{page.sections.map((part,i) => <section id={'part-' + (i + 1)}><h2>{part.title}</h2><p>{part.text}</p>{part.items && <ul>{part.items.map((item) => <li>{item}</li>)}</ul>}</section>)}
       {isServices && <><div class="grid cards-2">{services.map((service) => <section class="card"><h3>{service.name}</h3><p>{service.description}</p><a href={'/' + service.slug + '/'}>Explore this service →</a></section>)}</div><p>Need a solution for a specific field? <a class="text-link" href="/industries/">See the industries we can discuss →</a></p></>}
       {isServices && <><h2>Specialist creative services</h2><div class="grid cards-2">{detailedServices.map(item => <section class="card"><h3>{item.title}</h3><p>{item.intro}</p><a href={'/services/'+item.slug+'/'}>Explore service →</a></section>)}</div></>}
+      {serviceSilo && serviceSilo.details.length > 0 && <section><h2>Explore focused {serviceSilo.name.toLowerCase()} work</h2><div class="grid cards-2">{serviceSilo.details.map(detail => <div class="card"><h3>{detail.name}</h3><p>{detail.summary}</p><a href={'/services/' + detail.slug + '/'}>Explore {detail.name.toLowerCase()} →</a></div>)}</div></section>}
       {isPortfolio && <><h2>Demonstration project gallery</h2><p>Self-initiated concept work only. No paid-client project, performance result or endorsement is implied.</p>
         <div class="portfolio-filters" role="group" aria-label="Filter demonstration projects">
           {portfolioCategories.map((name,i)=><button type="button" class="filter-chip" data-discipline={name} aria-pressed={i===0?'true':'false'}>{name}</button>)}
