@@ -21,6 +21,8 @@ Preview deployment: `https://057b384b.slickk.pages.dev/` (branch alias `https://
 3. Submit `https://slickk.online/sitemap.xml`. Inspect homepage, `/services/website-development/`, `/services/brand-identity/`, and the three guides. Record indexed/excluded status and reasons, rather than assuming sitemap submission means indexing.
 4. After 28 days, export query/page impressions, clicks, CTR, average position and Core Web Vitals. Pair organic landing-page trends with private qualified-inquiry and won-project records. Current opt-in aggregate events cannot attribute organic acquisition or revenue. GA4 remains unconnected; any third-party analytics needs a privacy review and owner approval.
 
-Pending: browser retest in a working Playwright environment and fresh owner approval before production deployment. No payments, ads, new external integrations, DNS changes or production deployment were activated by this patch.
+Production deployment: owner approved on 29 October 2026. Deployed commit `34d9010` to Cloudflare Pages production; immutable deployment URL `https://b594faeb.slickk.pages.dev/`. Live verification on `https://slickk.online/`: all 40 sitemap routes returned 200; robots.txt returned 200; a missing route returned 404; HTTP and www redirected with 301 to the HTTPS apex; the new industries link, guide/service link and article Open Graph type were present.
+
+Pending: browser retest in a working Playwright environment and owner-managed Search Console verification. No payments, ads, new external integrations or DNS changes were activated by this patch.
 
 References: [Google Domain properties](https://support.google.com/webmasters/answer/10431861), [verify ownership](https://support.google.com/webmasters/answer/9008080), [sitemap guidance](https://developers.google.com/search/docs/crawling-indexing/sitemaps/build-sitemap).
