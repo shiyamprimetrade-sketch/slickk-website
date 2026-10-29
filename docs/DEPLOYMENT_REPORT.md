@@ -1,25 +1,23 @@
 # Flagship deployment report — 29 October 2026
 
-## Current state
+## Production release
 
-The redesign was deployed only to Cloudflare Pages preview branch `v4-upgrade`: https://v4-upgrade.slickk.pages.dev. Final verified preview deployment: `eefaa680` (`https://eefaa680.slickk.pages.dev`). Initial successful upload was `a23cb363`; final service visuals were included in the replacement. Production at `https://slickk.online/` remains V4 deployment `6f1409ab-7f45-4067-bb80-b353e94e83ab` until the owner authorizes the flagship promotion.
+Owner approved replacing the live site after reviewing the fixed preview `https://eefaa680.slickk.pages.dev/`. Wrangler 4.155.0 uploaded the unchanged tested `dist` and Pages Functions to the existing `slickk` project on production branch `main`, with content commit `c09c87930ca33e20b12df739b5cb429fcd98d172`. Deployment ID: **`a64144b7`**; immutable URL: https://a64144b7.slickk.pages.dev. The canonical live site is https://slickk.online/. The prior production deployment `6f1409ab-7f45-4067-bb80-b353e94e83ab` is the rollback target.
 
-## Release inputs
+The reviewed preview alias remains https://v4-upgrade.slickk.pages.dev/ (final preview deployment `eefaa680`). Private GitHub source branch: `slickk-flagship-2026-10-28`. All three CI runs through the content commit passed, including 24 browser tests on the latest source. Later operations-report commits do not change deployed assets.
 
-- Branch: `slickk-flagship-2026-10-28`; base `7d5756f3eda4416bd840c37c4e4ffc666c451c77`.
-- Build: Astro static `dist` plus Cloudflare Pages Functions. No database migration, DNS or email record change.
-- Existing Pages project `slickk`, D1 inquiry binding and Turnstile widget remain in use. Automated email notification is still unconfigured; the form reports this honestly.
-- CI workflow was extended for the flagship branch. The earlier V4 draft PR remains separate from this work.
-- Security: pinned Wrangler 4.155.0 resolved the audit findings. Cloudflare `_headers` includes CSP and security policies.
+## Live verification
 
-## Recovery
+`npm run verify:live` passed after switching its network transport from repeated Windows curl processes to Node's TLS-validating `fetch`. The initial curl run timed out intermittently on individual routes; those routes then returned 200 using native HTTPS requests. The final run checked all 40 sitemap routes against built titles, one H1, canonical, OG image, JSON-LD, secure form mode and CSP. It also checked sitemap, robots, sharing JPEG, portfolio SVG, local font, branded 404, HTTP-to-HTTPS and www-to-apex redirects. Both unauthenticated administrator APIs returned 401. Production favicon and brand asset URLs were separately checked on preview; the live browser displayed the new wordmark.
 
-Local ignored `.wrangler/flagship-before.bundle` contains Git refs; `.wrangler/flagship-before-production.zip` contains the pre-flagship static deployment. Earlier Desktop V4 backup contains a full source archive, output archive, Git history and Windows-encrypted credentials. Keep the old production deployment ID for Cloudflare rollback. Production promotion must be preceded by final preview validation and explicit authorization per the flagship brief. A matching Desktop backup contains source ZIP, preview-build ZIP, full Git bundle, brand guide, test report and a separate Windows-encrypted credential copy. The private GitHub branch contains the tested implementation starting at `43ea762`; later documentation commits do not change the deployed site.
+A clearly labeled synthetic quote was submitted through the live `/request-quote/` form after its Turnstile token was ready. The page reported successful storage and correctly said automatic email notification is not configured. A read-only D1 query found exactly one matching quote record. No real customer data was printed during verification.
 
-## Verified preview response
+## Infrastructure and recovery
 
-After the final upload, all 40 sitemap URLs returned 200 with one H1, expected canonical and CSP. The wordmark SVG, PNG favicon and sharing JPEG returned 200 with the expected media type. Both administrator APIs returned 401 without credentials. This was a static HTTP smoke check; a fresh real Turnstile-to-D1 form submission was not completed in the preview browser because its navigation timed out. The unchanged backend retains prior V4 production storage verification.
+The release reused the existing Pages project, D1 binding, Turnstile widget and encrypted runtime secrets. No migration, DNS, mail record, sender, social profile or WhatsApp change was made. Search Console and Bing indexing remain owner-account tasks; no display position is promised.
 
-## Open operations
+Ignored `.wrangler/flagship-before.bundle` and `.wrangler/flagship-before-production.zip` preserve the prior source/output locally. The Desktop `SLICKK-Flagship-Backup-2026-10-29` folder contains a current source ZIP, preview build ZIP, full Git bundle, SHA-256 list, design records and a separate Windows-encrypted credential copy. That credential copy works only on the same Windows account and computer. The private GitHub branch is another source backup. If production fails, restore deployment `6f1409ab-7f45-4067-bb80-b353e94e83ab` in Pages history; preserve D1 records and bindings.
 
-Search Console/Bing owner verification and indexing are not confirmed. Sender configuration is absent, so the lead inbox must be checked directly. A production smoke test, actual favicon fetch, private API denial check and form storage test must run after an authorized production promotion.
+## Remaining limits
+
+Automated email notification is not configured, so the owner must monitor the private inbox. Manual screen-reader testing and real user feedback remain open. Local Lighthouse scores are lab measurements; production field performance needs observation.

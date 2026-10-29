@@ -1,20 +1,9 @@
 import assert from 'node:assert/strict';
-import { execFileSync } from 'node:child_process';
 import { readFileSync } from 'node:fs';
 import { load } from 'cheerio';
 
-async function request(url, options = {}) {
-  if (process.platform !== 'win32') return fetch(url, { signal: AbortSignal.timeout(20000), ...options });
-  // Windows curl uses the platform TLS validator; never pass --insecure or override certificate validation.
-  const raw = execFileSync('curl.exe', ['--silent', '--show-error', '--max-time', '20', '--proto', '=http,https', '--dump-header', '-', '--write-out', '\nSLICKK_STATUS:%{http_code}:%{ssl_verify_result}', String(url)], { encoding: 'utf8', maxBuffer: 4 * 1024 * 1024 });
-  const result = /\nSLICKK_STATUS:(\d{3}):(\d+)\s*$/.exec(raw);
-  assert.ok(result, 'curl returned no verification status');
-  assert.equal(result[2], '0', 'TLS certificate validation must pass');
-  const response = raw.slice(0, result.index); const split = response.indexOf('\r\n\r\n');
-  assert.ok(split >= 0, 'HTTP headers missing');
-  const headers = new Headers(response.slice(0, split).split('\r\n').slice(1).map((line) => { const colon = line.indexOf(':'); return [line.slice(0, colon), line.slice(colon + 1).trim()]; }));
-  return { status: Number(result[1]), headers, text: async () => response.slice(split + 4) };
-}
+// Native fetch validates TLS certificates; no insecure override is used.
+const request = (url, options = {}) => fetch(url, { signal: AbortSignal.timeout(25000), ...options });
 
 const origin = process.argv[2] ?? 'https://slickk.online';
 assert.match(origin, /^https:\/\//, 'Use HTTPS for production verification');
@@ -33,7 +22,7 @@ for (const route of routes) {
   assert.equal($('body').attr('data-tracking-enabled'),'true');
   for(const script of $('script[type="application/ld+json"]').toArray())JSON.parse($(script).text());
   if(['/contact/','/request-quote/'].includes(route))assert.equal($('#project-inquiry').attr('data-mode'),'secure');
-  console.log(`PASS ${route} HTTP 200, V4 metadata, canonical, schema, CSP and TLS`);
+  console.log(`PASS ${route} HTTP 200, flagship metadata, canonical, schema, CSP and TLS`);
 }
 for (const path of ['/sitemap.xml', '/robots.txt', '/images/agency-social.jpg', '/images/portfolio/identity-system.svg', '/fonts/inter-latin.woff2']) {
   const response = await request(new URL(path, origin));
