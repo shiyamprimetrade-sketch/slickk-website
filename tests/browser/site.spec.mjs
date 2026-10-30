@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 
-const routes = ['/insights/business-website-cost-bangladesh/','/insights/professional-brand-identity/','/insights/software-project-brief/',"/","/about/","/services/","/software-development/","/app-development/","/web-development/","/seo-services/","/digital-marketing/","/content-creation/","/portfolio/","/pricing/","/contact/","/faq/","/privacy/","/terms/","/cookies/","/industries/","/process/","/insights/","/request-quote/","/branding-graphic-design/","/ai-automation/","/services/logo-design/","/services/brochure-design/","/services/brand-identity/","/services/company-profile-design/","/services/website-development/","/services/app-development/","/services/digital-marketing/","/services/seo/","/services/graphic-design/","/services/ai-automation/","/portfolio/identity-system/","/portfolio/corporate-brochure/","/portfolio/commerce-experience/","/portfolio/operations-dashboard/","/portfolio/social-campaign/"];
+const routes = ['/insights/business-website-cost-bangladesh/','/insights/professional-brand-identity/','/insights/software-project-brief/',"/","/about/","/services/","/software-development/","/app-development/","/web-development/","/seo-services/","/digital-marketing/","/content-creation/","/portfolio/","/pricing/","/contact/","/faq/","/privacy/","/terms/","/cookies/","/industries/","/process/","/insights/","/request-quote/","/branding-graphic-design/","/ai-automation/","/services/logo-design/","/services/brochure-design/","/services/brand-identity/","/services/company-profile-design/","/services/website-development/","/services/app-development/","/services/digital-marketing/","/services/seo/","/services/graphic-design/","/services/ai-automation/","/portfolio/identity-system/","/portfolio/corporate-brochure/","/portfolio/commerce-experience/","/portfolio/operations-dashboard/","/portfolio/social-campaign/",'/insights/business-tech-stack-starter-checklist/','/insights/google-workspace-readiness-checklist/','/insights/cloud-cost-awareness-guide/','/insights/safe-business-automation-checklist/','/business-tools/','/business-tools/cloudflare/','/business-tools/google-cloud/','/business-tools/google-workspace/','/business-tools/shopify/','/partners/','/affiliate-disclosure/','/solutions/','/solutions/google-workspace-setup/','/solutions/google-cloud-consulting/','/solutions/business-automation/'];
 
 test.beforeEach(async({page})=>{
   await page.addInitScript(()=>localStorage.setItem('slickk-analytics','no'));
@@ -142,4 +142,19 @@ test('brand artwork and every portfolio image load', async ({page}) => {
   const icon = await page.request.get('/favicon-96.png');
   expect(icon.status()).toBe(200);
   expect(icon.headers()['content-type']).toContain('image/png');
+});
+
+test('Stack Finder keeps choices on device and gives a safe shortlist', async ({page}) => {
+  const requests=[];
+  page.on('request',request=>{if(request.method()==='POST')requests.push(request.url());});
+  await page.goto('/business-tools/');
+  await page.locator('#stack-form select[name=business]').selectOption('shop');
+  await page.locator('#stack-form select[name=budget]').selectOption('explore');
+  await page.locator('#stack-form select[name=country]').selectOption('bd');
+  await page.locator('#stack-form select[name=comfort]').selectOption('guided');
+  await page.locator('#stack-form input[value=site]').check();
+  await page.getByRole('button',{name:'Show a starting shortlist'}).click();
+  await expect(page.locator('#stack-results')).toBeVisible();
+  await expect(page.locator('#stack-results li:visible')).toHaveCount(2);
+  expect(requests).toEqual([]);
 });

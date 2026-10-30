@@ -1,4 +1,6 @@
 import { guides } from './guides';
+import { businessTools } from './businessTools';
+import { growthSolutions } from './growthSolutions';
 import { enrichServicePages } from './v4';
 export const brand = {
   name: 'Slickk Digital Solutions',
@@ -14,7 +16,7 @@ export const brand = {
 export const mainNavigation = [
   { label: 'Services', href: '/services/' }, { label: 'About', href: '/about/' },
   { label: 'Portfolio', href: '/portfolio/' }, { label: 'Pricing', href: '/pricing/' },
-  { label: 'Insights', href: '/insights/' }
+  { label: 'Insights', href: '/insights/' }, { label: 'Business tools', href: '/business-tools/' }
 ];
 export const services = [
   { slug: 'branding-graphic-design', name: 'Branding & Graphic Design', icon: '00', short: 'Memorable visual identities, logos, brochures and corporate materials.', description: 'Strategy-led identities, logo design, brand guidelines, corporate brochures, company profiles, catalogues, packaging and presentations.', bullets: ['Logo and brand identity systems', 'Corporate brochures and company profiles', 'Packaging, print and presentation design', 'Social campaigns and reusable creative assets'] },
@@ -203,4 +205,4 @@ agencyPages.push(
 export const caseStudyPaths = portfolioConcepts.map((p) => '/portfolio/' + p.slug + '/');
 enrichServicePages([...servicePages, ...detailedServices]);
 export const detailServicePaths = detailedServices.map((p) => '/services/' + p.slug + '/');
-export const indexablePaths = [...guides.map(guide=>'/insights/'+guide.slug+'/'), '/', '/contact/', '/faq/', ...agencyPages.map((p) => '/' + p.slug + '/'), ...detailServicePaths, ...caseStudyPaths];
+export const indexablePaths = [...guides.map(guide=>'/insights/'+guide.slug+'/'), '/', '/contact/', '/faq/', ...agencyPages.map((p) => '/' + p.slug + '/'), ...detailServicePaths, ...caseStudyPaths, '/business-tools/', ...businessTools.filter(tool=>tool.detail).map(tool=>'/business-tools/'+tool.slug+'/'), '/partners/', '/affiliate-disclosure/', '/solutions/', ...growthSolutions.map(solution=>'/solutions/'+solution.slug+'/')];

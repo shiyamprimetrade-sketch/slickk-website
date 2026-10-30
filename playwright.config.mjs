@@ -13,5 +13,6 @@ export default defineConfig({
     { name: 'desktop', use: { ...devices['Desktop Chrome'] } },
     { name: 'tablet', use: { ...devices['Desktop Chrome'], viewport:{width:820,height:1180}, isMobile:true } },
     { name: 'mobile', use: { ...devices['iPhone 13'], deviceScaleFactor: 1, defaultBrowserType: 'chromium' } },
+    { name: 'android', use: { ...devices['Pixel 7'], defaultBrowserType: 'chromium' } },
   ],
 });

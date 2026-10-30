@@ -1,0 +1,18 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { businessTools, type BusinessTool } from '../../data/businessTools';
+export function getStaticPaths() { return businessTools.filter(tool=>tool.detail).map(tool=>({params:{slug:tool.slug},props:{tool}})); }
+interface Props { tool: BusinessTool; }
+const { tool } = Astro.props;
+---
+<Layout title={tool.name + ' for Business: Fit, Costs and Limits'} description={'Independent guide to '+tool.name+': who it fits, cost caveats, Bangladesh considerations, alternatives and implementation help from Slickk.'}>
+  <section class="page-hero"><div class="container"><nav class="breadcrumbs" aria-label="Breadcrumb"><a href="/">Home</a> / <a href="/business-tools/">Business tools</a> / {tool.name}</nav><p class="eyebrow">Independent tool guide</p><h1>{tool.name}: where it fits</h1><p class="lead">{tool.summary}</p></div></section>
+  <div class="section container editorial"><aside><p class="eyebrow">On this page</p><nav aria-label="Guide sections"><a href="#fit">Who it is for</a><a href="#cost">Cost and Bangladesh</a><a href="#tradeoffs">Trade-offs</a><a href="#alternatives">Alternatives</a></nav><a class="text-link" href="/business-tools/">All tools</a></aside>
+    <article><section id="fit"><h2>Who it is for</h2><p>{tool.fit}</p><p>Slickk can help assess requirements and implement an agreed setup. Vendor accounts and subscriptions remain under the client's control.</p></section>
+      <section id="cost"><h2>Cost and Bangladesh considerations</h2><p>{tool.costCaveat}</p><p>{tool.bangladeshNote}</p><p>Check current prices and eligibility directly with the vendor before paying.</p></section>
+      <section id="tradeoffs"><h2>Strengths and limits</h2><h3>Potential strengths</h3><ul>{tool.strengths.map(item=><li>{item}</li>)}</ul><h3>Limits to plan for</h3><ul>{tool.limits.map(item=><li>{item}</li>)}</ul></section>
+      <section id="alternatives"><h2>Alternatives and next step</h2><p>{tool.alternatives}</p><p><a href={tool.officialUrl} rel="noopener noreferrer" target="_blank">Visit the official {tool.name} site ↗</a> · <a href={tool.evidenceUrl} rel="noopener noreferrer" target="_blank">Review vendor documentation ↗</a></p><p>Official links are non-affiliate links. Slickk has no verified vendor endorsement.</p></section>
+    </article>
+  </div>
+  <section class="section container"><div class="cta"><div><h2>Get implementation help</h2><p>Tell us your use case. We will separate Slickk's fee from any vendor charges.</p></div><a class="btn" href="/request-quote/?service=software-development">Request a quote</a></div></section>
+</Layout>

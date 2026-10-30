@@ -1,0 +1,21 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import BusinessStackFinder from '../../components/BusinessStackFinder.astro';
+import { businessTools, toolCategories } from '../../data/businessTools';
+---
+<Layout title="Business Technology Tools and Stack Finder" description="Compare independent business technology options for domains, cloud, email, ecommerce, CRM, SEO and automation. Use Slickk's private no-login Stack Finder.">
+  <section class="page-hero"><div class="container"><nav class="breadcrumbs" aria-label="Breadcrumb"><a href="/">Home</a> / Business tools</nav><p class="eyebrow">Independent research</p><h1>Business technology, chosen for the job.</h1><p class="lead">Explore useful tools and trade-offs before committing to a platform. Slickk earns no commission from the official links below.</p></div></section>
+  <BusinessStackFinder />
+  <section class="section container" aria-labelledby="tools-title"><h2 id="tools-title">Explore by need</h2><p>Descriptions are editorial, not vendor endorsements. Costs, payment support and product terms can change.</p>
+    <nav class="portfolio-filters" aria-label="Tool categories"><a class="filter-chip" href="#all-tools">All</a>{toolCategories.map((category, i)=><a class="filter-chip" href={'#tool-category-'+i}>{category}</a>)}</nav>
+    <div id="all-tools" class="tool-categories">{toolCategories.map((category, i)=><section id={'tool-category-'+i} aria-labelledby={'tool-heading-'+i}><h3 id={'tool-heading-'+i}>{category}</h3><div class="grid">{businessTools.filter(tool=>tool.category===category).map(tool=><article class="card"><h4>{tool.name}</h4><p>{tool.summary}</p><p class="muted">{tool.costCaveat}</p><a href={tool.detail?'/business-tools/'+tool.slug+'/':tool.officialUrl} rel={tool.detail?undefined:'noopener noreferrer'} target={tool.detail?undefined:'_blank'}>{tool.detail?'Read the independent review →':'Official site ↗'}</a></article>)}</div></section>)}</div>
+  </section>
+  <section class="section container"><div class="cta"><div><h2>Need help choosing or setting up a stack?</h2><p>We can scope the work, fees and third-party costs in a written proposal.</p></div><a class="btn" href="/request-quote/?service=software-development">Request a quote</a></div></section>
+</Layout>
+<style>
+  .tool-categories{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:42px 30px;margin-top:36px}
+  .tool-categories>section{padding-top:20px;border-top:1px solid var(--line);scroll-margin-top:30px}
+  .tool-categories h3{margin-bottom:20px}
+  .tool-categories .card{min-height:225px}
+  @media(max-width:700px){.tool-categories{grid-template-columns:1fr;gap:30px}.tool-categories .card{min-height:0}}
+</style>
