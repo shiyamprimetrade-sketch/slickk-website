@@ -12,7 +12,7 @@
     "preview": "astro preview --host 127.0.0.1",
     "check": "astro check",
     "lint": "eslint .",
-    "test": "node --test tests/agency.test.mjs tests/leads.test.mjs tests/v4.test.mjs",
+    "test": "node --test tests/agency.test.mjs tests/leads.test.mjs tests/v4.test.mjs tests/ai.test.mjs",
     "test:browser": "playwright test",
     "deploy": "npm run check && npm run lint && npm run build && npm test && wrangler pages deploy dist --project-name=slickk --branch=main",
     "verify:live": "node scripts/verify-live.mjs"

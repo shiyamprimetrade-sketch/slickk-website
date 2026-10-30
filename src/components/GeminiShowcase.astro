@@ -1,0 +1,62 @@
+---
+const siteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || '';
+---
+<section class="section container" id="ai-showcase" aria-labelledby="ai-showcase-title">
+  <div class="cta"><div><p class="eyebrow">Optional interactive demonstration</p><h2 id="ai-showcase-title">Explore a first draft with AI</h2><p>Try one of three short examples. Review every result before use. No account access or automation runs here.</p></div></div>
+  <div class="notice" id="ai-unavailable">Checking demonstration availability…</div>
+  <form id="ai-form" hidden>
+    <fieldset><legend>Choose an example</legend>
+      <label><input type="radio" name="mode" value="proposal" checked /> Proposal outline</label>
+      <label><input type="radio" name="mode" value="seo" /> SEO page metadata</label>
+      <label><input type="radio" name="mode" value="workspace" /> Workspace automation plan</label>
+    </fieldset>
+    <label class="field" for="ai-input">Describe your business need (20–800 characters)</label>
+    <textarea id="ai-input" name="input" minlength="20" maxlength="800" rows="5" required placeholder="Describe your business, audience, and what you want to achieve."></textarea>
+    <p class="muted" id="ai-count">0 / 800 characters</p>
+    <p class="badge-note">Do not enter passwords, personal data, confidential material or API keys. Your text is sent to Google Gemini to generate the example. Slickk does not save the prompt or result.</p>
+    <label class="field"><input type="checkbox" name="consent" required /> I agree to this processing and have read the <a href="/privacy/">privacy policy</a>.</label>
+    {siteKey && <div class="cf-turnstile" data-sitekey={siteKey} data-theme="dark" data-action="gemini"></div>}
+    <button class="btn" type="submit">Generate example</button>
+    <p id="ai-status" role="status" aria-live="polite"></p>
+    <div id="ai-result" hidden><h3>Draft result</h3><pre id="ai-output" style="white-space:pre-wrap;overflow-wrap:anywhere;font:inherit"></pre><button class="btn" id="ai-copy" type="button">Copy text</button><p class="muted">AI can make mistakes. Check facts, permissions and claims before use.</p></div>
+  </form>
+  <p><a class="text-link" href="/request-quote/?service=ai-automation">Discuss a tailored automation project →</a></p>
+</section>
+{siteKey && <script async defer src="https://challenges.cloudflare.com/turnstile/v0/api.js"></script>}
+<script>
+  const form = document.querySelector<HTMLFormElement>('#ai-form');
+  const availability = document.querySelector<HTMLElement>('#ai-unavailable');
+  const input = document.querySelector<HTMLTextAreaElement>('#ai-input');
+  const count = document.querySelector<HTMLElement>('#ai-count');
+  const status = document.querySelector<HTMLElement>('#ai-status');
+  const result = document.querySelector<HTMLElement>('#ai-result');
+  const output = document.querySelector<HTMLElement>('#ai-output');
+  const copy = document.querySelector<HTMLButtonElement>('#ai-copy');
+  fetch('/api/gemini/status', { cache: 'no-store' }).then(async response => {
+    if (!response.ok || !(await response.json()).enabled) throw new Error('Unavailable');
+    if (form) form.hidden = false;
+    if (availability) availability.hidden = true;
+  }).catch(() => { if (availability) availability.textContent = 'Interactive examples are unavailable. You can still request a project consultation.'; });
+  input?.addEventListener('input', () => { if (count) count.textContent = `${input.value.length} / 800 characters`; });
+  form?.addEventListener('submit', async event => {
+    event.preventDefault();
+    if (!form.reportValidity()) return;
+    const fields = new FormData(form);
+    const token = fields.get('cf-turnstile-response');
+    if (typeof token !== 'string' || !token) { if (status) status.textContent = 'Complete the security check.'; return; }
+    const button = form.querySelector<HTMLButtonElement>('button[type=submit]');
+    if (button) button.disabled = true;
+    if (status) status.textContent = 'Generating a draft…';
+    if (result) result.hidden = true;
+    try {
+      const response = await fetch('/api/gemini/process', { method: 'POST', headers: { 'Content-Type': 'application/json' }, credentials: 'same-origin', body: JSON.stringify({ mode: fields.get('mode'), input: fields.get('input'), consent: fields.get('consent') === 'on', turnstile: token }) });
+      const data = await response.json();
+      if (!response.ok || !data.ok || typeof data.text !== 'string') throw new Error(data.error || 'Generation unavailable');
+      if (output) output.textContent = data.text;
+      if (result) result.hidden = false;
+      if (status) status.textContent = data.limited ? 'Draft ready. Long output was shortened.' : 'Draft ready.';
+    } catch (error) { if (status) status.textContent = error instanceof Error ? error.message : 'Generation unavailable'; }
+    finally { (window as Window & { turnstile?: { reset: () => void } }).turnstile?.reset(); if (button) button.disabled = false; }
+  });
+  copy?.addEventListener('click', async () => { if (output?.textContent) { try { await navigator.clipboard.writeText(output.textContent); if (status) status.textContent = 'Draft copied.'; } catch { if (status) status.textContent = 'Copy failed. Select the text instead.'; } } });
+</script>
