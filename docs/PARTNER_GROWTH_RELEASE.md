@@ -2,9 +2,13 @@
 
 ## Current state
 
-Feature branch: `feat/partner-growth-2026-10-30`. Prior production rollback deployment: `b2e2c12b-21f9-42ee-b173-6bc197b244ce`. GitHub repository remains PUBLIC with default branch `main`; neither setting was changed. Production Pages branch is `main`. Production release is authorized by the owner's direct message in this chat, subject to successful preview and regression checks.
+Feature branch: `feat/partner-growth-2026-10-30`. Website source commit: `5ecbf4f2274b220024ef68befeee5f89febdee63`. Prior production rollback deployment: `b2e2c12b-21f9-42ee-b173-6bc197b244ce`. GitHub repository remains PUBLIC with default branch `main`; neither setting was changed. Production Pages branch is `main`. The owner explicitly approved live deployment in this chat after the preview was tested.
 
-Validated preview: `https://937949c9.slickk.pages.dev/`, Cloudflare deployment `937949c9-73ca-4f82-9507-4ee2326307d0`. Tests: clean install, 28 unit, 36 browser, 55 sitemap URLs, 0 detected Axe A/AA violations, mobile Lighthouse 99/100/92/100. See `docs/PARTNER_GROWTH_QA.md`. Production deployment ID, source SHA and live checks will be appended after release. No partner application has been submitted and no partner approval is claimed.
+Validated preview: `https://937949c9.slickk.pages.dev/`, Cloudflare deployment `937949c9-73ca-4f82-9507-4ee2326307d0`. The preview was uploaded before the commit, so its Cloudflare source metadata names the previous HEAD; its files were the tested feature build. Tests: clean install, 28 unit, 36 browser, 55 sitemap URLs, 0 detected Axe A/AA violations, mobile Lighthouse 99/100/92/100. See `docs/PARTNER_GROWTH_QA.md`.
+
+Production: `https://slickk.online/`, immutable URL `https://72899920.slickk.pages.dev/`, Cloudflare deployment `72899920-82f0-4d1a-9412-64610ee6783c`. Cloudflare reports production environment, branch `main`, and source commit `5ecbf4f2274b220024ef68befeee5f89febdee63`, matching the committed website build. The initial live verifier failed because its old 40-route assertion had not been updated. After updating that assertion to 55 and checking sitemap uniqueness, `npm run verify:live` passed all 55 HTTPS routes, metadata, canonical URLs, JSON-LD parsing, CSP, sitemap, robots, static assets, branded 404, WWW redirects, private API denial and the existing enabled Gemini status. A read-only D1 schema check found the existing `leads`, `inquiry_limits` and `interaction_counts` tables plus the earlier `ai_usage_daily` table. No real inquiry or paid AI call was made. A live Pixel 7 smoke test confirmed the Stack Finder returned two local results with no POST request, Bangladesh payment caveat, the existing AI form, and the ICO favicon with HTTP 200. The verifier change after deployment does not change website assets.
+
+No partner application has been submitted and no partner approval is claimed. Search ranking and Google favicon display depend on later crawling and cannot be guaranteed by deployment.
 
 ## Five application priorities for the owner
 

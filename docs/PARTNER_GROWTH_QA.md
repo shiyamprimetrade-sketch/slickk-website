@@ -10,7 +10,7 @@
 
 ## Tests
 
-`npm ci --no-audit --no-fund` completed from the existing lockfile. `npm run security:scan` passed 181 source files. An in-memory comparison against the owner-supplied Gemini key found zero matches in 300 source/build files. `npm run check` reported 0 errors/warnings/hints; lint passed; the build generated 57 static pages and 55 sitemap URLs; 28 unit tests passed. The four-viewport Playwright suite passed 36/36, including Pixel 7, the Stack Finder's local-only behavior, all pages for Axe A/AA findings, and existing inquiry and consent flows. No real customer inquiry was sent.
+`npm ci --no-audit --no-fund` completed from the existing lockfile. `npm run security:scan` passed 181 source files. An in-memory comparison against the owner-supplied Gemini key found zero matches in 301 source/build files. `npm run check` reported 0 errors/warnings/hints; lint passed; the build generated 57 static pages and 55 sitemap URLs; 28 unit tests passed. The four-viewport Playwright suite passed 36/36, including Pixel 7, the Stack Finder's local-only behavior, all pages for Axe A/AA findings, and existing inquiry and consent flows. No real customer inquiry was sent.
 
 Mobile Lighthouse lab on the unchanged home-page design plus new navigation/favicon: performance 99, accessibility 100, best practices 92, SEO 100; LCP 1.954 s, CLS 0.0073. These are lab values, not field Core Web Vitals. The Lighthouse JSON is in ignored `test-results/partner-growth-home-lighthouse.json`; the command wrote the complete report but its process required manual termination after output was saved.
 
