@@ -8,7 +8,7 @@ const request = (url, options = {}) => fetch(url, { signal: AbortSignal.timeout(
 const origin = process.argv[2] ?? 'https://slickk.online';
 assert.match(origin, /^https:\/\//, 'Use HTTPS for production verification');
 const routes = [...readFileSync('dist/sitemap.xml','utf8').matchAll(/<loc>https:\/\/slickk\.online([^<]*)<\/loc>/g)].map(match=>match[1]||'/');
-assert.equal(routes.length,55,'Expected all indexable agency and partner-growth routes');
+assert.equal(routes.length,56,'Expected all indexable agency and growth routes');
 assert.equal(new Set(routes).size,routes.length,'Sitemap must not contain duplicate routes');
 for (const route of routes) {
   const response = await request(new URL(route, origin));

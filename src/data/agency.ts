@@ -62,11 +62,23 @@ const categoryDescriptions: Record<string, string> = {
   'digital-marketing': 'Plan digital campaigns, social creative and measurement around a clear business objective. Discuss audience, channels and scope with SLICKK.',
   'content-creation': 'Prepare website copy, brand graphics and campaign content with a clear audience and approval process. Discuss formats and ownership with SLICKK.',
 };
+const focusedServiceSections: Record<string, Section[]> = {
+  'web-development': [
+    { title: 'What a business website needs to do', text: 'A useful website answers a visitor’s first questions: what you offer, who it is for, why the information is credible and how to contact you. We plan those answers before choosing a layout.', items: ['A page plan matched to the services you actually sell', 'Clear navigation and a working inquiry route', 'Readable layouts for phones and larger screens', 'Content ownership, hosting and handover documented'] },
+    { title: 'A practical build sequence', text: 'We review your existing site or brief, identify the primary visitor task, agree page content and design direction, then build and test the approved scope. Mobile layouts, keyboard access, form errors, metadata and page speed are checked before owner review.' },
+    { title: 'Scope and starting price', text: 'The Business Website package starts at ৳10,000 for up to five responsive pages, a contact experience, basic on-page SEO and deployment assistance. Your written quote confirms content, revisions, integrations and support. Hosting and third-party charges are separate.' },
+  ],
+  'seo-services': [
+    { title: 'Start with pages people can use', text: 'Search work begins by checking whether important pages can be reached, understood and indexed. We review page purpose, titles, headings, canonical URLs, internal links and the sitemap before proposing new content.', items: ['Technical crawl and indexability review', 'Search-intent mapping for relevant services', 'Clearer service copy and helpful internal links', 'A prioritized fix list with a way to verify each change'] },
+    { title: 'Measure what changed', text: 'A baseline records existing pages and available Search Console data. Later reports separate work completed from impressions, clicks and inquiries. New or recently verified properties may need time before Google provides useful data.' },
+    { title: 'A realistic engagement', text: 'The Growth & SEO package is quoted after an audit. Scope can include technical fixes, service-page improvements and an editorial plan. Search rankings and traffic are not guaranteed; Google decides when to crawl and index pages.' },
+  ],
+};
 const servicePages: AgencyPage[] = services.map((service) => ({
   slug: service.slug, title: categoryTitles[service.slug] ?? service.name, label: 'Slickk services',
   intro: service.description,
   description: categoryDescriptions[service.slug] ?? service.name + ' from Slickk, a Bangladesh-based software development and digital growth agency. Explore our approach and request a project quote.',
-  sections: [
+  sections: focusedServiceSections[service.slug] ?? [
     { title: 'What we can help with', text: service.short, items: service.bullets },
     { title: 'Our approach', text: 'We start with your objectives, audience, constraints and project scope. Then we agree on deliverables, review checkpoints and quality expectations before implementation.' },
     { title: 'Deliverables and pricing', text: 'Project scope, schedule, revisions, third-party costs and ongoing support are agreed in a written proposal. We do not promise outcomes beyond our control.' },
