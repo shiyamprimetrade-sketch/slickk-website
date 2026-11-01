@@ -6,6 +6,7 @@ import { load } from 'cheerio';
 const request = (url, options = {}) => fetch(url, { signal: AbortSignal.timeout(25000), ...options });
 
 const origin = process.argv[2] ?? 'https://slickk.online';
+const preview = process.argv.includes('--preview');
 assert.match(origin, /^https:\/\//, 'Use HTTPS for production verification');
 const routes = [...readFileSync('dist/sitemap.xml','utf8').matchAll(/<loc>https:\/\/slickk\.online([^<]*)<\/loc>/g)].map(match=>match[1]||'/');
 assert.equal(routes.length,56,'Expected all indexable agency and growth routes');
@@ -30,17 +31,19 @@ for (const path of ['/sitemap.xml', '/robots.txt', '/images/agency-social.jpg', 
   assert.equal(response.status, 200, path); console.log(`PASS ${path}`);
 }
 const aiStatus=await request(new URL('/api/gemini/status',origin));
-assert.equal(aiStatus.status,200);assert.equal((await aiStatus.json()).enabled,true,'Existing guarded Gemini demo must remain enabled');
+assert.equal(aiStatus.status,200);assert.equal((await aiStatus.json()).enabled,!preview,'Gemini demo availability must match the deployment environment');
 for(const path of ['/api/admin/leads','/api/admin/metrics'])assert.equal((await request(new URL(path,origin))).status,401,'Private API must reject unauthenticated access');
 const inbox=load(await (await request(new URL('/internal-leads/',origin))).text());
 assert.match(inbox('meta[name=robots]').attr('content'),/noindex/);
 const missing = await request(new URL('/verification-missing-page/', origin)); assert.equal(missing.status, 404); assert.match(await missing.text(), /doesn't exist/);
-const www = await request('https://www.slickk.online/services/', { redirect: 'manual' });
-assert.ok([301, 308].includes(www.status)); assert.equal(www.headers.get('location'), 'https://slickk.online/services/');
-console.log('PASS branded 404 and WWW canonical redirect. Mail delivery is a separate end-to-end check.');
-for (const host of ['slickk.online', 'www.slickk.online']) {
-  const response = await request(`http://${host}/`, { redirect: 'manual' });
-  assert.ok([301, 308].includes(response.status), `HTTP must redirect: ${host}`);
-  assert.ok(response.headers.get('location')?.startsWith('https://'), `HTTPS redirect required: ${host}`);
-  console.log(`PASS http://${host}/ redirects to HTTPS`);
+if (!preview) {
+  const www = await request('https://www.slickk.online/services/', { redirect: 'manual' });
+  assert.ok([301, 308].includes(www.status)); assert.equal(www.headers.get('location'), 'https://slickk.online/services/');
+  console.log('PASS branded 404 and WWW canonical redirect. Mail delivery is a separate end-to-end check.');
+  for (const host of ['slickk.online', 'www.slickk.online']) {
+    const response = await request(`http://${host}/`, { redirect: 'manual' });
+    assert.ok([301, 308].includes(response.status), `HTTP must redirect: ${host}`);
+    assert.ok(response.headers.get('location')?.startsWith('https://'), `HTTPS redirect required: ${host}`);
+    console.log(`PASS http://${host}/ redirects to HTTPS`);
+  }
 }
