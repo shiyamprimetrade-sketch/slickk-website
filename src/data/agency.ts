@@ -16,7 +16,8 @@ export const brand = {
 export const mainNavigation = [
   { label: 'Services', href: '/services/' }, { label: 'About', href: '/about/' },
   { label: 'Portfolio', href: '/portfolio/' }, { label: 'Pricing', href: '/pricing/' },
-  { label: 'Insights', href: '/insights/' }, { label: 'Business tools', href: '/business-tools/' }
+  { label: 'Insights', href: '/insights/' }, { label: 'Business tools', href: '/business-tools/' },
+  { label: 'Domains', href: '/domains/' }
 ];
 export const services = [
   { slug: 'branding-graphic-design', name: 'Branding & Graphic Design', icon: '00', short: 'Memorable visual identities, logos, brochures and corporate materials.', description: 'Strategy-led identities, logo design, brand guidelines, corporate brochures, company profiles, catalogues, packaging and presentations.', bullets: ['Logo and brand identity systems', 'Corporate brochures and company profiles', 'Packaging, print and presentation design', 'Social campaigns and reusable creative assets'] },
