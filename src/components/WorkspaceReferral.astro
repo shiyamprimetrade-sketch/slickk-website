@@ -19,11 +19,13 @@ const benefits = [
   </ul>
   <h2>02. Request your first-year offer</h2>
   <p>Eligible new customers can get 10% off their first year when they sign up through Slickk’s referral link and apply a promotion code from Slickk. Availability depends on your billing country and plan. Request your code privately before signing up.</p>
+  <Fragment set:html={'<!--email_off-->'} />
   <div class="workspace-actions">
     <a class="btn" href={requestUrl}>Request a promotion code</a>
     <a class="btn" href={referralUrl} rel="sponsored">Sign up for Google Workspace</a>
   </div>
   <p>Prefer to write directly? Email <a href={'mailto:' + brand.email}>{brand.email}</a>.</p>
+  <Fragment set:html={'<!--/email_off-->'} />
   <h2>03. Check your readiness before you move</h2>
   <ol>
     <li>Confirm who controls your domain and can update DNS.</li>
