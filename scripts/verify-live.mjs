@@ -20,7 +20,7 @@ const routes = ['/', '/about/', '/products/', '/global-sourcing/', '/quality-log
 for (const route of routes) {
   const response = await request(new URL(route, origin));
   assert.equal(response.status, 200, route); const html = await response.text();
-  assert.match(html, /SLICKK/); assert.match(html, /contact@slickk.online/);
+  assert.match(html, /SLICKK/); assert.match(html, /info@slickk.online/);
   assert.ok(response.headers.get('content-security-policy'), `${route}: CSP missing`);
   console.log(`PASS ${route} HTTP 200, brand, contact, CSP; TLS validation enabled`);
 }

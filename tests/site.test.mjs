@@ -22,8 +22,8 @@ test('all 13 public pages and branded 404 have unique SEO, landmarks and valid i
     assert.equal($('html').attr('lang'), 'en');
     assert.equal($('link[rel=canonical]').attr('href'), route === '/404.html' ? undefined : `https://slickk.online${route}`);
     assert.equal($('meta[property="og:image"]').attr('content'), 'https://slickk.online/images/social.jpg');
-    assert.ok($('a[href="mailto:contact@slickk.online"]').length > 0);
-    assert.equal(JSON.parse($('script[type="application/ld+json"]').html()).email, 'contact@slickk.online');
+    assert.ok($('a[href="mailto:info@slickk.online"]').length > 0);
+    assert.equal(JSON.parse($('script[type="application/ld+json"]').html()).email, 'info@slickk.online');
     for (const element of $('a[href],img[src],script[src],link[rel=stylesheet],link[rel=icon]').toArray()) {
       const value = $(element).attr('href') ?? $(element).attr('src');
       if (!value || /^(mailto:|https?:)/.test(value)) continue;
@@ -65,7 +65,7 @@ test('inquiry draft validates, encodes untrusted input and fixes recipient and s
   const data = new FormData();
   Object.entries({ name: 'Buyer & Co\nBcc: attacker@example.com', business: 'Fresh <Fruit>', email: 'buyer@example.com', country: 'Bangladesh', message: 'Please discuss 100 cartons of apples & packing.', consent: 'on', type: 'Wholesale buyer inquiry', product: 'apples' }).forEach(([key, value]) => data.set(key, value));
   const link = new URL(buildInquiry(data));
-  assert.equal(link.pathname, 'contact@slickk.online'); assert.equal([...link.searchParams].length, 2);
+  assert.equal(link.pathname, 'info@slickk.online'); assert.equal([...link.searchParams].length, 2);
   assert.equal(link.searchParams.get('subject'), 'SLICKK — Wholesale buyer inquiry');
   assert.ok(link.searchParams.get('body').includes('Fresh <Fruit>'));
   assert.equal(validProduct('<script>'), 'all');
