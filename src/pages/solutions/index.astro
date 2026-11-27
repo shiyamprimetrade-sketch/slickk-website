@@ -1,0 +1,8 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { growthSolutions } from '../../data/growthSolutions';
+---
+<Layout title="Business Technology Solutions" description="Explore independent Google Workspace setup, Google Cloud consulting and business automation services from Slickk Digital Solutions in Bangladesh.">
+  <section class="page-hero"><div class="container"><nav class="breadcrumbs" aria-label="Breadcrumb"><a href="/">Home</a> / Solutions</nav><p class="eyebrow">Services first</p><h1>Practical technology services</h1><p class="lead">Slickk scopes the work with you. Vendor accounts, subscriptions and approvals stay under your control.</p></div></section>
+  <section class="section container"><div class="grid cards-3">{growthSolutions.map(solution=><article class="card"><h2>{solution.title}</h2><p>{solution.intro}</p><a href={'/solutions/'+solution.slug+'/'}>Explore the service →</a></article>)}</div></section>
+</Layout>

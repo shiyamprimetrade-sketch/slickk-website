@@ -12,10 +12,12 @@
     "preview": "astro preview --host 127.0.0.1",
     "check": "astro check",
     "lint": "eslint .",
-    "test": "node --test tests/site.test.mjs",
+    "security:scan": "node scripts/scan-secrets.mjs",
+    "test": "node --test tests/agency.test.mjs tests/leads.test.mjs tests/v4.test.mjs tests/ai.test.mjs tests/partner-growth.test.mjs tests/gsc-report.test.mjs",
     "test:browser": "playwright test",
     "deploy": "npm run check && npm run lint && npm run build && npm test && wrangler pages deploy dist --project-name=slickk --branch=main",
-    "verify:live": "node scripts/verify-live.mjs"
+    "verify:live": "node scripts/verify-live.mjs",
+    "gsc:report": "node scripts/gsc-report.mjs"
   },
   "dependencies": {
     "@astrojs/check": "0.9.12",
@@ -32,6 +34,6 @@
     "globals": "17.13.0",
     "lighthouse": "13.5.0",
     "sharp": "0.35.5",
-    "wrangler": "4.151.3"
+    "wrangler": "4.155.0"
   }
 }

@@ -1,0 +1,10 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { partnerPrograms } from '../../data/partnerPrograms';
+---
+<Layout title="Tools and Partner Programs We Evaluate" description="Official vendor program links and eligibility research. Slickk has no verified active partnership, affiliate approval or public badge with the listed providers.">
+  <section class="page-hero"><div class="container"><nav class="breadcrumbs" aria-label="Breadcrumb"><a href="/">Home</a> / Programs</nav><p class="eyebrow">Research, not membership</p><h1>Tools and programs we evaluate</h1><p class="lead">These are official program pages for future research. Slickk has no verified approval, referral code or partner badge for any listing.</p></div></section>
+  <section class="section container"><p class="notice">Bangladesh is absent from the published Google Workspace referral country list. Google Cloud's affiliate program currently limits affiliates to the US and Canada. Client consulting remains separate from referral eligibility.</p><p>Every link below is an official non-affiliate information link. Terms, country support and payouts require a fresh check before any application. Read our <a href="/affiliate-disclosure/">affiliate disclosure</a>.</p>
+    <div class="grid cards-2">{partnerPrograms.map(program=><article class="card"><p class="eyebrow">{program.category} · {program.programType.replaceAll('_',' ')}</p><h2>{program.provider}: {program.programName}</h2><p>Status: {program.approvalStatus==='ineligible'?'not eligible on published terms':'research only'}{program.geoEligibility==='bd_not_listed'?' · Bangladesh not listed':program.geoEligibility==='us_ca_only'?' · US/Canada operating affiliates only':''}.</p><p>{program.restrictions}</p><a href={program.officialUrl} target="_blank" rel="noopener noreferrer">Official program information ↗</a></article>)}</div>
+  </section>
+</Layout>

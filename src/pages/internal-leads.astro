@@ -1,0 +1,72 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+<Layout title="Private Lead Inbox" description="Private Slickk staff-only inquiry management. Requires a separately configured Cloudflare D1 backend." noindex={true}>
+  <section class="page-hero"><div class="container"><p class="eyebrow">Restricted administrative workspace</p><h1>Inquiry inbox</h1><p class="lead">Private, temporary session access. The administrator secret is not saved to this browser or to the website.</p></div></section>
+  <section class="section container">
+    <div class="contact-form inbox-panel">
+      <p class="notice">Authorized staff only. Inquiries contain personal information. Clear this session when finished and store exports privately. Automatic email notifications require a separately configured sender.</p>
+      <label class="field">Administrator token (session only) <input type="password" id="admin-token" autocomplete="off" spellcheck="false" minlength="32" placeholder="Private access token" /></label>
+      <div class="actions"><button class="btn" type="button" id="load-leads">Load inquiries</button><button class="btn btn-outline" type="button" id="export-leads">Export visible page as CSV</button><button class="btn btn-outline" type="button" id="clear-leads">Clear session</button></div>
+      <p id="admin-status" role="status" aria-live="polite"></p>
+      <button class="btn btn-outline" type="button" id="load-metrics">View inquiry and interaction totals</button>
+      <div id="metrics-results" aria-live="polite"></div>
+      <div class="grid cards-2" id="leads-results"></div>
+      <div class="actions"><button type="button" class="btn btn-outline" id="prev-page">Previous</button><button type="button" class="btn btn-outline" id="next-page">Next</button></div>
+    </div>
+  </section>
+  <script>
+    const tokenEl=document.querySelector<HTMLInputElement>('#admin-token');
+    const status=document.querySelector<HTMLElement>('#admin-status');
+    const results=document.querySelector<HTMLElement>('#leads-results');
+    let currentPage=0;let hasMore=false;
+    const sessionToken=()=>tokenEl?.value.trim()||'';
+    const setStatus=(text:string)=>{if(status)status.textContent=text;};
+    async function request(endpoint:string,options:RequestInit={}){
+      const token=sessionToken();
+      if(token.length<32)throw Error('Enter your administrator token before continuing.');
+      const response=await fetch(endpoint,{...options,cache:'no-store',headers:{Authorization:'Bearer '+token,...(options.headers||{})}});
+      if(!response.ok)throw Error('Request rejected (HTTP '+response.status+'). Check deployment, token and database setup.');
+      return response;
+    }
+    async function load(page=0){
+      setStatus('Loading inquiries…');
+      try{
+        const response=await request('/api/admin/leads?page='+page);
+        const data=await response.json();
+        currentPage=page;hasMore=Boolean(data.hasMore);
+        if(results){results.replaceChildren();for(const item of data.results||[]){
+          const card=document.createElement('article');card.className='card';
+          const heading=document.createElement('h3');heading.textContent=item.name+' — '+item.service;
+          const info=document.createElement('p');info.textContent=[item.email,item.company,item.phone,item.budget,item.timeline,item.created_at].filter(Boolean).join(' · ');
+          const message=document.createElement('p');message.textContent=item.message;
+          const state=document.createElement('label');state.className='field';state.textContent='Lead status';
+          const select=document.createElement('select');for(const value of ['new','contacted','qualified','proposal','won','lost']){const option=document.createElement('option');option.value=value;option.textContent=value;if(value===item.status)option.selected=true;select.append(option);}
+          select.addEventListener('change',async()=>{try{await request('/api/admin/leads',{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({id:item.id,status:select.value})});setStatus('Updated lead status.');}catch(error){setStatus(String(error));}});
+          state.append(select);card.append(heading,info,message,state);results.append(card);
+        }}
+        setStatus((data.results||[]).length+' inquiry records on page '+(page+1)+'.');
+      }catch(error){setStatus(String(error));}
+    }
+    document.querySelector('#load-leads')?.addEventListener('click',()=>load(0));
+    document.querySelector('#load-metrics')?.addEventListener('click',async()=>{try{
+      const data=await (await request('/api/admin/metrics')).json();
+      const target=document.querySelector('#metrics-results');
+      if(target){target.replaceChildren();const notice=document.createElement('p');notice.textContent=data.notice;target.append(notice);
+        for(const [label,rows] of [['Stored inquiries',data.leads],['Last 30 days: optional interactions',data.interactions]] as const){
+          const heading=document.createElement('h3');heading.textContent=label;target.append(heading);
+          for(const row of rows||[]){const p=document.createElement('p');p.textContent=[row.inquiry_type,row.service,row.status,row.event,': '+row.total].filter(Boolean).join(' · ');target.append(p);}
+        }
+      }setStatus('Loaded stored totals.');
+    }catch(error){setStatus(String(error));}});
+    document.querySelector('#prev-page')?.addEventListener('click',()=>{if(currentPage>0)load(currentPage-1);});
+    document.querySelector('#next-page')?.addEventListener('click',()=>{if(hasMore)load(currentPage+1);});
+    document.querySelector('#clear-leads')?.addEventListener('click',()=>{if(tokenEl)tokenEl.value='';if(results)results.replaceChildren();document.querySelector('#metrics-results')?.replaceChildren();currentPage=0;setStatus('Session cleared.');});
+    document.querySelector('#export-leads')?.addEventListener('click',async()=>{try{
+      const response=await request('/api/admin/leads?page='+currentPage+'&export=csv');
+      const blob=await response.blob();const url=URL.createObjectURL(blob);
+      const a=document.createElement('a');a.href=url;a.download='slickk-leads-page-'+(currentPage+1)+'.csv';document.body.append(a);a.click();a.remove();URL.revokeObjectURL(url);
+      setStatus('Exported current page only. Treat CSV as confidential.');
+    }catch(error){setStatus(String(error));}});
+  </script>
+</Layout>

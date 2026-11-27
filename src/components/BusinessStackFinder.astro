@@ -1,0 +1,53 @@
+---
+import { businessTools } from '../data/businessTools';
+---
+<section class="section container" aria-labelledby="finder-title" id="stack-finder">
+  <p class="eyebrow">No login · no AI call</p><h2 id="finder-title">Business Stack Finder</h2>
+  <p>Answer four questions for a starting shortlist. Results stay in this browser; no answers are sent to Slickk.</p>
+  <form id="stack-form" class="card">
+    <label class="field">Business type<select name="business" required><option value="">Choose one</option><option value="service">Service business</option><option value="shop">Shop or ecommerce</option><option value="team">Internal team</option></select></label>
+    <label class="field">Budget band<select name="budget" required><option value="">Choose one</option><option value="explore">Exploring free or low-cost tools</option><option value="planned">Budget for a paid plan if justified</option></select></label>
+    <label class="field">Main audience country<select name="country" required><option value="">Choose one</option><option value="bd">Bangladesh</option><option value="other">Other or mixed</option></select></label>
+    <label class="field">Technical comfort<select name="comfort" required><option value="">Choose one</option><option value="guided">Prefer guided setup</option><option value="hands-on">Can manage settings</option></select></label>
+    <fieldset><legend>What do you need? Choose at least one.</legend>
+      <label><input type="checkbox" name="goal" value="site" /> Website or domain</label>
+      <label><input type="checkbox" name="goal" value="email" /> Professional email</label>
+      <label><input type="checkbox" name="goal" value="sales" /> Sales follow-up</label>
+      <label><input type="checkbox" name="goal" value="automation" /> Automation</label>
+    </fieldset>
+    <button class="btn" type="submit">Show a starting shortlist</button>
+  </form>
+  <p id="stack-status" role="status" aria-live="polite"></p>
+  <div id="stack-results" hidden><h3>Starting options</h3><p>These are independent examples, not paid recommendations. Verify current plans, payment methods and country support before purchase.</p><p id="stack-caveat" class="notice"></p>
+    <ul>{businessTools.filter(tool=>['cloudflare','google-workspace','shopify','pipedrive','make','search-console'].includes(tool.slug)).map(tool=><li data-tool={tool.slug} hidden><strong>{tool.name}</strong>: {tool.summary} <a href={tool.officialUrl} rel="noopener noreferrer" target="_blank">Official site</a></li>)}</ul>
+    <p><a class="btn" href="/request-quote/?service=software-development">Ask Slickk to scope your setup</a></p>
+  </div>
+</section>
+<script>
+  const form = document.querySelector<HTMLFormElement>('#stack-form');
+  form?.addEventListener('submit', event => {
+    event.preventDefault();
+    const data = new FormData(form);
+    const goals = data.getAll('goal');
+    const status = document.querySelector<HTMLElement>('#stack-status');
+    if (!goals.length) { if (status) status.textContent = 'Choose at least one goal.'; return; }
+    const shortlist = ['cloudflare'];
+    if (goals.includes('email')) shortlist.push('google-workspace');
+    if (goals.includes('site') && data.get('business') === 'shop') shortlist.push('shopify');
+    if (goals.includes('sales')) shortlist.push('pipedrive');
+    if (goals.includes('automation')) shortlist.push('make');
+    if (shortlist.length < 2) shortlist.push('search-console');
+    const selected = new Set(shortlist.slice(0, 4));
+    const caveats=[];
+    if (data.get('budget') === 'explore') caveats.push('Start with free allowances, but Google Workspace, Shopify and some automation features require paid plans.');
+    if (data.get('country') === 'bd' && selected.has('shopify')) caveats.push('Shopify Payments does not list Bangladesh; confirm an available third-party gateway first.');
+    if (data.get('comfort') === 'guided') caveats.push('A guided setup should include account ownership, a written scope and handover.');
+    if (data.get('country') === 'other') caveats.push('Check billing and payment support in your operating country.');
+    const caveat=document.querySelector<HTMLElement>('#stack-caveat');
+    if (caveat) caveat.textContent=caveats.join(' ');
+    document.querySelectorAll<HTMLElement>('#stack-results [data-tool]').forEach(item => { item.hidden = !selected.has(item.dataset.tool || ''); });
+    const results = document.querySelector<HTMLElement>('#stack-results');
+    if (results) results.hidden = false;
+    if (status) status.textContent = `Showing ${selected.size} starting options. No answers were sent.`;
+  });
+</script>
