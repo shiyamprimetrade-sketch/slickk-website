@@ -73,7 +73,7 @@ const organization = {
         <button class="menu-toggle" aria-expanded="false" aria-controls="site-navigation" type="button">Menu ☰</button>
         <nav id="site-navigation" class="primary" aria-label="Main navigation">
           {mainNavigation.map((item) => <a aria-current={Astro.url.pathname === item.href ? 'page' : undefined} href={item.href}>{item.label}</a>)}
-          <a class="btn btn-small" href="/contact/">Get a free consultation</a>
+          <a class="btn btn-small" href="/contact/">Start a project</a>
         </nav>
       </div>
     </header>
@@ -82,7 +82,7 @@ const organization = {
       <div class="container">
         <div class="footer-grid">
           <div><BrandLogo /><p>{brand.tagline}</p><p>Independent creative technology, led by a solo founder.<br />Based in Bangladesh. International inquiries welcome.</p><Fragment set:html={'<!--email_off--><a href="mailto:info@slickk.online">info@slickk.online</a><!--/email_off-->'} /></div>
-          <div><h3>Explore</h3>{mainNavigation.map((item) => <a href={item.href}>{item.label}</a>)}<a href="/solutions/">Technology solutions</a><a href="/partners/">Programs we evaluate</a><a href="/contact/">Contact</a></div>
+          <div><h3>Explore</h3>{mainNavigation.map((item) => <a href={item.href}>{item.label}</a>)}<a href="/business-tools/">Business tools</a><a href="/solutions/">Technology solutions</a><a href="/partners/">Programs we evaluate</a><a href="/contact/">Contact</a></div>
           <div><h3>Services & policies</h3><a href="/services/logo-design/">Logo design</a><a href="/services/brochure-design/">Brochures</a><a href="/software-development/">Software</a><a href="/web-development/">Web development</a><a href="/seo-services/">SEO</a><a href="/digital-marketing/">Digital marketing</a><a href="/ai-automation/">AI automation</a><a href="/affiliate-disclosure/">Affiliate disclosure</a><a href="/privacy/">Privacy</a><a href="/terms/">Terms</a><a href="/cookies/">Cookies</a></div>
         </div>
         {socials.length > 0 && <div aria-label="Social profiles">{socials.map(([name, href]) => <a href={href} rel="me noopener noreferrer" target="_blank">{name}</a>)}</div>}

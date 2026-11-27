@@ -84,8 +84,8 @@ test('six service silos have homepage paths and reciprocal detail links', async 
       assert.ok(breadcrumbs.itemListElement.some(item => item.item === `https://slickk.online${parentPath}`));
     }
   }
-  assert.match(home('h1').text(), /websites, software and digital growth/i);
-  assert.match(home('.hero-copy .lead').text(), /mobile apps, SEO, digital marketing and content creation/i);
+  assert.match(home('h1').text(), /websites and branding for small businesses/i);
+  assert.match(home('.hero-copy .lead').text(), /small businesses in Bangladesh and abroad/i);
 });
 
 test('optional analytics consent starts inert until its script makes it visible', async () => {
@@ -202,5 +202,17 @@ test('the Email Sending API reports rejected alerts instead of treating HTTP 200
     assert.equal(createInquiryNotifier({ ...env, INQUIRY_EMAIL_API_TOKEN: '' }), null);
   } finally {
     globalThis.fetch = originalFetch;
+  }
+});
+
+test('inquiry and quote pages keep extra scoping fields in a collapsed section', async () => {
+  for (const route of ['/contact/', '/request-quote/']) {
+    const $ = load(await readFile(fileFor(route), 'utf8'));
+    const form = $('#project-inquiry');
+    assert.equal(form.attr('data-mode'), 'secure');
+    const optional = form.find('details.inquiry-options');
+    assert.equal(optional.attr('open'), undefined);
+    assert.deepEqual(optional.find('input, select').map((_, field) => $(field).attr('name')).get(), ['company', 'phone', 'timeline', 'reference', 'budget']);
+    assert.deepEqual(form.find('[required]').map((_, field) => $(field).attr('name')).get(), ['name', 'email', 'message', 'consent']);
   }
 });

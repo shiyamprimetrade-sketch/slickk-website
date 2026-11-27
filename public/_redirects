@@ -1,1 +1,2 @@
 # Domain redirects are managed by Cloudflare Single Redirects; see DEPLOYMENT.md.
+/services/web-development/ /services/website-development/ 301

@@ -13,8 +13,8 @@ const options = [{name:'General inquiry',slug:'general'},...new Map([...services
       <p class="muted">Slickk is based in Bangladesh. We welcome inquiries from local and international businesses.</p>
       <p><strong>Email:</strong> <a href={'mailto:' + brand.email}>{brand.email}</a></p>
       <p class="muted">A consultation request is an inquiry, not a confirmed appointment. We will discuss scheduling and availability by email.</p>
-      <div class="notice"><strong>How it works</strong><p>Tell us your goals, services needed and budget range. We will use the details to prepare a useful response.</p></div>
-      <p class="muted">No verified social or WhatsApp business profile is linked yet.</p>
+      <div class="notice"><strong>How it works</strong><p>Share your goal and a short brief. Slickk reviews it, replies by email with follow-up questions if needed, and confirms scope, timing and payment terms in writing before work starts.</p></div>
+
     </div>
     <div class="contact-form">
       <h2>Project inquiry</h2>
@@ -23,15 +23,20 @@ const options = [{name:'General inquiry',slug:'general'},...new Map([...services
         <input type="hidden" name="inquiryType" value={quote ? 'quote' : 'contact'} />
         <div class="form-grid">
           <label class="field">Your name *<input name="name" autocomplete="name" required maxlength="100" /></label>
-          <label class="field">Business / company<input name="company" autocomplete="organization" maxlength="140" /></label>
           <label class="field">Email *<input name="email" type="email" autocomplete="email" required maxlength="254" /></label>
           <label class="field">Service<select name="service">{options.map((option) => <option value={option.slug}>{option.name}</option>)}</select></label>
+          <label class="field full">Tell us about your project *<textarea name="message" rows="6" minlength="20" maxlength="3000" required placeholder="What would you like to build, improve or promote?"></textarea></label>
+        </div>
+        <details class="inquiry-options">
+          <summary>Add optional project details</summary>
+          <div class="form-grid">
+          <label class="field">Business / company<input name="company" autocomplete="organization" maxlength="140" /></label>
           <label class="field">Phone / WhatsApp<input name="phone" autocomplete="tel" maxlength="30" placeholder="Include country code if relevant" /></label>
           <label class="field">Desired timeline<select name="timeline"><option value="Flexible">Flexible / to discuss</option><option value="1-2 weeks">Within 1–2 weeks</option><option value="1 month">Within one month</option><option value="2-3 months">2–3 months</option><option value="3+ months">More than 3 months</option></select></label>
           <label class="field full">Reference link (optional)<input name="reference" type="url" placeholder="https://example.com" maxlength="500" /></label>
           <label class="field full">Estimated budget<select name="budget"><option value="Not specified">Prefer to discuss</option><option value="Under BDT 25000">Under ৳25,000</option><option value="BDT 25000-50000">৳25,000–50,000</option><option value="BDT 50000-100000">৳50,000–100,000</option><option value="BDT 100000+">Over ৳100,000</option></select></label>
-          <label class="field full">Tell us about your project *<textarea name="message" rows="6" minlength="20" maxlength="3000" required placeholder="What would you like to build, improve or promote?"></textarea></label>
-        </div>
+          </div>
+        </details>
         <label class="field" hidden aria-hidden="true">Leave this blank<input name="website" type="text" tabindex="-1" autocomplete="off" /></label>
         <label class="field"><input type="checkbox" name="consent" required /> I have reviewed the <a href="/privacy/">privacy policy</a> and agree to be contacted about my inquiry. *</label>
         {siteKey && <div class="cf-turnstile" data-sitekey={siteKey} data-theme="dark" data-action="inquiry"></div>}
@@ -50,6 +55,12 @@ const options = [{name:'General inquiry',slug:'general'},...new Map([...services
     const options = new Set(['general', 'branding-graphic-design','ai-automation','software-development', 'app-development', 'web-development', 'seo-services', 'digital-marketing', 'content-creation', 'logo-design','brochure-design','brand-identity','company-profile-design','website-development','seo','graphic-design']);
     if (form) {
       form.hidden = false;
+      form.addEventListener('invalid', (event) => {
+        if (!(event.target instanceof HTMLElement)) return;
+        const section = event.target.closest('details');
+        if (section) section.open = true;
+        if (status) status.textContent = 'Check the highlighted field before sending your inquiry.';
+      }, true);
       const queryValue = new URLSearchParams(location.search).get('service') || '';
       const queryService = packageServices[queryValue] || queryValue;
       const serviceSelect = form.elements.namedItem('service');
@@ -77,7 +88,7 @@ const options = [{name:'General inquiry',slug:'general'},...new Map([...services
           if (!response.ok || !result.ok) throw new Error('Submission was not accepted');
           document.dispatchEvent(new CustomEvent('slickk:inquiry-saved',{detail:{type:values.inquiryType,service:values.service}}));
           form.reset();
-          if (status) status.textContent = result.notified ? 'Your inquiry was saved and the notification service accepted the message. Thank you.' : 'Your inquiry was saved for Slickk to review. Automated email notification is not configured; you can also email info@slickk.online.';
+          if (status) status.textContent = result.notified ? 'Thank you. Slickk received your inquiry and will reply by email.' : 'Your inquiry was saved for Slickk to review. You can also reach us at info@slickk.online.';
         } catch {
           if (status) status.textContent = 'The secure form could not send your inquiry. Please email info@slickk.online directly.';
         } finally {
@@ -88,3 +99,9 @@ const options = [{name:'General inquiry',slug:'general'},...new Map([...services
       });
     }
   </script>
+
+<style>
+  .inquiry-options { margin-block: 1rem; padding: .75rem 1rem; border: 1px solid var(--line); border-radius: .75rem; }
+  .inquiry-options summary { cursor: pointer; min-height: 44px; padding-block: .55rem; font-weight: 700; }
+  .inquiry-options[open] summary { margin-bottom: .75rem; }
+</style>
