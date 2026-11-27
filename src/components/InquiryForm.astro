@@ -39,7 +39,7 @@ const options = [{name:'General inquiry',slug:'general'},...new Map([...services
         <AnimatedGradientButton type="submit">{siteKey ? (quote ? 'Send quote request' : 'Send project inquiry') : 'Open email draft'}</AnimatedGradientButton>
         <p class="form-status" id="inquiry-status" role="status" aria-live="polite"></p>
       </form>
-      <noscript><p>Email us directly at <a href="mailto:contact@slickk.online">contact@slickk.online</a> because the form requires JavaScript.</p></noscript>
+      <noscript><p>Email us directly at <a href="mailto:info@slickk.online">info@slickk.online</a> because the form requires JavaScript.</p></noscript>
     </div>
   </section>
   {siteKey && <script async defer src="https://challenges.cloudflare.com/turnstile/v0/api.js"></script>}
@@ -63,7 +63,7 @@ const options = [{name:'General inquiry',slug:'general'},...new Map([...services
         if (values.message.length < 20 || values.message.length > 3000 || values.name.length > 100 || !values.consent) { if (status) status.textContent = 'Check your required fields.'; return; }
         if (form.dataset.mode === 'draft') {
           const body = ['Name: ' + values.name, 'Company: ' + (values.company || 'Not provided'), 'Email: ' + values.email, 'Service: ' + values.service, 'Budget: ' + values.budget, 'Phone / WhatsApp: ' + (values.phone || 'Not provided'), 'Timeline: ' + (values.timeline || 'Flexible'), 'Reference: ' + (values.reference || 'Not provided'), '', values.message].join('\n');
-          const email = 'mailto:contact@slickk.online?subject=' + encodeURIComponent('Slickk project inquiry — ' + values.service) + '&body=' + encodeURIComponent(body);
+          const email = 'mailto:info@slickk.online?subject=' + encodeURIComponent('Slickk project inquiry — ' + values.service) + '&body=' + encodeURIComponent(body);
           if (status) status.textContent = 'Opening your email app. Review and send the message there. Nothing has been submitted through this site.';
           window.location.href = email;
           return;
@@ -77,9 +77,9 @@ const options = [{name:'General inquiry',slug:'general'},...new Map([...services
           if (!response.ok || !result.ok) throw new Error('Submission was not accepted');
           document.dispatchEvent(new CustomEvent('slickk:inquiry-saved',{detail:{type:values.inquiryType,service:values.service}}));
           form.reset();
-          if (status) status.textContent = result.notified ? 'Your inquiry was saved and the notification service accepted the message. Thank you.' : 'Your inquiry was saved for Slickk to review. Automated email notification is not configured; you can also email contact@slickk.online.';
+          if (status) status.textContent = result.notified ? 'Your inquiry was saved and the notification service accepted the message. Thank you.' : 'Your inquiry was saved for Slickk to review. Automated email notification is not configured; you can also email info@slickk.online.';
         } catch {
-          if (status) status.textContent = 'The secure form could not send your inquiry. Please email contact@slickk.online directly.';
+          if (status) status.textContent = 'The secure form could not send your inquiry. Please email info@slickk.online directly.';
         } finally {
           // Turnstile tokens are single-use, including requests that fail after verification.
           (window as Window & { turnstile?: { reset: () => void } }).turnstile?.reset();

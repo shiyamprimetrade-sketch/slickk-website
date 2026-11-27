@@ -5,7 +5,7 @@ import { enrichServicePages } from './v4';
 export const brand = {
   name: 'Slickk Digital Solutions',
   url: 'https://slickk.online',
-  email: 'contact@slickk.online',
+  email: 'info@slickk.online',
   tagline: 'Design with purpose. Technology that works.',
   description: 'Slickk Digital Solutions is a Bangladesh-based creative technology studio for identity design, digital experiences, software, SEO and business automation.',
   location: 'Bangladesh',
@@ -113,8 +113,8 @@ export const agencyPages: AgencyPage[] = [
       { title: 'Use of information', text: 'Inquiry information is used to respond, evaluate requested services and manage related communications. Avoid sharing payment card data or sensitive personal information in an initial message.' },
       { title: 'Technical services and analytics', text: 'Hosting and anti-abuse providers may process technical information needed to operate the site. Cloudflare Turnstile checks inquiry submissions for abuse. Temporary salted request hashes support rate limits; raw IP addresses are not stored in the inquiry database. Optional first-party analytics records daily page and action totals only after you choose Allow analytics. Counts contain no message contents, email addresses or visitor identifiers. Hosting and security providers may process IP addresses under their own policies.' },
       { title: 'Optional AI demonstration', text: 'If you choose to use the AI demonstration, your submitted business description is sent to Google Gemini for a generated draft. Do not enter personal, confidential or sensitive information. Slickk does not store your prompt or generated text in its inquiry database. A daily aggregate request count and temporary salted request hashes enforce usage limits. Google may process submitted content under its service terms and privacy notices. The demonstration does not access your Google Workspace account or perform account actions.' },
-      { title: 'Retention and rights', text: 'Inquiry correspondence is retained only as reasonably needed for the communication and business records, subject to applicable legal requirements. Contact contact@slickk.online to request access, correction or deletion where applicable.' },
-      { title: 'Changes and contact', text: 'Updated notices will be published if collection, hosting or marketing practices change. Questions: contact@slickk.online.' },
+      { title: 'Retention and rights', text: 'Inquiry correspondence is retained only as reasonably needed for the communication and business records, subject to applicable legal requirements. Contact info@slickk.online to request access, correction or deletion where applicable.' },
+      { title: 'Changes and contact', text: 'Updated notices will be published if collection, hosting or marketing practices change. Questions: info@slickk.online.' },
     ] },
   { slug: 'terms', title: 'Terms of Service', label: 'Legal draft — review before publication', intro: 'General conditions for using this informational website.', description: 'Read the initial Slickk terms draft covering website content, project proposals and limitations.', legal: true,
     sections: [
@@ -122,13 +122,13 @@ export const agencyPages: AgencyPage[] = [
       { title: 'Quotes and engagement', text: 'Written agreements establish deliverables, intellectual property, payment terms, revisions, confidentiality, timelines and maintenance arrangements for commissioned services.' },
       { title: 'No guaranteed results', text: 'Slickk does not guarantee search rankings, advertising conversions, sales or third-party platform uptime. We aim to communicate relevant limitations and assumptions before engagement.' },
       { title: 'Use and ownership', text: 'Do not misuse the website or submit unlawful material. Website designs and content may not be reproduced without appropriate permission. Customer ownership is defined by each signed agreement.' },
-      { title: 'Changes', text: 'These are preliminary terms pending legal and commercial review. Contact contact@slickk.online for questions.' },
+      { title: 'Changes', text: 'These are preliminary terms pending legal and commercial review. Contact info@slickk.online for questions.' },
     ] },
   { slug: 'cookies', title: 'Cookie Policy', label: 'Legal draft — review before publication', intro: 'An explanation of website cookies and optional tracking.', description: 'How SLICKK uses necessary security services and your optional first-party analytics preference.', legal: true,
     sections: [
       { title: 'Current website design', text: 'The public website is designed to work without optional tracking cookies. Hosting and security infrastructure may use necessary cookies or technical signals to protect service availability.' },
       { title: 'Optional first-party analytics', text: 'Optional first-party analytics is disabled until you choose Allow analytics. It records daily aggregate page and inquiry-action counts without visitor identifiers or contact/message data. The slickk-analytics preference in local browser storage remembers yes or no. Use Analytics preferences in the footer to change your choice; Necessary only stops future optional events. No advertising pixels are configured.' },
-      { title: 'Your options', text: 'You can manage browser cookies and site permissions in your browser settings. For questions, write to contact@slickk.online.' },
+      { title: 'Your options', text: 'You can manage browser cookies and site permissions in your browser settings. For questions, write to info@slickk.online.' },
     ] },
 ];
 export type PortfolioConcept = { slug:string; title:string; discipline:string; eyebrow:string; summary:string; objective:string; deliverables:readonly string[]; note:string };

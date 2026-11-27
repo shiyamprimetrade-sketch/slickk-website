@@ -14,7 +14,7 @@ assert.equal(new Set(routes).size,routes.length,'Sitemap must not contain duplic
 for (const route of routes) {
   const response = await request(new URL(route, origin));
   assert.equal(response.status, 200, route); const html = await response.text();
-  assert.match(html, /Slickk/i); assert.match(html, /contact@slickk.online/);
+  assert.match(html, /Slickk/i); assert.match(html, /info@slickk.online/);
   assert.ok(response.headers.get('content-security-policy'), `${route}: CSP missing`);
   const $=load(html), expected=load(readFileSync('dist'+route+'index.html','utf8'));
   assert.equal($('title').text(),expected('title').text(),route+': title mismatch');

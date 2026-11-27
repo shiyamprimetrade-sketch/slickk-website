@@ -23,9 +23,9 @@ test('all agency pages have unique SEO, headings, accessible landmarks and worki
     assert.equal($('html').attr('lang'), 'en', route);
     assert.equal($('link[rel=canonical]').attr('href'), 'https://slickk.online' + route, route);
     assert.equal($('meta[property="og:image"]').attr('content'), 'https://slickk.online/images/agency-social.jpg');
-    assert.ok($('a[href="mailto:contact@slickk.online"]').length > 0, route);
+    assert.ok($('a[href="mailto:info@slickk.online"]').length > 0, route);
     const jsonld = JSON.parse($('script[type="application/ld+json"]').html());
-    assert.equal(jsonld.email, 'contact@slickk.online');
+    assert.equal(jsonld.email, 'info@slickk.online');
     assert.ok(!$('h1').text().match(/fruit|oranges|grapes/i), route);
     for (const link of $('a[href], link[rel=stylesheet], link[rel=icon], script[src], img[src]').toArray()) {
       const raw = $(link).attr('href') || $(link).attr('src');
