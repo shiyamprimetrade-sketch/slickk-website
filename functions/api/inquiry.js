@@ -1,5 +1,6 @@
 /* global Response, URL, fetch, URLSearchParams, crypto */
 import { limitedJson } from '../lib/body.js';
+import { createInquiryNotifier } from '../lib/inquiry-notification.js';
 import { allowRequest } from '../lib/rate-limit.js';
 // Cloudflare Pages Function. No credentials or customer inquiries belong in the static bundle.
 // Required: TURNSTILE_SECRET and INQUIRIES_DB (D1) or a restricted EMAIL send binding + INQUIRY_DESTINATION.
@@ -9,7 +10,8 @@ const services = new Set(['general','software-development','app-development','we
 const budgets = new Set(['Not specified','Under BDT 25000','BDT 25000-50000','BDT 50000-100000','BDT 100000+']);
 const text = (value, max) => typeof value === 'string' && value.trim().length <= max ? value.trim() : null;
 export async function onRequestPost({ request, env }) {
-  if (!env?.TURNSTILE_SECRET || (!env?.INQUIRIES_DB?.prepare && (!env?.EMAIL?.send || !env?.INQUIRY_DESTINATION))) return json(503, { ok: false, error: 'Not configured' });
+  const notify = createInquiryNotifier(env ?? {});
+  if (!env?.TURNSTILE_SECRET || (!env?.INQUIRIES_DB?.prepare && !notify)) return json(503, { ok: false, error: 'Not configured' });
   const origin = request.headers.get('Origin');
   if (!origin || origin !== new URL(request.url).origin) return json(403, { ok: false, error: 'Invalid origin' });
   if (!request.headers.get('Content-Type')?.startsWith('application/json')) return json(415, { ok: false, error: 'Unsupported request' });
@@ -42,8 +44,6 @@ export async function onRequestPost({ request, env }) {
   } catch { return json(503, { ok: false, error: 'Verification unavailable' }); }
   const host = new URL(request.url).hostname;
   if (!verification?.success || verification.hostname !== host || verification.action !== 'inquiry') return json(403, { ok: false, error: 'Verification failed' });
-  const destination = text(env.INQUIRY_DESTINATION || '',254);
-  if (env.EMAIL?.send && (!destination || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(destination))) return json(503,{ok:false,error:'Destination unavailable'});
   const hasDB = Boolean(env.INQUIRIES_DB?.prepare);
   const id = crypto.randomUUID();
   if (hasDB) {
@@ -60,12 +60,12 @@ export async function onRequestPost({ request, env }) {
     try { await env.INQUIRIES_DB.prepare('DELETE FROM inquiry_limits WHERE expires_at < unixepoch()').bind().run(); }
     catch { /* Expired keys cannot match a new time bucket; maintenance failure must not reject a saved inquiry. */ }
   }
-  if (env.EMAIL?.send) {
+  if (notify) {
     try {
-      await env.EMAIL.send({
-        from:'contact@slickk.online',to:destination,replyTo:email,
+      await notify({
         subject:'Slickk project inquiry — '+service,
-        text:['ID: '+id,'Name: '+name,'Company: '+company,'Email: '+email,'Phone / WhatsApp: '+phone,'Service: '+service,'Budget: '+budget,'Timeline: '+timeline,'Reference: '+reference,'','Project:',message].join('\n')
+        ...(hasDB ? {} : { replyTo: email }),
+        text:hasDB ? ['Inquiry: '+id, 'Service: '+service, 'Review it in the private Slickk inbox:', 'https://slickk.online/internal-leads/'].join('\n') : ['ID: '+id,'Name: '+name,'Company: '+company,'Email: '+email,'Phone / WhatsApp: '+phone,'Service: '+service,'Budget: '+budget,'Timeline: '+timeline,'Reference: '+reference,'','Project:',message].join('\n')
       });
     } catch {
       // A stored submission is still accepted; notification failure must not erase it.
@@ -73,5 +73,5 @@ export async function onRequestPost({ request, env }) {
       return json(200,{ok:true,stored:true,notified:false});
     }
   }
-  return json(200,{ok:true,stored:hasDB,notified:Boolean(env.EMAIL?.send)});
+  return json(200,{ok:true,stored:hasDB,notified:Boolean(notify)});
 }

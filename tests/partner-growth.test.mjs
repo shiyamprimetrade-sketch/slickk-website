@@ -28,14 +28,14 @@ test('35 official program records stay research only without tracking or badges'
 test('public program and tool pages disclose status and link directly to official sites', () => {
   const partners=html('/partners/');
   assert.match(partners('h1').text(),/programs we evaluate/i);
-  assert.match(partners('main').text(),/no verified approval/i);
+  assert.match(partners('main').text(),/disclosed Google Workspace referral offer/i);
   assert.equal(partners('main a[href^="https:"]').length,35);
   for(const link of partners('main a[href^="https:"]').toArray()) {
     assert.match(partners(link).attr('rel'),/noopener noreferrer/);
     assert.ok(!partners(link).attr('href').includes('ref='));
   }
   const disclosure=html('/affiliate-disclosure/');
-  assert.match(disclosure('main').text(),/not tracked affiliate links/i);
+  assert.match(disclosure('main').text(),/may earn a referral reward/i);
   const hub=html('/business-tools/');
   assert.equal(hub('#stack-form').length,1);
   for(const tool of businessTools.filter(item=>item.detail)) {

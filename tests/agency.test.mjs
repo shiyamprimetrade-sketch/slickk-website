@@ -165,3 +165,42 @@ test('flagship brand exports have expected dimensions and transparent PNG', asyn
   const share = await sharp('public/images/agency-social.jpg').metadata();
   assert.equal(share.width, 1200); assert.equal(share.height, 630);
 });
+
+test('Workspace guide discloses the referral before the offer and requests codes privately', async () => {
+  const html = await readFile('dist/business-tools/google-workspace/index.html', 'utf8');
+  const $ = load(html);
+  const block = $('#workspace-referral');
+  assert.match(block.children().first().text(), /may earn a referral reward/);
+  assert.equal(block.find('a[href="/affiliate-disclosure/"]').length, 1);
+  assert.equal(block.find('a[rel="sponsored"]').attr('href'), 'https://sharegoogleworkspace.advocate.impact.com/mzYX3Hn');
+  assert.match(block.find('a[href^="mailto:"]').first().attr('href'), /^mailto:info@slickk\.online\?subject=/);
+});
+
+test('the Email Sending API reports rejected alerts instead of treating HTTP 200 as success', async () => {
+  const { createInquiryNotifier } = await import('../functions/lib/inquiry-notification.js');
+  const env = {
+    INQUIRY_DESTINATION: 'owner@example.com',
+    INQUIRY_NOTIFICATION_FROM: 'alerts@example.com',
+    INQUIRY_EMAIL_ACCOUNT_ID: 'a'.repeat(32),
+    INQUIRY_EMAIL_API_TOKEN: 'test-only',
+  };
+  const originalFetch = globalThis.fetch;
+  try {
+    let accepted = false;
+    globalThis.fetch = async (url, options) => {
+      assert.match(url, /\/email\/sending\/send$/);
+      assert.equal(options.headers.Authorization, 'Bearer test-only');
+      const data = JSON.parse(options.body);
+      assert.equal(data.to, 'owner@example.com');
+      assert.equal(data.from, 'alerts@example.com');
+      return Response.json({ success: accepted });
+    };
+    const notify = createInquiryNotifier(env);
+    await assert.rejects(notify({ subject: 'New project inquiry', text: 'Inquiry: 123' }));
+    accepted = true;
+    await notify({ subject: 'New project inquiry', text: 'Inquiry: 123' });
+    assert.equal(createInquiryNotifier({ ...env, INQUIRY_EMAIL_API_TOKEN: '' }), null);
+  } finally {
+    globalThis.fetch = originalFetch;
+  }
+});

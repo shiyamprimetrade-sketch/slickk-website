@@ -1,0 +1,41 @@
+---
+import { brand } from '../data/agency';
+
+const referralUrl = 'https://sharegoogleworkspace.advocate.impact.com/mzYX3Hn';
+const requestUrl = 'mailto:' + brand.email + '?subject=' + encodeURIComponent('Google Workspace promotion code request');
+const benefits = [
+  ['Professional business email', 'Give your team addresses on your own domain, such as info@yourdomain.com.'],
+  ['30 GB of pooled storage per user', 'Business Starter includes 30 GB per user. Enable offline access in supported apps to keep working without a connection.'],
+  ['Security and admin controls', 'Manage users, access, and security settings from the Admin console. Advanced controls vary by plan.'],
+  ['Support and uptime', 'Google lists 24/7 Standard Support access for administrators. Phone and email availability can vary. Google’s SLA covers 99.9% monthly uptime for covered services.'],
+];
+---
+<section id="workspace-referral" aria-labelledby="workspace-referral-heading">
+  <p class="notice">Slickk refers customers to Google through the Google Workspace Referral Program and may earn a referral reward if you sign up using our referral link and a promotion code. <a href="/affiliate-disclosure/">Read our affiliate disclosure</a>.</p>
+  <slot name="affiliation-visual" />
+  <h2 id="workspace-referral-heading">01. What Google Workspace gives your team</h2>
+  <ul class="grid cards-2 workspace-benefits">
+    {benefits.map(([title, description]) => <li class="card"><h3>{title}</h3><p>{description}</p></li>)}
+  </ul>
+  <h2>02. Request your first-year offer</h2>
+  <p>Eligible new customers can get 10% off their first year when they sign up through Slickk’s referral link and apply a promotion code from Slickk. Availability depends on your billing country and plan. Request your code privately before signing up.</p>
+  <div class="workspace-actions">
+    <a class="btn" href={requestUrl}>Request a promotion code</a>
+    <a class="btn" href={referralUrl} rel="sponsored">Sign up for Google Workspace</a>
+  </div>
+  <p>Prefer to write directly? Email <a href={'mailto:' + brand.email}>{brand.email}</a>.</p>
+  <h2>03. Check your readiness before you move</h2>
+  <ol>
+    <li>Confirm who controls your domain and can update DNS.</li>
+    <li>List existing mailboxes, aliases, and messages you need to migrate.</li>
+    <li>Confirm your billing country, plan, and number of users.</li>
+    <li>Pick a cutover window and test incoming and outgoing mail before retiring your old service.</li>
+  </ol>
+  <p><a href="/solutions/google-workspace-setup/">Explore the setup and migration plan</a>.</p>
+</section>
+
+<style>
+  .workspace-benefits { list-style: none; padding-inline-start: 0; }
+  .workspace-actions { display: flex; flex-wrap: wrap; gap: .75rem; margin-block: 1rem; }
+  .workspace-actions a { max-width: 100%; }
+</style>

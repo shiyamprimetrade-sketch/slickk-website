@@ -40,8 +40,15 @@ Concept portfolio studies are self-initiated examples, not client endorsements o
 
 Validated inquiries are saved through Pages Functions to the existing D1 database bound as `INQUIRIES_DB`, after server-side Turnstile verification. The private inbox at `/internal-leads/` requires the runtime `LEADS_ADMIN_TOKEN`; its API enforces authorization. The ignored Windows-encrypted local administrator file can be used by `scripts/open-private-inbox.ps1` on the Windows account that created it.
 
-Automatic email notification is not configured; monitor the private inbox. Tracking requires visitor consent and the corresponding build/runtime flags. Do not place private credentials in Git, static assets, screenshots or public archives.
+Automatic email alerts require a configured provider. See [Inquiry email alerts](docs/INQUIRY_EMAIL.md). Tracking requires visitor consent and the corresponding build/runtime flags. Do not place private credentials in Git, static assets, screenshots or public archives.
 
 ## Release and recovery
 
 See `DEPLOYMENT.md` for preview, production and rollback steps. Git pushes alone do not upload the website to Pages. Historical release records describe their dated releases, not the current deployment. The flagship cleanup and preserved recovery records are listed in `docs/LEGACY_CLEANUP_REPORT.md`; prior V4 verification remains under `docs/SLICKK_V4_*.md`.
+
+## Documentation map
+
+- [Deployment runbook](DEPLOYMENT.md) for Cloudflare Pages releases.
+- [Inquiry email alerts](docs/INQUIRY_EMAIL.md) for runtime settings and verification.
+- [Historical local SEO records](docs/archive/local-seo/SEO_IMPLEMENTATION_REPORT.md) for the baseline and inventories.
+- [Google Workspace guide](https://slickk.online/business-tools/google-workspace/) for the referral disclosure, eligible offer, and readiness checklist.

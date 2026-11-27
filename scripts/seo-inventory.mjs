@@ -4,7 +4,7 @@ import { load } from 'cheerio';
 
 const base = 'https://slickk.online';
 const live = process.argv.includes('--live');
-const output = process.argv.find(value => value.startsWith('--output='))?.slice(9) ?? 'SEO_URL_INVENTORY.csv';
+const output = process.argv.find(value => value.startsWith('--output='))?.slice(9) ?? 'docs/archive/local-seo/SEO_URL_INVENTORY.csv';
 const linksOutput = process.argv.find(value => value.startsWith('--links='))?.slice(8);
 const sitemap = await readFile('dist/sitemap.xml', 'utf8');
 const paths = [...sitemap.matchAll(/<loc>https:\/\/slickk\.online([^<]*)<\/loc>/g)].map(match => match[1] || '/');
