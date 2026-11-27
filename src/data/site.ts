@@ -1,7 +1,7 @@
 export const site = {
   name: 'SLICKK',
   url: 'https://slickk.online',
-  email: 'info@slickk.online',
+  email: 'contact@slickk.online',
   tagline: 'Freshness Across Borders',
   description: 'Connecting international fresh-fruit sourcing opportunities with Bangladesh’s growing produce market.',
 };

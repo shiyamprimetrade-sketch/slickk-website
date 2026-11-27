@@ -49,5 +49,5 @@ test('reduced motion and no-JavaScript fallback remain usable', async ({ browser
   await expect(page.locator('[data-product]')).toHaveCount(3); await expect(page.locator('.product-filters')).toBeHidden();
   await page.goto('/contact/'); await expect(page.locator('#inquiry-form')).toBeHidden();
   await expect(page.locator('.no-js-email')).toBeVisible();
-  await expect(page.locator('main a[href="mailto:info@slickk.online"]').first()).toBeVisible(); await context.close();
+  await expect(page.locator('main a[href="mailto:contact@slickk.online"]').first()).toBeVisible(); await context.close();
 });

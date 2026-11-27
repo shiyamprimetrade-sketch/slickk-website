@@ -1,6 +1,6 @@
 # SLICKK website
 
-Static English-language B2B fresh-fruit sourcing website for the Bangladesh market. Public contact: **info@slickk.online**. Intended canonical domain: **https://slickk.online**.
+Static English-language B2B fresh-fruit sourcing website for the Bangladesh market. Public contact: **contact@slickk.online**. Intended canonical domain: **https://slickk.online**.
 
 ## Local development
 

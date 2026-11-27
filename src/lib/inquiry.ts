@@ -12,5 +12,5 @@ export function buildInquiry(data: FormData) {
   const type = types.includes(field('type')) ? field('type') : types[0];
   const product = validProduct(field('product'));
   const body = `Name: ${name}\nBusiness: ${business}\nEmail: ${email}\nCountry: ${country}\nProduct: ${product === 'all' ? 'Multiple / to discuss' : product}\n\n${message}\n\nThis is an inquiry, not a confirmed order.`;
-  return `mailto:info@slickk.online?subject=${encodeURIComponent(`SLICKK — ${type}`)}&body=${encodeURIComponent(body)}`;
+  return `mailto:contact@slickk.online?subject=${encodeURIComponent(`SLICKK — ${type}`)}&body=${encodeURIComponent(body)}`;
 }
